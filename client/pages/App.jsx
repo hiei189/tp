@@ -2,7 +2,6 @@ const { AppBar, IconButton, IconMenu, LeftNav,Badge,Divider,CircularProgress,Lis
 const {ActionShoppingCart,ActionAccountCircle} = mui.SvgIcons;
 const {ThemeManager} = mui.Styles;
 const Colors = mui.Styles.Colors;
-console.log(mui);
 const {SelectableContainerEnhance} = mui;
 
 //import { Grid,Row, Col } from 'react-flexbox-grid/lib/index';

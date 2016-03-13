@@ -1,14 +1,14 @@
 backendCom = {
   getTokenGuest: function(oldToken,callback){
     let _oldToken = '';
-    console.log(oldToken);
+
 
     if (!typeof oldToken === 'undefined'){
       if(Object.keys(oldToken).length !== 0){
         _oldToken = oldToken.access_token;
       }
     }
-    console.log(_oldToken);
+
     const guest = Base64.encode('demo_oauth_client:demo_oauth_secret');
     if(_oldToken===''){
       HTTP.call(
@@ -22,8 +22,7 @@ backendCom = {
           }
         },
         (err,response)=>{
-          console.log(response);
-          console.log(err);
+
           callback(err,response);
           return;
         }

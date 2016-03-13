@@ -7,9 +7,9 @@ Meteor.startup(function() {
       Session.set('user',{});
       Session.setDefault('isShoppingCartEmpty',true);
       injectTapEventPlugin();
+    }
       //const browserHistory = ReactRouter.history.useQueries(ReactRouter.history.createHistory)();
       const Routes = (
-        <Router  history={browserHistory}>
           <Route path="/" component={App}>
             <IndexRoute component={ProductsByCategoryPage} />
             <Route path="/categories/:categoryId" component ={ProductsByCategoryPage}/>
@@ -19,8 +19,11 @@ Meteor.startup(function() {
             <Route path="/shoppingcart" component = {CartPage}/>
             <Route path="/shipping" component = {Shipping}/>
           </Route>
-        </Router>
         );
-      ReactDOM.render(Routes,document.getElementById('react-target'));
-    }
+      ReactRouterSSR.Run(Routes);
+      //ReactDOM.render(Routes,document.getElementById('react-target'));
+
   })
+
+  //<Router  history={browserHistory}>
+  //</Router>

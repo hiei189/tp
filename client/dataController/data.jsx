@@ -10,7 +10,6 @@ data = {
       });
 
       FB.getLoginStatus((response)=> {
-        console.log(response);
         callback(response);
         return
       });
@@ -18,7 +17,6 @@ data = {
     this.loadFB();
   },
   loadFB:function(){
-    console.log('loading fb');
     (function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
@@ -102,7 +100,6 @@ data = {
       if(!err){
         if(response.data.success){
           Session.set('categories',response.data.data);
-          console.log('categories set');
         }
       }
       callback(err,response);

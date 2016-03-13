@@ -8,7 +8,7 @@ CartController = {
           this.getAllItems(token,callback);
         }
       }else{
-        throw new Meteor.error('Error de conexión');
+        throw new Meteor.Error('Error de conexión');
       }
       callback(err,response);
       return;
@@ -22,7 +22,7 @@ CartController = {
           this.getAllItems(token,callback);
         }
       }else{
-        throw new Meteor.error('Error de conexión');
+        throw new Meteor.Error('Error de conexión');
       }
       callback(err,response);
     });
@@ -36,7 +36,7 @@ CartController = {
           this.getAllItems(token,callback);
         }
       }else{
-        throw new Meteor.error('Error de conexión');
+        throw new Meteor.Error('Error de conexión');
       }
       callback(err,response);
     });
