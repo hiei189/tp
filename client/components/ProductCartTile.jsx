@@ -152,7 +152,7 @@ ProductCartTile = React.createClass({
         <div style={styles.productDataContainer} >
           <div style={styles.productTitle}
             onTouchTap={this._handleTouchTap}
-            id={this.props.product.key+'title'}>
+            id={this.props.product.key}>
             <h4>{this.props.product.name}</h4>
           </div><hr/>
           <div style={styles.productDescription}>
