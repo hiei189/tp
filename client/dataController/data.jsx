@@ -30,7 +30,7 @@ data = {
     var token = Session.get('token');
     let isTokenPersistent = Object.keys(token).length != 0; //si hay token entonces habia sesion
 
-    backendCom.getTokenGuest(token,(err,response)=>{
+    backendCom.getTokenGuest(token.access_token,(err,response)=>{
       if(response.data){
         if(isTokenPersistent){Session.setPersistent('token',response.data);}
         else {Session.set('token',response.data);}

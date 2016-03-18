@@ -65,7 +65,8 @@ App = React.createClass({
       user:{},
       gotUser: false,
       fbUser:false,
-      categories:{}
+      categories:{},
+      gotFbResponse: false
     };
   },
 
@@ -196,7 +197,15 @@ App = React.createClass({
           CartController.getAllItems(this.token.access_token,(err,response)=>{});
           data.initFB((response)=>{
             if(response.status === 'connected'){ //si hay email tenemos
-              data.socialReLogin(this.token.access_token,(err,response)=>{});
+              data.socialReLogin(this.token.access_token,(err,response)=>{
+                this.setState({
+                  gotFbResponse: true
+                });
+              });
+            }else {
+              this.setState({
+                gotFbResponse: true
+              });
             }
           });
           data.getCategories((err,response)=>{});
@@ -284,7 +293,7 @@ App = React.createClass({
   },
 
   render() {
-    var appLoaded = this.state.gotToken && this.state.gotCategories;
+    var appLoaded = this.state.gotToken && this.state.gotCategories && this.state.gotFbResponse;
     return (
       <div>
         {!appLoaded?(this.loadingPage()):(
@@ -437,8 +446,11 @@ const GetLeftList = React.createClass({
           ])
           ):(
           React.Children.toArray([
-          <ListItem value={'user1'} onTouchTap={this._handleUpdateData} primaryText = {'Actualizar datos'} />,
-          <ListItem value={'user2'} onTouchTap={this._handleCloseSession} primaryText = {'Cerrar sesión'} />,
+          <ListItem value={'user1'} onTouchTap={this._handleUpdateData} primaryText = {'Mis datos'} />,
+          <ListItem value={'user2'} onTouchTap={this._handleShippingAddresses} primaryText = {'Direcciones de entrega'} />,
+          <ListItem value={'user3'} onTouchTap={this._handleHistorial} primaryText = {'Historial de pedidos'} />,
+          <ListItem value={'user4'} onTouchTap={this._handlePayment} primaryText = {'Métodos de pago'} />,
+          <ListItem value={'user5'} onTouchTap={this._handleCloseSession} primaryText = {'Cerrar sesión'} />,
           ])
         )}
       </SelectableList>

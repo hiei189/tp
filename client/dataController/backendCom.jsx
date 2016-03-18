@@ -312,7 +312,24 @@ backendCom = {
     );
   },
 
-  addAddress:function(firstname,lastname,telephone,place_id,address,reference,shippingAddress,token,callback){
+  getPlaces:function(search,token,callback){
+    HTTP.call(
+        'GET',
+        'http://www.tulipanda.pe/store/api/rest/places/search/'+search,
+        {
+          headers:{
+            Authorization: 'Bearer ' + token
+          }
+        },
+        (err,response)=>{
+          callback(err,response);
+          return;
+        });
+  },
+
+  addAddress:function(firstname,lastname,telephone,place_id,address,reference,token,callback){
+    console.log(telephone);
+    console.log(reference);
     HTTP.call(
       'POST',
       'http://www.tulipanda.pe/store/api/rest/shippingaddress',
@@ -346,24 +363,6 @@ backendCom = {
       {
         headers:{
           'Authorization':'Bearer '+token,
-          'X-Oc-Merchant-Language' : 'es',
-          'X-Oc-Store-Id': '0'
-        }
-      },
-      (err,response)=>{
-        callback(err,response);
-        return;
-      }
-    );
-  },
-
-  getOcassions:function(token,callback){
-    HTTP.call(
-      'GET',
-      'http://www.tulipanda.pe/store/api/rest/occasions',
-      {
-        headers:{
-          'Authorization':'Bearer '+ token,
           'X-Oc-Merchant-Language' : 'es',
           'X-Oc-Store-Id': '0'
         }

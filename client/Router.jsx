@@ -5,6 +5,7 @@ Meteor.startup(function() {
       Session.set('cartshopNumber','0');
       Session.set('token',{});
       Session.set('user',{});
+      Session.set('places','NO_DATA');
       Session.setDefault('isShoppingCartEmpty',true);
       injectTapEventPlugin();
     }
