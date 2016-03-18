@@ -1,4 +1,4 @@
-const { AppBar, IconButton, IconMenu, LeftNav,Badge,Divider,CircularProgress,List,Dialog,ListItem} = mui;
+const { AppBar, IconButton, IconMenu, LeftNav,Badge,Divider,CircularProgress,List,Dialog,ListItem,SvgIcon} = mui;
 const {ActionShoppingCart,ActionAccountCircle} = mui.SvgIcons;
 const {ThemeManager} = mui.Styles;
 const Colors = mui.Styles.Colors;
@@ -376,6 +376,11 @@ const GetLeftList = React.createClass({
 
   renderNested:function(category){
     return category.categories.map((category)=>{
+      let icon = category.icon.toUpperCase();
+      let IconComponent = Icons[icon];
+      if(typeof IconComponent === 'undefined'){
+        IconComponent = <SvgIcon/>
+      }
       return (
           <ListItem
             key={category.category_id}
@@ -391,13 +396,15 @@ const GetLeftList = React.createClass({
   getCategories:function(){
 
     return this.props.categories.map((category)=>{
+      let icon = category.icon.toUpperCase();
+      let IconComponent = Icons[icon];
       if(category.categories){
         return(
           React.Children.toArray([
             <ListItem
               key={category.category_id}
               id={category.category_id}
-              leftIcon = {<Icons.ROSE />}
+              leftIcon = {<IconComponent/>}
               onTouchTap = {this._handleTouchTap.bind(this,category.name)}
               primaryText = {category.name}
               nestedItems={this.renderNested(category)}
@@ -411,6 +418,7 @@ const GetLeftList = React.createClass({
             <ListItem
               id={category.category_id}
               key={category.category_id}
+              leftIcon = {<IconComponent/>}
               onTouchTap = {this._handleTouchTap.bind(this,category.name)}
               primaryText = {category.name}
               value={category.category_id}
