@@ -1,3 +1,5 @@
+let basic_url = 'http://api.tulipanda.pe/rest/';
+
 backendCom = {
   getTokenGuest: function(oldToken,callback){
     let _oldToken = '';
@@ -13,7 +15,7 @@ backendCom = {
     if(_oldToken===''){
       HTTP.call(
         'POST',
-        'http://www.tulipanda.pe/store/api/rest/oauth2/token/client_credentials',
+        basic_url + 'oauth2/token/client_credentials',
         {
           headers:{
             'Authorization':'Basic ' + guest,
@@ -30,7 +32,7 @@ backendCom = {
     }else{
       HTTP.call(
         'POST',
-        'http://www.tulipanda.pe/store/api/rest/oauth2/token/client_credentials',
+        basic_url + 'oauth2/token/client_credentials',
         {
           headers:{
             'Authorization':'Basic ' + guest,
@@ -53,7 +55,7 @@ backendCom = {
   getCategories: function(token,callback){
     HTTP.call(
       'GET',
-      'http://www.tulipanda.pe/store/api/rest/categories/level/2',
+      basic_url + 'categories/level/2',
       {
         headers:{
           'Authorization': 'Bearer '+token,
@@ -71,7 +73,7 @@ backendCom = {
   getProductsByCategory: function(token,category_id,callback){
     HTTP.call(
       'GET',
-      'http://www.tulipanda.pe/store/api/rest/products/category/'+category_id,
+      basic_url + 'products/category/'+category_id,
       {
         headers:{
           'Authorization': 'Bearer '+token,
@@ -88,7 +90,7 @@ backendCom = {
   getProductsByCategoryLimited: function(token,category_id,limit,page,callback){
     HTTP.call(
       'GET',
-      'http://www.tulipanda.pe/store/api/rest/products/category/'+category_id.toString()+'/limit/'+limit.toString()+'/page/'+page.toString(),
+      basic_url + 'products/category/'+category_id.toString()+'/limit/'+limit.toString()+'/page/'+page.toString(),
       {
         headers:{
           'Authorization': 'Bearer '+token,
@@ -105,7 +107,7 @@ backendCom = {
   getProductById: function(token,product_id,callback){
     HTTP.call(
       'GET',
-      "http://www.tulipanda.pe/store/api/rest/products/"+product_id.toString(),
+      basic_url + 'products/'+product_id.toString(),
       {
         headers:{
           'Authorization': 'Bearer '+token,
@@ -122,7 +124,7 @@ backendCom = {
   createUser:function(token,name,lastname,email,telephone,pass,passconfirm,gender,callback){
     HTTP.call(
       'POST',
-      'http://www.tulipanda.pe/store/api/rest/register',
+      basic_url + 'register',
       {
         headers:{
           'Authorization':'Bearer '+token,
@@ -158,7 +160,7 @@ backendCom = {
   loginUser:function(token,email,password,callback){
     HTTP.call(
       'POST',
-      'http://www.tulipanda.pe/store/api/rest/login',
+      basic_url + 'login',
       {
         headers:{
           'Authorization':'Bearer '+token,
@@ -178,7 +180,7 @@ backendCom = {
   socialLogin:function(email,fbToken,token,callback){
     HTTP.call(
       'POST',
-      'http://www.tulipanda.pe/store/api/rest/sociallogin',
+      basic_url + 'sociallogin',
       {
         headers:{
           'Authorization':'Bearer '+token,
@@ -199,7 +201,7 @@ backendCom = {
   getAllCart:function(token,callback){
     HTTP.call(
       'GET',
-      'http://www.tulipanda.pe/store/api/rest/cart',
+      basic_url + 'cart',
       {
         headers:{
           'Authorization':'Bearer '+token,
@@ -214,7 +216,7 @@ backendCom = {
   },
   removeItem:function(id,token,callback){
     HTTP.del(
-      'http://www.tulipanda.pe/store/api/rest/cart',
+      basic_url + 'cart',
       {
         headers:{
           'Authorization':'Bearer '+token,
@@ -232,7 +234,7 @@ backendCom = {
 
   updateCart:function(id,qty,token,callback){
     HTTP.put(
-      'http://www.tulipanda.pe/store/api/rest/cart',
+      basic_url + 'cart',
       {
         headers:{
           'Authorization':'Bearer '+token,
@@ -257,7 +259,7 @@ backendCom = {
     });
     HTTP.call(
       'POST',
-      'http://www.tulipanda.pe/store/api/rest/cart_bulk',
+      basic_url + 'cart_bulk',
       {
         headers:{
           'Authorization':'Bearer '+token,
@@ -274,7 +276,7 @@ backendCom = {
   addItem:function(token,product_id,quantity,callback){
     HTTP.call(
       'POST',
-      ' http://www.tulipanda.pe/store/api/rest/cart',
+      basic_url + 'cart',
       {
         headers:{
           'Authorization':'Bearer '+token
@@ -296,7 +298,7 @@ backendCom = {
   recoverPassword:function(email,token,callback){
     HTTP.call(
       'POST',
-      'http://www.tulipanda.pe/store/api/rest/forgotten',
+      basic_url + 'forgotten',
       {
         headers:{
           'Authorization':'Bearer '+token
@@ -315,7 +317,7 @@ backendCom = {
   getPlaces:function(search,token,callback){
     HTTP.call(
         'GET',
-        'http://www.tulipanda.pe/store/api/rest/places/search/'+search,
+        basic_url + 'places/search/'+search,
         {
           headers:{
             Authorization: 'Bearer ' + token
@@ -328,11 +330,9 @@ backendCom = {
   },
 
   addAddress:function(firstname,lastname,telephone,place_id,address,reference,token,callback){
-    console.log(telephone);
-    console.log(reference);
     HTTP.call(
       'POST',
-      'http://www.tulipanda.pe/store/api/rest/shippingaddress',
+      basic_url + 'shippingaddress',
       {
         headers:{
           'Authorization':'Bearer '+token,
@@ -359,7 +359,7 @@ backendCom = {
   getAddresses:function(token,callback){
     HTTP.call(
       'GET',
-      'http://www.tulipanda.pe/store/api/rest/shippingaddress',
+      basic_url + 'shippingaddress',
       {
         headers:{
           'Authorization':'Bearer '+token,
@@ -377,7 +377,7 @@ backendCom = {
   saveDelivery:function(day,hour,ocassion_id,message,anonymous,delivery,token,callback){
     HTTP.call(
       'POST',
-      'http://www.tulipanda.pe/store/api/rest/delivery',
+      basic_url + 'delivery',
       {
         headers:{
           'Authorization':'Bearer '+ token,

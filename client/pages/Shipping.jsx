@@ -37,18 +37,11 @@ const styles = {
 }
 
 Shipping = React.createClass({
+
   mixins: [React.addons.LinkedStateMixin],
 
   componentWillMount: function() {
     this.error = {};
-    this.minDate = new Date();
-    this.maxDate = new Date();
-    this.minDate.setFullYear(this.minDate.getFullYear());
-    this.maxDate.setFullYear(this.maxDate.getFullYear()+1);
-    this.setState({
-      dateShipping: this.maxDate
-    });
-
 
     this.token = Session.get('token');
     this.setState({
@@ -70,11 +63,8 @@ Shipping = React.createClass({
         });
       }
     });
-
-
-    //backendCom.getAddresses(this.token.access_token,(err,response)=>{console.log(response)});
-
   },
+
   handleChangeTimePicker12:function(err, time) {
     this.refs.picker12hr.setTime(time);
   },
@@ -82,6 +72,7 @@ Shipping = React.createClass({
   componentWillUnmount: function() {
 
   },
+
   getInitialState: function() {
     this.placeFinished = 'NOT FINISHED';
     this.place_id = 'X';
@@ -92,15 +83,6 @@ Shipping = React.createClass({
       shippingPlace:'',
       shippingAddress:'',
       reference:'',
-      dateShipping:'',
-      hourShipping:'',
-      occasions:'',
-      message:'',
-      items: [],
-      gotItems:false,
-      total:'',
-      noProducts:true,
-      gotProducts:false,
       placesDataSource:['Ingresa un lugar'],
       addressesLoading: true
     };
@@ -194,6 +176,7 @@ Shipping = React.createClass({
 
     if (value !== 'X'){
       let address = findById(this.state.savedAddress.addresses,value);
+      console.log(address);
       this.place_id =address.place_id;
       this.placeFinished = 'FINISHED';
       this.setState({
@@ -298,64 +281,7 @@ Shipping = React.createClass({
           </form><br/>
 
 
-          <h2 style={styles.headers}>Datos de delivery</h2>
-          <form style={styles.form}>
-            <DatePicker
-              floatingLabelText="Fecha de entrega"
-              textFieldStyle = {{width:'100%'}}
-              minDate = {this.minDate}
-              maxDate = {this.maxDate}
-              defaultDate={this.maxDate}
-              valueLink={this.linkState('dateShipping')}
-              style = {styles.field}
-              errorText={this.error.dateShipping}
-            /><br/>
-            <TimePicker
-              floatingLabelText="Hora de entrega"
-              textFieldStyle = {{width:'100%'}}
-              style = {styles.field}
-              format="24hr"
-              ref="picker24hr"
-              onChange={this.handleChangeTimePicker12}
-              errorText={this.error.hourShipping}
-            /><br/>
-            <TextField
-              floatingLabelText="Motivo"
-              type="string"
-              id ="occasions"
-              valueLink={this.linkState('occasions')}
-              style ={styles.field}
-              errorText={this.error.occasions}
-            /><br/>
-            <TextField
-              floatingLabelText="Mensaje"
-              type="string"
-              id ="message"
-              multiline={true}
-              valueLink={this.linkState('message')}
-              style ={styles.field}
-              rows = {2}
-              errorText={this.error.message}
-            /><br/>
-            <TextField
-              floatingLabelText="Costo de envío"
-              type="string"
-              id ="priceShipping"
-              multiline={true}
-              valueLink={this.linkState('priceShipping')}
-              style ={styles.field}
-              errorText={this.error.priceShipping}
-            /><br/>
-            <RaisedButton
-              primary={true}
-              label={'Costo'}
-              onTouchTap={this.calculatePriceShipping}/><br/>
-            <RaisedButton
-              icon={<ContentSave />}
-              primary={true}
-              label={'Guardar'}
-              onTouchTap={this.next}/><br/>
-          </form><br/>
+
         </div>
       </div>
     );

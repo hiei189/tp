@@ -158,6 +158,7 @@ App = React.createClass({
       this.setState({
         categories: Session.get('categories')
       });
+      console.log(this.state.categories);
       if(Object.keys(this.state.categories).length!== 0){
         this.setState({
           gotCategories: true
@@ -396,6 +397,7 @@ const GetLeftList = React.createClass({
             <ListItem
               key={category.category_id}
               id={category.category_id}
+              leftIcon = {<Icons.ROSE />}
               onTouchTap = {this._handleTouchTap.bind(this,category.name)}
               primaryText = {category.name}
               nestedItems={this.renderNested(category)}
