@@ -1,4 +1,4 @@
-const { AppBar, IconButton, IconMenu, LeftNav,Badge,Divider,CircularProgress,List,Dialog,ListItem,SvgIcon} = mui;
+const { AppBar, IconButton, IconMenu, LeftNav,Badge,Divider,CircularProgress,List,Dialog,ListItem,SvgIcon,Avatar} = mui;
 const {ActionShoppingCart,ActionAccountCircle} = mui.SvgIcons;
 const {ThemeManager} = mui.Styles;
 const Colors = mui.Styles.Colors;
@@ -111,7 +111,7 @@ App = React.createClass({
             childrenContainer:{
               paddingTop:96,
               paddingBottom:64,
-              marginLeft:256,
+              marginLeft:272,
 
             }
           });
@@ -314,7 +314,7 @@ App = React.createClass({
             style={{zIndex:this.state.leftNavZIndex}}
             disableSwipeToOpen={false}
             overlayClassName={'overlayLeftNav'}
-            width={256}>
+            width={272}>
             {!this.state.leftNavDocked?<AppBar
               title="Tulipanda"
               zDepth = {2}
@@ -394,7 +394,7 @@ const GetLeftList = React.createClass({
   },
 
   getCategories:function(){
-
+    //innerDivStyle={{paddingTop:'24px',paddingBottom:'24px'}}
     return this.props.categories.map((category)=>{
       let icon = category.icon.toUpperCase();
       let IconComponent = Icons[icon];
@@ -404,21 +404,21 @@ const GetLeftList = React.createClass({
             <ListItem
               key={category.category_id}
               id={category.category_id}
-              leftIcon = {<IconComponent/>}
+              leftAvatar = {<Avatar color={'#000000'} icon={<IconComponent style={{fill:'black'}}/>} backgroundColor={Colors.blueGrey50}></Avatar>}
               onTouchTap = {this._handleTouchTap.bind(this,category.name)}
               primaryText = {category.name}
               nestedItems={this.renderNested(category)}
               value={category.category_id}/>
           ])
         );
-
+//<IconComponent style={{fill:'black',top:'16'}}/>
       }else{
         return (
           React.Children.toArray([
             <ListItem
               id={category.category_id}
               key={category.category_id}
-              leftIcon = {<IconComponent/>}
+              leftAvatar = {<Avatar color={'#000000'} icon={<IconComponent style={{fill:'black'}}/>} backgroundColor={Colors.blueGrey50}></Avatar>}
               onTouchTap = {this._handleTouchTap.bind(this,category.name)}
               primaryText = {category.name}
               value={category.category_id}
@@ -444,7 +444,7 @@ const GetLeftList = React.createClass({
   render: function() {
     return (
       <SelectableList
-        width={256}
+        width={272}
         style={{marginTop:64}}>
         {this.getCategories()}
         <Divider/>
