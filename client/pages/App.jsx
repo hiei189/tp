@@ -31,7 +31,9 @@ var styles = {
     zIndex: 0,
   },
   navbar:{
-    padding:'32px 16px'
+    paddingTop:'32px',
+    paddingLeft: '16px',
+    paddingRight: '16px'
   }
 }
 

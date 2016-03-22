@@ -180,7 +180,7 @@ DeliveryPage = React.createClass({
             <RaisedButton
               primary={true}
               onTouchTap={this.calculatePriceShipping}>
-              <NavigationRefresh />
+              <NavigationRefresh style={{fill:'white'}}/>
             </RaisedButton>
           </div>
 
