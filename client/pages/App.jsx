@@ -468,12 +468,14 @@ const GetLeftList = React.createClass({
     return (
       <SelectableList
         width={272} height={'100px'} >
-        <div style={{textAlign:'center'}}>
-          <img src={"/images/LogoAlta.png"} style={{width:'80%'}}/>
+        <div>
+          <div style={{textAlign:'center'}}>
+            <img src={"/images/LogoAlta.png"} style={{width:'80%'}}/>
+          </div>
+          <h4>
+            {'Bienvenido' + name}
+          </h4>
         </div>
-        <h4>
-          {'Bienvenido' + name}
-        </h4>
         <Divider/>
         {this.getCategories()}
         <Divider/>
