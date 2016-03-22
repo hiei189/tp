@@ -19,6 +19,7 @@ Meteor.startup(function() {
             <Route path="/login" component ={LoginPage}/>
             <Route path="/shoppingcart" component = {CartPage}/>
             <Route path="/shipping" component = {Shipping}/>
+            <Route path="/user" component = {UserPage}/>
             <Route path="/delivery" component = {DeliveryPage}/>
           </Route>
         );

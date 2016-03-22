@@ -2,7 +2,7 @@ const { TextField, TimePicker, SelectField, DatePicker,RaisedButton,MenuItem,Cir
 const {ContentSend} = mui.SvgIcons;
 
 const Colors = mui.Styles.Colors;
-console.log(mui);
+
 function findById(source, address_id) {
     return source.filter(function( obj ) {
         // coerce both obj.id and id to numbers
@@ -373,6 +373,7 @@ Shipping = React.createClass({
               filter={AutoComplete.noFilter}
               disabled = {this.state.disabledForm}
               required
+              fullWidth={true}
               style ={styles.field}
               errorText = {this.state.errorPlace}
               dataSource = {this.state.placesDataSource}/>
@@ -386,6 +387,7 @@ Shipping = React.createClass({
               id ="shippingAddress"
               value = {this.state.shippingAddress}
               style ={styles.field}
+
               disabled = {this.state.disabledForm}
             />
             <FormsyText

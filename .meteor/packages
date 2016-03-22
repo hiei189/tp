@@ -17,13 +17,10 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 
 react
 http
-markoshust:material-ui
 reactrouter:react-router
 reactrouter:react-router-ssr
 base64
 ficshelf:media-query
 inno:zoom
 u2622:persistent-session
-
-
-npm-container
+hiei:material-ui

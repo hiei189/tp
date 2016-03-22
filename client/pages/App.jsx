@@ -1,6 +1,6 @@
 const { AppBar, IconButton, IconMenu, LeftNav,Badge,Divider,CircularProgress,List,Dialog,ListItem,SvgIcon,Avatar} = mui;
 const {ActionShoppingCart,ActionAccountCircle} = mui.SvgIcons;
-const {ThemeManager} = mui.Styles;
+const {getMuiTheme} = mui.Styles;
 const Colors = mui.Styles.Colors;
 const {SelectableContainerEnhance} = mui;
 
@@ -46,7 +46,7 @@ App = React.createClass({
 
   getChildContext() {
     return {
-      muiTheme: ThemeManager.getMuiTheme(theme),
+      muiTheme: getMuiTheme(theme),
       screensize: Session.get('device-screensize'),
       user: this.state.user,
       gotUser: this.state.gotUser,
@@ -107,12 +107,11 @@ App = React.createClass({
             leftNavDocked: true,
             showMenuIconButton:false,
             openMenu:true,
-            leftNavZIndex: 1000,
+            leftNavZIndex: 1050,
             childrenContainer:{
-              paddingTop:96,
-              paddingBottom:64,
+              paddingTop:64,
+              paddingBottom:96,
               marginLeft:272,
-
             }
           });
           break;
@@ -124,8 +123,8 @@ App = React.createClass({
             showMenuIconButton:true,
             leftNavZIndex: 1300,
             childrenContainer:{
-              paddingTop:96,
-              paddingBottom:64
+              paddingTop:64,
+              paddingBottom:96
             }
           });
           break;
@@ -305,13 +304,13 @@ App = React.createClass({
             iconElementRight = {this.getShoppingcart()}
             showMenuIconButton = {this.state.showMenuIconButton}
             onLeftIconButtonTouchTap ={this.openMenu}
-            zDepth={2}/>
+            zDepth={0}/>
           <LeftNav
             ref= {"leftNav"}
             docked={this.state.leftNavDocked}
             open={this.state.openMenu}
             onRequestChange={open => this.setState({openMenu:open})}
-            style={{zIndex:this.state.leftNavZIndex}}
+            containerStyle={{zIndex:this.state.leftNavZIndex}}
             disableSwipeToOpen={false}
             overlayClassName={'overlayLeftNav'}
             width={272}>
@@ -432,7 +431,10 @@ const GetLeftList = React.createClass({
     this.close();
     this.context.router.push('/shoppingcart');
   },
-
+  _handleUpdateData:function(){
+    this.close();
+    this.context.router.push('/user');
+  },
   _handleCloseSession:function(){
     this.close();
     this.props.handleCloseSession();
@@ -457,9 +459,6 @@ const GetLeftList = React.createClass({
           ):(
           React.Children.toArray([
           <ListItem value={'user1'} onTouchTap={this._handleUpdateData} primaryText = {'Mis datos'} />,
-          <ListItem value={'user2'} onTouchTap={this._handleShippingAddresses} primaryText = {'Direcciones de entrega'} />,
-          <ListItem value={'user3'} onTouchTap={this._handleHistorial} primaryText = {'Historial de pedidos'} />,
-          <ListItem value={'user4'} onTouchTap={this._handlePayment} primaryText = {'Métodos de pago'} />,
           <ListItem value={'user5'} onTouchTap={this._handleCloseSession} primaryText = {'Cerrar sesión'} />,
           ])
         )}
