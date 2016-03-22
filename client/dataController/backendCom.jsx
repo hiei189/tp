@@ -374,6 +374,22 @@ backendCom = {
     );
   },
 
+  getOccasions: function(token,callback){
+    HTTP.get(
+      basic_url + 'ocassions',
+      {
+        headers:{
+        'Authorization':'Bearer '+ token,
+        'X-Oc-Merchant-Language' : 'es',
+        'X-Oc-Store-Id': '0'
+        }
+      },
+      (err,response)=>{
+        callback(err,response);
+      }
+    );
+  },
+
   saveDelivery:function(day,hour,ocassion_id,message,anonymous,delivery,token,callback){
     HTTP.call(
       'POST',
@@ -390,7 +406,7 @@ backendCom = {
           ocassion_id:ocassion_id,
           message: message,
           anonymous: anonymous,
-          delivery: delivery
+          delivery: "new"
         }
       },
       (err,response)=>{

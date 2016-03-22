@@ -3,9 +3,6 @@ const { Paper, RaisedButton, CircularProgress,FloatingActionButton} = mui;
 const Colors = mui.Styles.Colors;
 
 var styles = {
-  root: {
-
-  },
   paper:{
     overflow:'visible',
     height:'190',
@@ -137,7 +134,7 @@ CartPage = React.createClass({
 
   render: function() {
       return (
-        <div style={styles.root} >
+        <div>
           {this.state.noProducts?<div>Elige productos para poder comprarlos</div>:
             (
             <div style={{width:'100%'}}>

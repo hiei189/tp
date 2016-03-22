@@ -1,8 +1,8 @@
-const { TextField, TimePicker, SelectField, DatePicker,RaisedButton,MenuItem,AutoComplete,CircularProgress} = mui;
-const {ContentSave} = mui.SvgIcons;
+const { TextField, TimePicker, SelectField, DatePicker,RaisedButton,MenuItem,CircularProgress,AutoComplete,FloatingActionButton} = mui;
+const {ContentSend} = mui.SvgIcons;
 
 const Colors = mui.Styles.Colors;
-
+console.log(mui);
 function findById(source, address_id) {
     return source.filter(function( obj ) {
         // coerce both obj.id and id to numbers
@@ -22,17 +22,34 @@ const styles = {
   },
   field: {
     margin: 'auto',
-    width:'60%',
-    minWidth:'256'
+    width:'100%',
   },
   form:{
-    textAlign:'center'
+    textAlign:'center',
+    display:'flex',
+    flexDirection:'column',
+    alignItems:'center',
+    width:'60%',
+    minWidth:'256',
+    margin:'auto'
   },
   headers:{
     margin:'auto',
     width:'60%',
     textAlign:'center',
     color:Colors.pink800
+  },
+  footer:{
+    position:'fixed',
+    display:'flex',
+    justifyContent:'flex-end',
+    left:0,
+    bottom:0,
+    height:60,
+    width:'100%',
+    backgroundColor: Colors.grey100,
+    minWidth: '100%',
+    alignItems:'center'
   }
 }
 
@@ -40,12 +57,33 @@ Shipping = React.createClass({
 
   mixins: [React.addons.LinkedStateMixin],
 
+  contextTypes: {
+    screensize: React.PropTypes.string,
+    gotUser: React.PropTypes.bool,
+    router:React.PropTypes.object
+  },
+
   componentWillMount: function() {
-    this.error = {};
 
     this.token = Session.get('token');
     this.setState({
       addressesLoading: true
+    });
+
+    Tracker.autorun((a)=>{
+      this.trackerId_a = a;
+
+      if(Session.get('isShoppingCartEmpty')){
+        this.setState({
+          noProducts: true
+        });
+      }else{
+        this.shoppingCart = Session.get('shoppingCart');
+        this.setState({
+          total: this.shoppingCart.totals[0].text,
+          noProducts: false
+        });
+      }
     });
 
     formsController.getAddresses(this.token.access_token,(err,response)=>{
@@ -65,12 +103,18 @@ Shipping = React.createClass({
     });
   },
 
+  errorMessages: {
+    wordsError: "Solo use letras (a-z)",
+    isDefaultRequiredValue: 'Este campo es requerido'
+  },
+
   handleChangeTimePicker12:function(err, time) {
     this.refs.picker12hr.setTime(time);
   },
 
   componentWillUnmount: function() {
-
+    this.trackerId_a.stop();
+    Session.set('shippingFormErrors',{});
   },
 
   getInitialState: function() {
@@ -84,17 +128,30 @@ Shipping = React.createClass({
       shippingAddress:'',
       reference:'',
       placesDataSource:['Ingresa un lugar'],
-      addressesLoading: true
+      addressesLoading: true,
+      errors:{},
+      total: 0,
+      errorPlace:'',
+      place:'',
+      validForm:false
     };
   },
 
   _handleTouchMenuAutoComplete(e){
     this.place_id = e.currentTarget.id;
     this.placeFinished = 'FINISHED';
+    formsController.shipping.place_id = this.place_id;
+    this.setState({
+      errorPlace: ''
+    });
   },
+
   _handleAutoComplete:function(search){
+
     this.placeFinished = 'NOT FINISHED';
     this.place_id = 'X';
+    formsController.shipping.place_id = this.place_id;
+
     this.setState({
       place: search
     });
@@ -144,22 +201,6 @@ Shipping = React.createClass({
     }
   },
 
-  saveShippingAddress:function(){
-    console.log(this.place_id);
-    backendCom.addAddress(
-      this.state.firstname,
-      this.state.lastname,
-      this.state.telephone,
-      this.place_id,
-      this.state.shippingAddress,
-      this.state.reference,
-      this.token.access_token,
-      (err,response)=>{
-      console.log(response);
-      }
-    );
-  },
-
   getAddresses: function(){
     return this.state.savedAddress.addresses.map((address)=>{
       return (
@@ -171,14 +212,15 @@ Shipping = React.createClass({
     });
   },
 
-  handleChangeMenuAddresses:function(event, index, value){
+  handleChangeMenuAddresses:function(event, value, index){
     this.setState({selectedAddress:value});
-
+    formsController.shipping.address_id = value; //GUARDAR ADDRES_ID SELECCIONADO
     if (value !== 'X'){
       let address = findById(this.state.savedAddress.addresses,value);
       console.log(address);
-      this.place_id =address.place_id;
+      this.place_id=address.place_id;
       this.placeFinished = 'FINISHED';
+      formsController.shipping.isSavedAddress = true;
       this.setState({
         disabledForm: true,
         firstname: address.firstname,
@@ -190,6 +232,7 @@ Shipping = React.createClass({
       });
     }else{
       this.placeFinished = 'NOT FINISHED';
+      formsController.shipping.isSavedAddress = false;  //DETERMINAR SI HUBO CAMBIO
       this.place_id = 'X';
       this.setState({
         disabledForm: false,
@@ -203,85 +246,167 @@ Shipping = React.createClass({
     }
   },
 
+  validatePlace:function(event){
+   if(this.place_id === 'X'){
+     this.setState({
+       errorPlace: 'Debe seleccionar un lugar válido'
+     });
+   }else{
+     this.setState({
+       errorPlace: ''
+     });
+   }
+  },
+
+  validateForm:function(){
+    console.log('valid');
+    if(this.place_id==='X'){
+      this.setState({
+        validForm: false
+      });
+    }else{
+      this.setState({
+        validForm: true
+      });
+    }
+  },
+
+  invalidForm:function(){
+    this.setState({
+      validForm: false
+    });
+  },
+
+  submit:function(model,reset){
+    this.validatePlace();
+    model.place_id = this.place_id;
+    if(model.place_id!=='X')
+    {
+      model.place_id = this.place_id;
+      if(this.context.gotUser){
+        if(model.selectedAddress !== 'X'){
+          formsController.shippingController.addAddress(model,this.token.access_token,
+            (response)=>{
+              Session.set('shoppingShipping',response.data);
+          });
+        }
+        else{
+          Session.set('shoppingShipping',model);
+        }
+        this.context.router.push('/delivery');
+      }
+      else{
+        this.context.router.push('/login');
+      }
+    }
+  },
+
   render: function() {
+    let { wordsError } = this.errorMessages;
+
     return (
       <div>
         <div style={styles.container}>
           <h2 style={styles.headers}>Datos de entrega</h2>
-          <form style={styles.form}>
-            <SelectField
-              style={styles.field}
-              value = {this.state.selectedAddress}
+
+          <Formsy.Form
+            onValidSubmit={this.submit}
+            onValid={this.validateForm}
+            onInvalid={this.invalidForm}
+            style ={styles.form}>
+
+            <FormsySelect
+              name='selectedAddress'
+              ref='selectedAddress'
+              required
               onChange={this.handleChangeMenuAddresses}
+              style ={styles.field}
               floatingLabelText="Elige una dirección">
-              <MenuItem value={'X'} primaryText="Nueva dirección" />
+              <MenuItem value={'X'} primaryText="Nueva dirección"/>
               {!this.state.addressesLoading?this.getAddresses():<div/>}
-            </SelectField><br/>
-            <TextField
+            </FormsySelect>
+
+            <FormsyText
+              name='firstname'
+              ref='firstname'
+              validations='isWords'
+              validationError={wordsError}
+              required
               floatingLabelText="Nombres"
               type="string"
-              id ="name"
-              valueLink={this.linkState('firstname')}
-              disabled = {this.state.disabledForm}
+              id ="firstname"
+              value = {this.state.firstname}
               style ={styles.field}
-              errorText={this.error.name}
-            /><br/>
-            <TextField
+              disabled = {this.state.disabledForm}
+            />
+            <FormsyText
+              name='lastname'
+              validations='isWords'
+              validationError={wordsError}
+              required
               floatingLabelText="Apellidos"
               type="string"
-              id ="name"
-              valueLink={this.linkState('lastname')}
-              disabled = {this.state.disabledForm}
+              id ="lastname"
+              value = {this.state.lastname}
               style ={styles.field}
-              errorText={this.error.name}
-            /><br/>
-            <TextField
+              disabled = {this.state.disabledForm}
+            />
+            <FormsyText
+              name='telephone'
+              validations='isNumeric'
+              validationError={wordsError}
+              required
               floatingLabelText="Teléfono"
               type="number"
               id ="telephone"
-              valueLink={this.linkState('telephone')}
-              disabled = {this.state.disabledForm}
               style ={styles.field}
-              errorText={this.error.telephone}
-            /><br/>
+              value = {this.state.telephone}
+              disabled = {this.state.disabledForm}
+            />
             <AutoComplete floatingLabelText="Lugar"
               type="string"
               id ="shippingPlace"
+              searchText = {this.state.place}
+              onBlur = {this.validatePlace}
               onUpdateInput = {this._handleAutoComplete}
               openOnFocus = {true}
               filter={AutoComplete.noFilter}
               disabled = {this.state.disabledForm}
+              required
               style ={styles.field}
-              searchText = {this.state.place}
-              dataSource = {this.state.placesDataSource}/><br/>
-            <TextField
+              errorText = {this.state.errorPlace}
+              dataSource = {this.state.placesDataSource}/>
+
+            <FormsyText
+              name='shippingAddress'
+              validationError={wordsError}
+              required
               floatingLabelText="Dirección de entrega"
               type="string"
               id ="shippingAddress"
-              valueLink={this.linkState('shippingAddress')}
-              disabled = {this.state.disabledForm}
+              value = {this.state.shippingAddress}
               style ={styles.field}
-              errorText={this.error.shippingAddress}
-            /><br/>
-            <TextField
+              disabled = {this.state.disabledForm}
+            />
+            <FormsyText
+              name='reference'
+              validationError={wordsError}
+              required
               floatingLabelText="Referencia"
               type="string"
               id ="reference"
-              valueLink={this.linkState('reference')}
-              disabled = {this.state.disabledForm}
+              value = {this.state.reference}
               style ={styles.field}
-              multiline={true}
-              errorText={this.error.reference}
-            /><br/>
-            <RaisedButton
-              icon={<ContentSave />}
-              primary={true}
-              label={'Guardar'}
-              onTouchTap={this.saveShippingAddress}/><br/>
-          </form><br/>
-
-
-
+              disabled = {this.state.disabledForm}
+            />
+            <div style={styles.footer}>
+              <h3 style={{marginRight:16}} >{'TOTAL: '+ this.state.total}</h3>
+              <FloatingActionButton
+                type="submit">
+                <ContentSend />
+              </FloatingActionButton>
+            </div>
+          </Formsy.Form>
         </div>
       </div>
     );
