@@ -29,6 +29,9 @@ var styles = {
     float: 'left',
     position: 'relative',
     zIndex: 0,
+  },
+  navbar:{
+    padding:'32px 16px'
   }
 }
 
@@ -430,7 +433,6 @@ const GetLeftList = React.createClass({
               value={category.category_id}/>
           ])
         );
-//<IconComponent style={{fill:'black',top:'16'}}/>
       }else{
         return (
           React.Children.toArray([
@@ -467,7 +469,7 @@ const GetLeftList = React.createClass({
     const name = this.props.gotUser?', '+this.context.user.firstname +' ' + this.context.user.lastname:'';
     return (
       <SelectableList
-        width={272} height={'100px'} >
+        width={272} style={styles.navbar}>
         <div>
           <div style={{textAlign:'center'}}>
             <img src={"/images/LogoAlta.png"} style={{width:'80%'}}/>
