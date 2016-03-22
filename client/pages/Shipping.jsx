@@ -1,4 +1,4 @@
-const { TextField, TimePicker, SelectField, DatePicker,RaisedButton,MenuItem,CircularProgress,AutoComplete,FloatingActionButton} = mui;
+const { TextField,TimePicker, SelectField, DatePicker,RaisedButton,MenuItem,CircularProgress,AutoComplete,FloatingActionButton} = mui;
 const {ContentSend} = mui.SvgIcons;
 
 const Colors = mui.Styles.Colors;
@@ -57,6 +57,12 @@ Shipping = React.createClass({
 
   mixins: [React.addons.LinkedStateMixin],
 
+  getDefaultProps: function() {
+    return {
+      footer:true
+    };
+  },
+  
   contextTypes: {
     screensize: React.PropTypes.string,
     gotUser: React.PropTypes.bool,
@@ -401,13 +407,14 @@ Shipping = React.createClass({
               style ={styles.field}
               disabled = {this.state.disabledForm}
             />
-            <div style={styles.footer}>
+            {this.props.footer?<div style={styles.footer}>
               <h3 style={{marginRight:16}} >{'TOTAL: '+ this.state.total}</h3>
               <FloatingActionButton
                 type="submit">
                 <ContentSend />
               </FloatingActionButton>
-            </div>
+            </div>:null}
+
           </Formsy.Form>
         </div>
       </div>

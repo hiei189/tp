@@ -50,7 +50,11 @@ const styles = {
 DeliveryPage = React.createClass({
 
   mixins: [React.addons.LinkedStateMixin],
-
+  getDefaultProps: function() {
+    return {
+      footer:true
+    };
+  },
   getInitialState: function() {
     this.placeFinished = 'NOT FINISHED';
     this.place_id = 'X';
@@ -181,14 +185,14 @@ DeliveryPage = React.createClass({
           </div>
 
 
-
-          <div style={styles.footer}>
+          {this.props.footer?<div style={styles.footer}>
             <h3 style={{marginRight:16}} >{'TOTAL: '+ this.state.total}</h3>
             <FloatingActionButton
               type="submit">
               <ContentSend />
             </FloatingActionButton>
-          </div>
+          </div>:false}
+
         </Formsy.Form>
 
 

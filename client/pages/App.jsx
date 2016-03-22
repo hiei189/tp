@@ -57,21 +57,29 @@ App = React.createClass({
   getInitialState() {
 
     return {
-      openMenu: true,
+      openMenu: false,
       gotToken:false,
       gotCategories:false,
-      leftNavDocked:false,
+      leftNavDocked:true,
       cartshopNumber:'0',
       user:{},
       gotUser: false,
       fbUser:false,
       categories:{},
-      gotFbResponse: false
+      gotFbResponse: false,
+      marginLeft:{
+        marginLeft:0
+      },
+      childrenContainer:{
+        paddingTop:64,
+        paddingBottom:96,
+      },
+      moveValue:'0px'
     };
   },
 
   componentWillMount: function() {
-
+    this.navbarWidth = '272px';
     Tracker.autorun((d)=>{
       this.trackerId = d;
       let user = Session.get('user');
@@ -105,14 +113,11 @@ App = React.createClass({
         case "xxlarge":
           this.setState({
             leftNavDocked: true,
-            showMenuIconButton:false,
-            openMenu:true,
             leftNavZIndex: 1050,
             childrenContainer:{
               paddingTop:64,
               paddingBottom:96,
-              marginLeft:272,
-            }
+            },
           });
           break;
         case "small":
@@ -125,7 +130,9 @@ App = React.createClass({
             childrenContainer:{
               paddingTop:64,
               paddingBottom:96
-            }
+            },
+            moveValue:'0px'
+
           });
           break;
         default:
@@ -214,9 +221,20 @@ App = React.createClass({
   },
 
   openMenu(){
+    let openMenu = this.state.openMenu
     this.setState({
-      openMenu: !this.state.openMenu
+      openMenu: !openMenu
     });
+
+    if(!openMenu && this.state.leftNavDocked){
+      this.setState({
+          moveValue:this.navbarWidth
+      });
+    }else{
+      this.setState({
+          moveValue:'0px'
+      });
+    }
   },
 
   loadingPage(){
@@ -260,7 +278,8 @@ App = React.createClass({
   },
   closeLeftNav(){
     this.setState({
-      openMenu: false
+      openMenu: false,
+      moveValue:0
     });
   },
   _handleCloseSession(){
@@ -298,13 +317,15 @@ App = React.createClass({
       <div>
         {!appLoaded?(this.loadingPage()):(
           <div>
-          <AppBar
-            title={this.state.pageTitle}
-            style={{position:'fixed'}}
-            iconElementRight = {this.getShoppingcart()}
-            showMenuIconButton = {this.state.showMenuIconButton}
-            onLeftIconButtonTouchTap ={this.openMenu}
-            zDepth={0}/>
+          <div style={Object.assign({},{paddingLeft:this.state.moveValue,width:'100%'})}>
+            <AppBar
+              title={this.state.pageTitle}
+              style={Object.assign({},{position:'fixed',width:'calc(100% - '+this.state.moveValue+')'})}
+              iconElementRight = {this.getShoppingcart()}
+              showMenuIconButton = {true}
+              onLeftIconButtonTouchTap ={this.openMenu}
+              zDepth={0}/>
+          </div>
           <LeftNav
             ref= {"leftNav"}
             docked={this.state.leftNavDocked}
@@ -312,14 +333,9 @@ App = React.createClass({
             onRequestChange={open => this.setState({openMenu:open})}
             containerStyle={{zIndex:this.state.leftNavZIndex}}
             disableSwipeToOpen={false}
+            zDepth={0}
             overlayClassName={'overlayLeftNav'}
             width={272}>
-            {!this.state.leftNavDocked?<AppBar
-              title="Tulipanda"
-              zDepth = {2}
-              style={{position:'fixed'}}
-              showMenuIconButton = {false}
-              onLeftIconButtonTouchTap ={this.openMenu}/>:undefined}
             <GetLeftList
               close = {this.closeLeftNav}
               handleCloseSession = {this._handleCloseSession}
@@ -328,7 +344,7 @@ App = React.createClass({
               router={this.context.router}/>
           </LeftNav>
 
-          <div style={this.state.childrenContainer}>
+          <div style={Object.assign({},this.state.childrenContainer,{marginLeft:this.state.moveValue}) }>
             {this.props.children}
           </div>
         </div>
@@ -341,8 +357,12 @@ App = React.createClass({
 const GetLeftList = React.createClass({
   contextTypes: {
     screensize: React.PropTypes.string,
-    router: React.PropTypes.object
+    router: React.PropTypes.object,
+    user: React.PropTypes.object,
+    gotUser:React.PropTypes.bool
   },
+
+
 
   close:function(){
     switch(this.context.screensize){
@@ -444,10 +464,17 @@ const GetLeftList = React.createClass({
     this.context.router.push('/login');
   },
   render: function() {
+    const name = this.props.gotUser?', '+this.context.user.firstname +' ' + this.context.user.lastname:'';
     return (
       <SelectableList
-        width={272}
-        style={{marginTop:64}}>
+        width={272} height={'100px'} >
+        <div style={{textAlign:'center'}}>
+          <img src={"/images/LogoAlta.png"} style={{width:'80%'}}/>
+        </div>
+        <h4>
+          {'Bienvenido' + name}
+        </h4>
+        <Divider/>
         {this.getCategories()}
         <Divider/>
         <ListItem value={'shoppinCart'} onTouchTap={this._handleShoppingCart} primaryText = {'Carrito de compras'} />
