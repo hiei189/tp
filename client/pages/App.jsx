@@ -515,6 +515,7 @@ function wrapList(ComposedComponent) {
     render() {
       return (
         <ComposedComponent
+          selectedIndex = {this.state.selectedIndex}
           {...this.props}
           {...this.state}
           valueLink={{value: this.state.selectedIndex, requestChange: this._handleUpdateSelectedIndex}}
