@@ -3,7 +3,7 @@ const {ActionShoppingCart,ActionAccountCircle} = mui.SvgIcons;
 const {getMuiTheme} = mui.Styles;
 const Colors = mui.Styles.Colors;
 const {SelectableContainerEnhance} = mui;
-
+console.log(mui);
 //import { Grid,Row, Col } from 'react-flexbox-grid/lib/index';
 
 let SelectableList = SelectableContainerEnhance(List);
@@ -31,9 +31,15 @@ var styles = {
     zIndex: 0,
   },
   navbar:{
-    paddingTop:'32px',
     paddingLeft: '16px',
     paddingRight: '16px'
+  },
+  selectedCategory:{
+    color:Colors.pink500,
+    backgroundColor:''
+  },
+  selectedAvatar:{
+    fill:Colors.pink500
   }
 }
 
@@ -79,7 +85,8 @@ App = React.createClass({
         paddingTop:64,
         paddingBottom:96,
       },
-      moveValue:'0px'
+      moveValue:'0px',
+      paddingTopNavBar:96
     };
   },
 
@@ -123,7 +130,13 @@ App = React.createClass({
               paddingTop:64,
               paddingBottom:96,
             },
+            paddingTopNavBar:96
           });
+          if(this.state.openMenu){
+            this.setState({
+              moveValue: 272
+            });
+          }
           break;
         case "small":
         case "medium":
@@ -136,8 +149,8 @@ App = React.createClass({
               paddingTop:64,
               paddingBottom:96
             },
-            moveValue:'0px'
-
+            moveValue:'0px',
+            paddingTopNavBar:32
           });
           break;
         default:
@@ -322,10 +335,10 @@ App = React.createClass({
       <div>
         {!appLoaded?(this.loadingPage()):(
           <div>
-          <div style={Object.assign({},{paddingLeft:this.state.moveValue,width:'100%'})}>
+          <div style={Object.assign({},{width:'100%'})}>
             <AppBar
               title={this.state.pageTitle}
-              style={Object.assign({},{position:'fixed',width:'calc(100% - '+this.state.moveValue+')'})}
+              style={Object.assign({},{position:'fixed',width:'100%'})}
               iconElementRight = {this.getShoppingcart()}
               showMenuIconButton = {true}
               onLeftIconButtonTouchTap ={this.openMenu}
@@ -336,7 +349,7 @@ App = React.createClass({
             docked={this.state.leftNavDocked}
             open={this.state.openMenu}
             onRequestChange={open => this.setState({openMenu:open})}
-            containerStyle={{zIndex:this.state.leftNavZIndex}}
+            containerStyle={Object.assign({},{zIndex:this.state.leftNavZIndex,paddingTop:this.state.paddingTopNavBar})  }
             disableSwipeToOpen={false}
             zDepth={0}
             overlayClassName={'overlayLeftNav'}
@@ -349,7 +362,7 @@ App = React.createClass({
               router={this.context.router}/>
           </LeftNav>
 
-          <div style={Object.assign({},this.state.childrenContainer,{marginLeft:this.state.moveValue}) }>
+          <div style={Object.assign({},this.state.childrenContainer,{paddingLeft:this.state.moveValue}) }>
             {this.props.children}
           </div>
         </div>
@@ -359,15 +372,17 @@ App = React.createClass({
   }
   });
 
+
+
+
 const GetLeftList = React.createClass({
   contextTypes: {
+     muiTheme: React.PropTypes.object,
     screensize: React.PropTypes.string,
     router: React.PropTypes.object,
     user: React.PropTypes.object,
     gotUser:React.PropTypes.bool
   },
-
-
 
   close:function(){
     switch(this.context.screensize){
@@ -420,6 +435,7 @@ const GetLeftList = React.createClass({
   getCategories:function(){
     //innerDivStyle={{paddingTop:'24px',paddingBottom:'24px'}}
     return this.props.categories.map((category)=>{
+      const styleAvatar = Session.get('selectedItem')==category.category_id?styles.selectedAvatar:null;
       let icon = category.icon.toUpperCase();
       let IconComponent = Icons[icon];
       if(category.categories){
@@ -428,7 +444,7 @@ const GetLeftList = React.createClass({
             <ListItem
               key={category.category_id}
               id={category.category_id}
-              leftAvatar = {<Avatar color={'#000000'} icon={<IconComponent style={{fill:'black'}}/>} backgroundColor={Colors.blueGrey50}></Avatar>}
+              leftAvatar = {<Avatar color={'#000000'} icon={<IconComponent style={styleAvatar}/>} backgroundColor={Colors.blueGrey50}></Avatar>}
               onTouchTap = {this._handleTouchTap.bind(this,category.name)}
               primaryText = {category.name}
               nestedItems={this.renderNested(category)}
@@ -441,7 +457,7 @@ const GetLeftList = React.createClass({
             <ListItem
               id={category.category_id}
               key={category.category_id}
-              leftAvatar = {<Avatar color={'#000000'} icon={<IconComponent style={{fill:'black'}}/>} backgroundColor={Colors.blueGrey50}></Avatar>}
+              leftAvatar = {<Avatar color={'#000000'} icon={<IconComponent style={styleAvatar}/>} backgroundColor={Colors.blueGrey50}></Avatar>}
               onTouchTap = {this._handleTouchTap.bind(this,category.name)}
               primaryText = {category.name}
               value={category.category_id}
@@ -469,6 +485,7 @@ const GetLeftList = React.createClass({
   },
   render: function() {
     const name = this.props.gotUser?', '+this.context.user.firstname +' ' + this.context.user.lastname:'';
+
     return (
       <SelectableList
         width={272} style={styles.navbar}>
@@ -502,20 +519,36 @@ const GetLeftList = React.createClass({
 
 function wrapList(ComposedComponent) {
   const StateWrapper = React.createClass({
-    getInitialState() {
+    getInitialState:function() {
+      Session.set('selectedItem','25');
       return {selectedIndex: '25'};
     },
 
-    _handleUpdateSelectedIndex(e, index) {
-      this.setState({
-        selectedIndex: index,
+    componentWillMount: function() {
+      Tracker.autorun((a)=>{
+        this.trackerId_a = a;
+        this.setState({
+          selectedIndex: Session.get('selectedItem')
+        });
       });
     },
 
-    render() {
+    componentWillUnmount: function() {
+      this.trackerId_a.stop();
+    },
+
+    _handleUpdateSelectedIndex:function(e, index) {
+      this.setState({
+        selectedIndex: index,
+      });
+      Session.set('selectedItem',index);
+    },
+
+    render:function() {
       return (
         <ComposedComponent
           selectedIndex = {this.state.selectedIndex}
+          selectedItemStyle = {styles.selectedCategory}
           {...this.props}
           {...this.state}
           valueLink={{value: this.state.selectedIndex, requestChange: this._handleUpdateSelectedIndex}}

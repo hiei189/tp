@@ -12,7 +12,7 @@ theme =  getMuiTheme({
     primary1Color: Colors.pink500,
     primary2Color: Colors.yellow500,
     primary3Color: Colors.lightBlack,
-    accent1Color: Colors.cyan500,
+    accent1Color: Colors.pink500,
     accent2Color: Colors.grey100,
     accent3Color: Colors.grey500,
     textColor: Colors.darkBlack,
@@ -21,5 +21,16 @@ theme =  getMuiTheme({
     borderColor: Colors.grey300,
     disabledColor: ColorManipulator.fade(Colors.darkBlack, 0.3),
     pickerHeaderColor: Colors.yellow500,
+  },
+  listItem:{
+    hoverColor:Colors.pink100,
+    selectedTextColor: Colors.pink500,
+  },
+  selectableContainerEnhance:{
+    hoverColor:Colors.pink100,
+    selectedTextColor: Colors.pink500,
+  },
+  tabs:{
+    backgroundColor: Colors.white
   }
 });

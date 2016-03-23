@@ -1,12 +1,13 @@
 const {Tabs,Tab} = mui;
 const {MapsLocalShipping,ActionHistory,ActionPayment} =mui.SvgIcons;
+const Colors = mui.Styles.Colors;
 const styles={
   icons:{
     margin:'auto',
     width:28,
     color:'white',
     height:28,
-    fill: 'white'
+    fill: Colors.pink500
   }
 }
 UserPage = React.createClass({
@@ -26,7 +27,6 @@ UserPage = React.createClass({
         </Tab>
         <Tab
           icon={<div><ActionPayment style={styles.icons}/></div>}>
-
         </Tab>
       </Tabs>
     );

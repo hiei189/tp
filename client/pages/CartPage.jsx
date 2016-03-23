@@ -62,6 +62,7 @@ CartPage = React.createClass({
   componentWillMount: function() {
     this.total = 0;
     Session.set('pageTitle','Carrito de compras');
+    Session.set('selectedItem','shoppinCart');
     Tracker.autorun((d)=>{
       this.trackerId_d = d;
       this.screensize = Session.get('device-screensize');
