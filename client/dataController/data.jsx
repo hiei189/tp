@@ -10,8 +10,10 @@ data = {
       });
 
       FB.getLoginStatus((response)=> {
+        Session.set('fbResponse',response);
+        Session.set('gotFbResponse',true);
         callback(response);
-        return
+        return;
       });
     };
     this.loadFB();

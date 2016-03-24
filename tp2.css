@@ -11,9 +11,54 @@ br{
 .activeMenuLink{
   background-color: rgba(0, 0, 0, 0.2);
 }
+
 .overlayLeftNav{
 
 }
+
 html{
   font-family: 'Roboto', sans-serif;
+}
+
+
+.leftNav{
+  padding: 0px 16px !important;
+}
+
+#divLogoLoading{
+  position: absolute !important;
+  width: 50% !important;
+  margin: auto !important;
+  top: 50% !important;
+  bottom: 50% !important;
+  right: 50% !important;
+  left: 50% !important;
+  margin-left: -25% !important;
+  margin-top: -145px !important;
+  text-align: center !important;
+}
+
+#imgLogoLoading{
+  width: 100% !important;
+}
+
+#childrenContainer{
+  padding-top:64px;
+  padding-bottom:96px;
+  transition: transform 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+}
+
+@media (max-width: 1023px) {
+  .leftNav{
+    z-index: 1300 !important;
+    padding-top: 32px !important;
+  }
+}
+
+@media (min-width: 1023px) {
+  .leftNav{
+    z-index: 1050 !important;
+    margin-top: 64px !important;
+    padding-top: 24px !important;
+  }
 }

@@ -1,14 +1,23 @@
 const {Route, Router,IndexRoute,browserHistory} = ReactRouter;
 Meteor.startup(function() {
-    if (Meteor.isClient) {
+
       Session.set('pageTitle','Tulipanda');
       Session.set('cartshopNumber','0');
       Session.set('token',{});
       Session.set('user',{});
       Session.set('places','NO_DATA');
+      Session.set('gotFbResponse',{});
+      Session.set('fbResponse',{});
       Session.setDefault('isShoppingCartEmpty',true);
-      injectTapEventPlugin();
-    }
+
+      data.initToken((err,response)=>{
+          this.token = Session.get('token');
+          data.initFB((response)=>{});
+          CartController.getAllItems(this.token.access_token,(err,response)=>{});
+          data.getCategories((err,response)=>{});
+
+        });
+
       //const browserHistory = ReactRouter.history.useQueries(ReactRouter.history.createHistory)();
       const Routes = (
           <Route path="/" component={App}>

@@ -12,28 +12,6 @@ SelectableList = wrapList(SelectableList);
 const {Link} = ReactRouter;
 
 var styles = {
-  logoLoading:{
-    position:'absolute',
-    width:'50%',
-    margin:'auto',
-    top:'50%',
-    bottom:'50%',
-    right:'50%',
-    left:'50%',
-    marginLeft:'-25%',
-    marginTop:'-145px',
-    textAlign:'center'
-  },
-  MenuCategories:{
-    marginRight: 32,
-    float: 'left',
-    position: 'relative',
-    zIndex: 0,
-  },
-  navbar:{
-    paddingLeft: '16px',
-    paddingRight: '16px'
-  },
   selectedCategory:{
     color:Colors.pink500,
     backgroundColor:''
@@ -125,11 +103,6 @@ App = React.createClass({
         case "xxlarge":
           this.setState({
             leftNavDocked: true,
-            leftNavZIndex: 1050,
-            childrenContainer:{
-              paddingTop:64,
-              paddingBottom:96,
-            },
             paddingTopNavBar:96
           });
           if(this.state.openMenu){
@@ -144,11 +117,6 @@ App = React.createClass({
             openMenu:false,
             leftNavDocked: false,
             showMenuIconButton:true,
-            leftNavZIndex: 1300,
-            childrenContainer:{
-              paddingTop:64,
-              paddingBottom:96
-            },
             moveValue:'0px',
             paddingTopNavBar:32
           });
@@ -200,6 +168,23 @@ App = React.createClass({
       }
     });
 
+    Tracker.autorun((i)=>{
+      this.trackerId_i = i;
+      this.fbResponse = Session.get('fbResponse');
+
+      if(Object.keys(this.fbResponse).length !== 0){
+        switch (this.fbResponse.status) {
+          case 'connected':
+            data.socialReLogin(this.token.access_token,(err,response)=>{});
+            break;
+        }
+        this.setState({
+          gotFbResponse: true
+        });
+      }
+
+    })
+
   },
   componentWillUnmount: function() {
     this.trackerId_c.stop();
@@ -208,34 +193,11 @@ App = React.createClass({
     this.trackerId_b.stop();
     this.trackerId_f.stop();
     this.trackerId_h.stop();
+    this.trackerId_i.stop();
   },
 
   componentDidMount: function() {
-    //get guest Token
 
-      data.initToken((err,response)=>{
-        if(!err){
-          this.token = Session.get('token');
-          this.setState({
-            gotToken: true
-          });
-          CartController.getAllItems(this.token.access_token,(err,response)=>{});
-          data.initFB((response)=>{
-            if(response.status === 'connected'){ //si hay email tenemos
-              data.socialReLogin(this.token.access_token,(err,response)=>{
-                this.setState({
-                  gotFbResponse: true
-                });
-              });
-            }else {
-              this.setState({
-                gotFbResponse: true
-              });
-            }
-          });
-          data.getCategories((err,response)=>{});
-        }
-      });
   },
 
   openMenu(){
@@ -257,8 +219,8 @@ App = React.createClass({
 
   loadingPage(){
     return(
-      <div style={styles.logoLoading}>
-        <img src={"/images/LogoAlta.png"} style={{width:'100%'}}/>
+      <div id={'divLogoLoading'}>
+        <img id={'imgLogoLoading'} src={"/images/LogoAlta.png"}/>
         <CircularProgress style={{marginLeft:'-25px',marginTop:'80px'}}/>
       </div>
     );
@@ -331,25 +293,24 @@ App = React.createClass({
 
   render() {
     var appLoaded = this.state.gotToken && this.state.gotCategories && this.state.gotFbResponse;
+    //leftnavstyle     containerStyle={Object.assign({},{zIndex:this.state.leftNavZIndex,paddingTop:this.state.paddingTopNavBar})  }
     return (
       <div>
         {!appLoaded?(this.loadingPage()):(
           <div>
-          <div style={Object.assign({},{width:'100%'})}>
-            <AppBar
-              title={this.state.pageTitle}
-              style={Object.assign({},{position:'fixed',width:'100%'})}
-              iconElementRight = {this.getShoppingcart()}
-              showMenuIconButton = {true}
-              onLeftIconButtonTouchTap ={this.openMenu}
-              zDepth={0}/>
-          </div>
+          <AppBar
+            title={this.state.pageTitle}
+            style={Object.assign({},{position:'fixed',width:'100%'})}
+            iconElementRight = {this.getShoppingcart()}
+            showMenuIconButton = {true}
+            onLeftIconButtonTouchTap ={this.openMenu}
+            zDepth={0}/>
           <LeftNav
+            containerClassName = {'leftNav'}
             ref= {"leftNav"}
             docked={this.state.leftNavDocked}
             open={this.state.openMenu}
             onRequestChange={open => this.setState({openMenu:open})}
-            containerStyle={Object.assign({},{zIndex:this.state.leftNavZIndex,paddingTop:this.state.paddingTopNavBar})  }
             disableSwipeToOpen={false}
             zDepth={0}
             overlayClassName={'overlayLeftNav'}
@@ -362,7 +323,7 @@ App = React.createClass({
               router={this.context.router}/>
           </LeftNav>
 
-          <div style={Object.assign({},this.state.childrenContainer,{paddingLeft:this.state.moveValue}) }>
+          <div id={'childrenContainer'} style={{paddingLeft:this.state.moveValue}}>
             {this.props.children}
           </div>
         </div>
@@ -488,7 +449,7 @@ const GetLeftList = React.createClass({
 
     return (
       <SelectableList
-        width={272} style={styles.navbar}>
+        width={272}>
         <div>
           <div style={{textAlign:'center'}}>
             <img src={"/images/LogoAlta.png"} style={{width:'80%'}}/>
