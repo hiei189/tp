@@ -3,36 +3,6 @@ const Colors = mui.Styles.Colors;
 const {IconButton,FloatingActionButton,Snackbar,CircularProgress,FlatButton} = mui;
 
 const styles= {
- image:{
-   width:'100%',
-   maxHeight:190
- },
- imageContainer:{
-   flex:'40',
-   height:190,
-   display:'flex',
-   alignItems:'center'
- },
- productDataContainer:{
-   flex:'60',
-   height:190,
-   position:'relative',
-
- },
- productContainer:{
-   width:'100%',
-   flexDirection:'row',
-   'display': 'flex',
- },
- productTitle:{
-   paddingLeft:'5%',
-   marginBottom:'-8px'
- },
- productDescription:{
-   paddingLeft:'5%',
-   overflow:'auto',
-   height:80
- },
  iconAddShopping:{
    position:'absolute',
    bottom: '-16',
@@ -53,7 +23,8 @@ ProductTile = React.createClass({
   getInitialState: function() {
     return {
       openTooltipRequest: false,
-      gotCartResponse: true
+      gotCartResponse: true,
+      zoomed:false
     };
   },
 
@@ -97,20 +68,28 @@ ProductTile = React.createClass({
       openTooltipRequest: false
     });
   },
+
+  onTouchTapImg:function(){
+    this.setState({
+      zoomed: !this.state.zoomed
+    });
+
+  },
+
   render: function() {
+    //data-action={zoom} zoom de img
     const picHeight = this.props.picHeight?this.props.picHeight:240;
-    const zoom = this.props.zoom?'zoom':'';
-    const onTouchTap = this.props.onTouchTap?this.props.onTouchTap:'';
+    //const productImg = this.props.zoom?'productImg zoomable':'productImg';
+    const productImg = this.state.zoomed?'zoomed zoomable productImg':'zoomable productImg';
     return (
       <div className={'productContainer'} >
         <div className={'productImgContainer'}>
           <img
             id = {this.props.product.id}
-            className={'productImg'}
             style={styles.image}
             src={this.props.product.image}
-            data-action={zoom}
-            onTouchTap={onTouchTap}
+            className={productImg}
+            onTouchTap={this.onTouchTapImg}
           />
         </div>
         <div className={'productDataContainer'}  >

@@ -56,12 +56,12 @@ ProductByIdPage = React.createClass({
   },
 
   getCategories:function(data){
-
     var category =  data.category.map((category)=>{
       return category.name
     });
     return category.toString();
   },
+
   render: function() {
 
     if (this.state.gotMainProduct && !this.state.productNotFound){
@@ -92,6 +92,7 @@ const styles={
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
+    padding:8
   },
   paper:{
     overflow:'visible',
