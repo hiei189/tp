@@ -300,7 +300,7 @@ App = React.createClass({
           <div>
           <AppBar
             title={this.state.pageTitle}
-            style={Object.assign({},{position:'fixed',width:'100%'})}
+            style={{position:'fixed'}}
             iconElementRight = {this.getShoppingcart()}
             showMenuIconButton = {true}
             onLeftIconButtonTouchTap ={this.openMenu}

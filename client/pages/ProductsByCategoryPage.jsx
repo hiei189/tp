@@ -5,11 +5,6 @@ var styles = {
     display: 'flex',
     padding:8,
   },
-  paper:{
-    overflow:'visible',
-    height:'190',
-    margin:16
-  },
   container:{
     display:'flex',
     flexWrap:'wrap',
@@ -116,43 +111,12 @@ var ProductTilesArray = React.createClass({
     screensize: React.PropTypes.string
   },
 
-  componentWillMount: function() {
-    Tracker.autorun((c)=>{
-      this.trackerId = c;
-      this.screensize = Session.get('device-screensize');
-      switch(this.screensize){
-        case "large":
-        case "xlarge":
-        case "xxlarge":
-          this.setState({
-            widthPaper: "calc(33.3% - 32px)"
-          });
-          break;
-        case "medium":
-          this.setState({
-            widthPaper: "calc(50% - 32px)"
-          });
-          break;
-        case "small":
-          this.setState({
-            widthPaper: "calc(100% - 32px)"
-          });
-          break;
-      }
-    });
-  },
-
-  componentWillUnmount: function() {
-    this.trackerId.stop();
-  },
-
   _handleTouchTap:function(e){
     this.props.router.push('/products/'+e.currentTarget.id);
   },
   render: function() {
-    styles.paper.width = this.state.widthPaper;
     return(
-      <Paper style={styles.paper} zDepth={2} rounded={true}>
+      <Paper className={'productTile'} zDepth={2} rounded={true}>
         <ProductTile
           id={this.props.product.id}
           onTouchTap={this._handleTouchTap}

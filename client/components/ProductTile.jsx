@@ -43,12 +43,7 @@ const styles= {
    bottom: '-19',
    right: '3px'
  },
- icons:{
-
- },
  priceText:{
-   paddingLeft:'5%',
-   overflow:'auto',
    color:Colors.pink800
  }
 };
@@ -107,29 +102,30 @@ ProductTile = React.createClass({
     const zoom = this.props.zoom?'zoom':'';
     const onTouchTap = this.props.onTouchTap?this.props.onTouchTap:'';
     return (
-      <div style={styles.productContainer}>
-        <div style={styles.imageContainer}>
+      <div className={'productContainer'} >
+        <div className={'productImgContainer'}>
           <img
             id = {this.props.product.id}
+            className={'productImg'}
             style={styles.image}
             src={this.props.product.image}
             data-action={zoom}
             onTouchTap={onTouchTap}
           />
         </div>
-        <div style={styles.productDataContainer} >
-          <div style={styles.productTitle}
+        <div className={'productDataContainer'}  >
+          <div className={'productTitle'}
             onTouchTap={this._handleTouchTap}
             id={this.props.product.id}>
             <h4>{this.props.product.name}</h4>
           </div><hr/>
-          <div style={styles.productDescription}>
+          <div className={'productDescription'}>
             {this.props.product.description}
           </div>
-          <div style={styles.priceText}>
+          <div className={'productPriceText'} style={styles.priceText}>
             {'S/. '+this.props.product.price}
           </div>
-          <div styles={styles.icons}>
+          <div className={'productIcons'} >
             {this.state.gotCartResponse?(
               <FloatingActionButton
               mini={true}
