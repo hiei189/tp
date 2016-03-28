@@ -150,11 +150,23 @@ html{
 @media (max-width: 1024px) {
   .leftNav{
     z-index: 1300 !important;
-    padding-top: 32px !important;
+    padding-top: 0px !important;
+  }
+  #LogoNavContainer{
+    padding-left: 4px;
+    text-align: left;
+    display: flex;
+    margin: 8px 0px;
+  }
+  #LogoNavTitle{
+    margin-left: 21px;
   }
 }
 
 @media (min-width: 1024px) {
+  #LogoNavContainer{
+    display: none;
+  }
   .leftNav{
     z-index: 1050 !important;
     margin-top: 64px !important;

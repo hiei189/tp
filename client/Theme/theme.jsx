@@ -15,7 +15,7 @@ theme =  getMuiTheme({
     accent1Color: Colors.pink500,
     accent2Color: Colors.grey100,
     accent3Color: Colors.grey500,
-    textColor: Colors.darkBlack,
+    textColor: Colors.grey700,
     alternateTextColor: Colors.white,
     canvasColor: Colors.white,
     borderColor: Colors.grey300,

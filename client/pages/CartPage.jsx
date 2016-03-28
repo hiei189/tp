@@ -61,11 +61,14 @@ CartPage = React.createClass({
 
   componentWillMount: function() {
     this.total = 0;
+
     Session.set('pageTitle','Carrito de compras');
-    Session.set('selectedItem','shoppinCart');
+    Session.set('selectedItem','shoppingCart');
+
     Tracker.autorun((d)=>{
       this.trackerId_d = d;
       this.screensize = Session.get('device-screensize');
+      console.log(this.screensize);
       switch (this.screensize) {
         case "large":
         case "xlarge":
@@ -110,10 +113,19 @@ CartPage = React.createClass({
         this.setState({products: arrayProducts,gotProducts:true});
       }
     });
+
+    Tracker.autorun((b)=>{
+      this.trackerId_b = b;
+      console.log(Session.get('var'));
+    });
+
+
   },
+
   componentWillUnmount: function() {
     this.trackerId_d.stop();
     this.trackerId_c.stop();
+    this.trackerId_b.stop();
   },
 
   renderTiles:function(){

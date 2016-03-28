@@ -64,12 +64,18 @@ App = React.createClass({
         paddingBottom:96,
       },
       moveValue:'0px',
-      paddingTopNavBar:96
     };
   },
 
   componentWillMount: function() {
     this.navbarWidth = '272px';
+
+    Tracker.autorun((k)=>{
+      this.trackerId_k = k;
+      console.log(Session.get('shoppingCart'));
+    });
+
+
     Tracker.autorun((d)=>{
       this.trackerId = d;
       let user = Session.get('user');
@@ -103,7 +109,6 @@ App = React.createClass({
         case "xxlarge":
           this.setState({
             leftNavDocked: true,
-            paddingTopNavBar:96
           });
           if(this.state.openMenu){
             this.setState({
@@ -118,7 +123,6 @@ App = React.createClass({
             leftNavDocked: false,
             showMenuIconButton:true,
             moveValue:'0px',
-            paddingTopNavBar:32
           });
           break;
         default:
@@ -147,6 +151,7 @@ App = React.createClass({
 
     Tracker.autorun((g)=>{
       this.trackerId_g = g;
+      console.log(Session.get('categories'));
       this.setState({
         categories: Session.get('categories')
       });
@@ -338,7 +343,7 @@ App = React.createClass({
 
 const GetLeftList = React.createClass({
   contextTypes: {
-     muiTheme: React.PropTypes.object,
+    muiTheme: React.PropTypes.object,
     screensize: React.PropTypes.string,
     router: React.PropTypes.object,
     user: React.PropTypes.object,
@@ -405,7 +410,7 @@ const GetLeftList = React.createClass({
             <ListItem
               key={category.category_id}
               id={category.category_id}
-              leftAvatar = {<Avatar color={'#000000'} icon={<IconComponent style={styleAvatar}/>} backgroundColor={Colors.blueGrey50}></Avatar>}
+              leftIcon = {<IconComponent style={styleAvatar}/>}
               onTouchTap = {this._handleTouchTap.bind(this,category.name)}
               primaryText = {category.name}
               nestedItems={this.renderNested(category)}
@@ -418,7 +423,7 @@ const GetLeftList = React.createClass({
             <ListItem
               id={category.category_id}
               key={category.category_id}
-              leftAvatar = {<Avatar color={'#000000'} icon={<IconComponent style={styleAvatar}/>} backgroundColor={Colors.blueGrey50}></Avatar>}
+              leftIcon = {<IconComponent style={styleAvatar}/>}
               onTouchTap = {this._handleTouchTap.bind(this,category.name)}
               primaryText = {category.name}
               value={category.category_id}
@@ -445,18 +450,14 @@ const GetLeftList = React.createClass({
     this.context.router.push('/login');
   },
   render: function() {
-    const name = this.props.gotUser?', '+this.context.user.firstname +' ' + this.context.user.lastname:'';
-
     return (
       <SelectableList
         width={272}>
-        <div>
-          <div style={{textAlign:'center'}}>
-            <img src={"/images/LogoAlta.png"} style={{width:'80%'}}/>
-          </div>
-          <h4>
-            {'Bienvenido' + name}
-          </h4>
+        <div id ={'LogoNavContainer'}>
+          <Icons.LOGO_PANDA_DER />
+          <h3 id={'LogoNavTitle'}>
+            {'Tulipanda'}
+          </h3>
         </div>
         <Divider/>
         {this.getCategories()}

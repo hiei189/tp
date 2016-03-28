@@ -62,7 +62,7 @@ Shipping = React.createClass({
       footer:true
     };
   },
-  
+
   contextTypes: {
     screensize: React.PropTypes.string,
     gotUser: React.PropTypes.bool,
@@ -92,6 +92,7 @@ Shipping = React.createClass({
       }
     });
 
+    
     formsController.getAddresses(this.token.access_token,(err,response)=>{
       if(response.data.success){
         this.setState({

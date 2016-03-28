@@ -8,7 +8,8 @@ Meteor.startup(function() {
       Session.set('places','NO_DATA');
       Session.set('gotFbResponse',{});
       Session.set('fbResponse',{});
-      Session.setDefault('isShoppingCartEmpty',true);
+      Session.set('isShoppingCartEmpty',true);
+      Session.set('shoppingCart',{});
 
       data.initToken((err,response)=>{
           this.token = Session.get('token');
@@ -20,18 +21,21 @@ Meteor.startup(function() {
 
       //const browserHistory = ReactRouter.history.useQueries(ReactRouter.history.createHistory)();
       const Routes = (
+
           <Route path="/" component={App}>
             <IndexRoute component={ProductsByCategoryPage} />
             <Route path="/categories/:categoryId" component ={ProductsByCategoryPage}/>
             <Route path="/products/:productId" component ={ProductByIdPage}/>
             <Route path="/createuser" component ={CreateUserPage}/>
             <Route path="/login" component ={LoginPage}/>
-            <Route path="/shoppingcart" component = {CartPage}/>
             <Route path="/shipping" component = {Shipping}/>
             <Route path="/user" component = {UserPage}/>
             <Route path="/delivery" component = {DeliveryPage}/>
             <Route path="/stepper" component = {ShoppingStepsPage}/>
+            <Route path="shoppingcart" component = {CartPage}/>
+            <Route path="page" component = {Page}/>
           </Route>
+
         );
       ReactRouterSSR.Run(Routes);
       //ReactDOM.render(Routes,document.getElementById('react-target'));
