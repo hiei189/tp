@@ -226,7 +226,7 @@ App = React.createClass({
     return(
       <div id={'divLogoLoading'}>
         <img id={'imgLogoLoading'} src={"/images/LogoAlta.png"}/>
-        <CircularProgress style={{marginLeft:'-25px',marginTop:'80px'}}/>
+        <CircularProgress id={'progressLogoLoading'}/>
       </div>
     );
   },
