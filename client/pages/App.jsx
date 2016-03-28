@@ -452,6 +452,7 @@ const GetLeftList = React.createClass({
   render: function() {
     return (
       <SelectableList
+        id = {'leftNavListContainer'}
         width={272}>
         <div id ={'LogoNavContainer'}>
           <Icons.LOGO_PANDA_DER />
@@ -461,19 +462,11 @@ const GetLeftList = React.createClass({
         </div>
         <Divider/>
         {this.getCategories()}
-        <Divider/>
-        <ListItem value={'shoppinCart'} onTouchTap={this._handleShoppingCart} primaryText = {'Carrito de compras'} />
-        {!this.props.gotUser?(
-          React.Children.toArray([
-            <ListItem value={'createUser'} id={'createUser'} onTouchTap={this._handleUserListTouch} primaryText = {'Crear usuario'}/>,
-          <ListItem value={'login'} id={'login'} onTouchTap={this._handleGoToLogin} primaryText = {'Iniciar sesión'}/>,
-          ])
-          ):(
-          React.Children.toArray([
-          <ListItem value={'user1'} onTouchTap={this._handleUpdateData} primaryText = {'Mis datos'} />,
-          <ListItem value={'user5'} onTouchTap={this._handleCloseSession} primaryText = {'Cerrar sesión'} />,
-          ])
-        )}
+        <ListItem value={'user'}
+          id={'divUserListItem'}
+          onTouchTap={this._handleUserListTouch}
+          leftIcon = {<ActionAccountCircle/>}
+          primaryText = {'Usuario'}/>
       </SelectableList>
     );
   }

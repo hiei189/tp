@@ -22,7 +22,12 @@ html{
 
 
 .leftNav{
-  padding: 0px 16px !important;
+  padding: 0px 16px 16px 16px !important;
+}
+
+#leftNavListContainer{
+  position:relative !important;
+  height: 98% !important;
 }
 
 #divLogoLoading{
@@ -94,6 +99,7 @@ html{
 .productTitle{
   padding-left:5%;
   margin-bottom:-8px;
+  color:black;
 }
 
 .productDescription{
@@ -132,6 +138,11 @@ html{
     margin: auto;
     width: auto;
     z-index: 1100;
+}
+
+#divUserListItem{
+  position: absolute !important;
+  bottom: 0;
 }
 
 @media (max-width: 640px) {
