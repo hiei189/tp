@@ -1,5 +1,5 @@
 const {Stepper,HorizontalStep,Paper,RaisedButton,FlatButton,FontIcon} = mui;
-console.log(mui);
+
 ShoppingStepsPage = React.createClass({
   contextTypes:{
     user: React.PropTypes.object,

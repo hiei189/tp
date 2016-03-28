@@ -3,7 +3,6 @@ const {ActionShoppingCart,ActionAccountCircle} = mui.SvgIcons;
 const {getMuiTheme} = mui.Styles;
 const Colors = mui.Styles.Colors;
 const {SelectableContainerEnhance} = mui;
-console.log(mui);
 //import { Grid,Row, Col } from 'react-flexbox-grid/lib/index';
 
 let SelectableList = SelectableContainerEnhance(List);
@@ -70,124 +69,138 @@ App = React.createClass({
   componentWillMount: function() {
     this.navbarWidth = '272px';
 
-    Tracker.autorun((k)=>{
-      this.trackerId_k = k;
-      console.log(Session.get('shoppingCart'));
-    });
-
-
     Tracker.autorun((d)=>{
       this.trackerId = d;
       let user = Session.get('user');
-      if(Object.keys(user).length!==0){
-        this.setState({
-          gotUser: true,
-          user: user
-        });
-      }else{
-        this.setState({
-          gotUser: false
-        });
-      }
+      Tracker.nonreactive(()=>{
+        if(Object.keys(user).length!==0){
+          this.setState({
+            gotUser: true,
+            user: user
+          });
+        }else{
+          this.setState({
+            gotUser: false
+          });
+        }
+      });
+
     });
 
     Tracker.autorun((e)=>{
       this.trackerId_e = e;
-      this.setState({
-        cartshopNumber:Session.get('cartshopNumber') //read qty of items in cartshop
+      let cartshopNumber = Session.get('cartshopNumber');
+      Tracker.nonreactive(()=>{
+        this.setState({
+          cartshopNumber: cartshopNumber//read qty of items in cartshop
+        });
       });
     });
 
     Tracker.autorun((c)=>{
-
       this.trackerId_c = c;
-
       this.screensize = Session.get('device-screensize'); //read screen changes
-      switch(this.screensize){
-        case "large":
-        case "xlarge":
-        case "xxlarge":
-          this.setState({
-            leftNavDocked: true,
-          });
-          if(this.state.openMenu){
+      Tracker.nonreactive(()=>{
+        switch(this.screensize){
+          case "large":
+          case "xlarge":
+          case "xxlarge":
             this.setState({
-              moveValue: 272
+              leftNavDocked: true,
             });
-          }
-          break;
-        case "small":
-        case "medium":
-          this.setState({
-            openMenu:false,
-            leftNavDocked: false,
-            showMenuIconButton:true,
-            moveValue:'0px',
-          });
-          break;
-        default:
-          this.setState({
-            leftNavDocked: false,
-            showMenuIconButton:true,
-            openMenu:false
-          });
-      }
+            if(this.state.openMenu){
+              this.setState({
+                moveValue: 272
+              });
+            }
+            break;
+          case "small":
+          case "medium":
+            this.setState({
+              openMenu:false,
+              leftNavDocked: false,
+              showMenuIconButton:true,
+              moveValue:'0px',
+            });
+            break;
+          default:
+            this.setState({
+              leftNavDocked: false,
+              showMenuIconButton:true,
+              openMenu:false
+            });
+        }
+      });
+
     });
 
     Tracker.autorun((b)=>{
       this.trackerId_b = b;
-      this.setState({
-        pageTitle: Session.get('pageTitle')
+      let pageTitle = Session.get('pageTitle');
+      Tracker.nonreactive(()=>{
+        this.setState({
+          pageTitle: pageTitle
+        });
       });
     });
 
 
     Tracker.autorun((f)=>{
       this.trackerId_f = f;
-      this.setState({
-        fbUser: Session.get('fbUser')
+      let fbUser = Session.get('fbUser');
+      Tracker.nonreactive(()=>{
+        this.setState({
+          fbUser: fbUser
+        });
       });
+
     });
 
     Tracker.autorun((g)=>{
       this.trackerId_g = g;
-      console.log(Session.get('categories'));
-      this.setState({
-        categories: Session.get('categories')
+      let categories = Session.get('categories');
+      Tracker.nonreactive(()=>{
+        if(categories){
+          this.setState({
+            categories: categories
+          });
+          if(Object.keys(categories).length!== 0){
+            this.setState({
+              gotCategories: true
+            });
+          }
+        }
+
       });
-      console.log(this.state.categories);
-      if(Object.keys(this.state.categories).length!== 0){
-        this.setState({
-          gotCategories: true
-        });
-      }
     });
 
     Tracker.autorun((h)=>{
       this.trackerId_h = h;
       this.token = Session.get('token');
-      if(Object.keys(this.token).length!== 0){
-        this.setState({
-          gotToken: true
-        });
-      }
+      Tracker.nonreactive(()=>{
+        if(Object.keys(this.token).length!== 0){
+          this.setState({
+            gotToken: true
+          });
+        }
+      });
     });
 
     Tracker.autorun((i)=>{
       this.trackerId_i = i;
       this.fbResponse = Session.get('fbResponse');
-
-      if(Object.keys(this.fbResponse).length !== 0){
-        switch (this.fbResponse.status) {
-          case 'connected':
-            data.socialReLogin(this.token.access_token,(err,response)=>{});
-            break;
+      Tracker.nonreactive(()=>{
+        if(Object.keys(this.fbResponse).length !== 0){
+          switch (this.fbResponse.status) {
+            case 'connected':
+              data.socialReLogin(this.token.access_token,(err,response)=>{});
+              break;
+          }
+          this.setState({
+            gotFbResponse: true
+          });
         }
-        this.setState({
-          gotFbResponse: true
-        });
-      }
-
+      });
     })
 
   },

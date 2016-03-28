@@ -10,6 +10,7 @@ Meteor.startup(function() {
       Session.set('fbResponse',{});
       Session.set('isShoppingCartEmpty',true);
       Session.set('shoppingCart',{});
+      Session.set('var','hola');
 
       data.initToken((err,response)=>{
           this.token = Session.get('token');
