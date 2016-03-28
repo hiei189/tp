@@ -449,13 +449,17 @@ const GetLeftList = React.createClass({
     this.close();
     this.context.router.push('/login');
   },
+  _handleUserListTouch:function(){
+    this.close();
+    this.context.router.push('/user');
+  },
   render: function() {
     return (
       <SelectableList
         id = {'leftNavListContainer'}
         width={272}>
         <div id ={'LogoNavContainer'}>
-          <Icons.LOGO_PANDA_DER />
+          <Icons.LOGO_PANDA_DER id={'LogoNavIcon'} />
           <h3 id={'LogoNavTitle'}>
             {'Tulipanda'}
           </h3>

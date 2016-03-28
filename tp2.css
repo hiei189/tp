@@ -16,6 +16,8 @@ br{
 
 }
 
+
+
 html{
   font-family: 'Roboto', sans-serif;
 }
@@ -28,7 +30,9 @@ html{
 #leftNavListContainer{
   position:relative !important;
   height: 98% !important;
+  min-height: 500px !important;
 }
+
 
 #divLogoLoading{
   position: absolute !important;
@@ -38,7 +42,6 @@ html{
   bottom: 50% !important;
   right: 50% !important;
   left: 50% !important;
-  margin-left: -25% !important;
   margin-top: -145px !important;
   text-align: center !important;
 }
@@ -142,6 +145,7 @@ html{
 
 #divUserListItem{
   position: absolute !important;
+  width: 100%;
   bottom: 0;
 }
 
@@ -171,6 +175,12 @@ html{
   }
   #LogoNavTitle{
     margin-left: 21px;
+    color: black;
+  }
+
+  #LogoNavIcon{
+    height: 48px;
+
   }
 }
 
