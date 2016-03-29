@@ -67,7 +67,7 @@ App = React.createClass({
   },
 
   componentWillMount: function() {
-    this.navbarWidth = '272px';
+    this.navbarWidth = '112px';
 
     Tracker.autorun((d)=>{
       this.trackerId = d;
@@ -108,11 +108,10 @@ App = React.createClass({
             this.setState({
               leftNavDocked: true,
             });
-            if(this.state.openMenu){
               this.setState({
-                moveValue: 272
+                moveValue: this.navbarWidth,
+                openMenu:true
               });
-            }
             break;
           case "small":
           case "medium":
@@ -311,6 +310,8 @@ App = React.createClass({
 
   render() {
     var appLoaded = this.state.gotToken && this.state.gotCategories && this.state.gotFbResponse;
+    let smallScreen = this.screensize==='small'||this.screensize==='medium';
+    let leftNavWidth = smallScreen?272:112;
     //leftnavstyle     containerStyle={Object.assign({},{zIndex:this.state.leftNavZIndex,paddingTop:this.state.paddingTopNavBar})  }
     return (
       <div>
@@ -320,7 +321,7 @@ App = React.createClass({
             title={this.state.pageTitle}
             style={{position:'fixed'}}
             iconElementRight = {this.getShoppingcart()}
-            showMenuIconButton = {true}
+            showMenuIconButton = {!this.state.leftNavDocked}
             onLeftIconButtonTouchTap ={this.openMenu}
             zDepth={0}/>
           <LeftNav
@@ -330,9 +331,9 @@ App = React.createClass({
             open={this.state.openMenu}
             onRequestChange={open => this.setState({openMenu:open})}
             disableSwipeToOpen={false}
-            zDepth={0}
+            zDepth={1}
             overlayClassName={'overlayLeftNav'}
-            width={272}>
+            width={leftNavWidth}>
             <GetLeftList
               close = {this.closeLeftNav}
               handleCloseSession = {this._handleCloseSession}
@@ -376,10 +377,10 @@ const GetLeftList = React.createClass({
 
     //console.log(i);
     this.close();
-    //const test = event;
+    const clickedItem = event.currentTarget;
     Session.set('pageTitle',name);
-    //console.log(event.currentTarget.value.toString());
-    this.context.router.push('/categories/'+event.currentTarget.id.toString());
+    Session.set('selectedItem',clickedItem);
+    this.context.router.push('/categories/'+clickedItem.id.toString());
   },
 
   _handleUserListTouch:function(event){
@@ -394,11 +395,6 @@ const GetLeftList = React.createClass({
 
   renderNested:function(category){
     return category.categories.map((category)=>{
-      let icon = category.icon.toUpperCase();
-      let IconComponent = Icons[icon];
-      if(typeof IconComponent === 'undefined'){
-        IconComponent = <SvgIcon/>
-      }
       return (
           <ListItem
             key={category.category_id}
@@ -410,40 +406,55 @@ const GetLeftList = React.createClass({
         );
     });
   },
+  getCategoriesDesktop:function(){
+    return this.props.categories.map((category)=>{
+      let icon = category.icon.toUpperCase();
+      let IconComponent = Icons[icon];
+      return(
+        React.Children.toArray([
+          <Li
+            key={category.category_id}
+            category = {category}
+            onTouchTap = {this._handleTouchTap}/>
+        ])
+      );
+      });
 
-  getCategories:function(){
+  },
+
+  getCategoriesMobile:function(){
     //innerDivStyle={{paddingTop:'24px',paddingBottom:'24px'}}
     return this.props.categories.map((category)=>{
       const styleAvatar = Session.get('selectedItem')==category.category_id?styles.selectedAvatar:null;
       let icon = category.icon.toUpperCase();
       let IconComponent = Icons[icon];
-      if(category.categories){
-        return(
-          React.Children.toArray([
-            <ListItem
-              key={category.category_id}
-              id={category.category_id}
-              leftIcon = {<IconComponent style={styleAvatar}/>}
-              onTouchTap = {this._handleTouchTap.bind(this,category.name)}
-              primaryText = {category.name}
-              nestedItems={this.renderNested(category)}
-              value={category.category_id}/>
-          ])
-        );
-      }else{
-        return (
-          React.Children.toArray([
-            <ListItem
-              id={category.category_id}
-              key={category.category_id}
-              leftIcon = {<IconComponent style={styleAvatar}/>}
-              onTouchTap = {this._handleTouchTap.bind(this,category.name)}
-              primaryText = {category.name}
-              value={category.category_id}
-            />
-          ])
-        );
-      }
+        if(category.categories){
+          return(
+            React.Children.toArray([
+              <ListItem
+                key={category.category_id}
+                id={category.category_id}
+                leftIcon = {<IconComponent style={styleAvatar}/>}
+                onTouchTap = {this._handleTouchTap.bind(this,category.name)}
+                primaryText = {category.name}
+                nestedItems={this.renderNested(category)}
+                value={category.category_id}/>
+            ])
+          );
+        }else{
+          return (
+            React.Children.toArray([
+              <ListItem
+                id={category.category_id}
+                key={category.category_id}
+                leftIcon = {<IconComponent style={styleAvatar}/>}
+                onTouchTap = {this._handleTouchTap.bind(this,category.name)}
+                primaryText = {category.name}
+                value={category.category_id}
+              />
+            ])
+          );
+        }
     });
   },
   _handleShoppingCart:function(){
@@ -467,10 +478,11 @@ const GetLeftList = React.createClass({
     this.context.router.push('/user');
   },
   render: function() {
+    let smallScreen = this.context.screensize==='small'||this.context.screensize==='medium';
+    let width = smallScreen?272:128;
     return (
       <SelectableList
-        id = {'leftNavListContainer'}
-        width={272}>
+        id = {'leftNavListContainer'}>
         <div id ={'LogoNavContainer'}>
           <Icons.LOGO_PANDA_DER id={'LogoNavIcon'} />
           <h3 id={'LogoNavTitle'}>
@@ -478,16 +490,70 @@ const GetLeftList = React.createClass({
           </h3>
         </div>
         <Divider/>
-        {this.getCategories()}
-        <ListItem value={'user'}
+        {smallScreen?(
+          this.getCategoriesMobile()):
+            (<ul className={'desktopList'}>
+            {this.getCategoriesDesktop()}
+          </ul>)
+        }
+        {smallScreen?<ListItem value={'user'}
           id={'divUserListItem'}
           onTouchTap={this._handleUserListTouch}
           leftIcon = {<ActionAccountCircle/>}
-          primaryText = {'Usuario'}/>
+          primaryText = {'Usuario'}/>:null}
       </SelectableList>
     );
   }
 });
+
+var Li = React.createClass({
+
+  _handleTouchTap:function(e){
+    const {category} = this.props;
+    this.props.onTouchTap(category.name,e);
+  },
+  getInitialState: function() {
+    return {
+      hovered: false
+    };
+  },
+  mouseOver:function(){
+    this.setState({
+      hovered: true
+    });
+  },
+  mouseOut:function(){
+    this.setState({
+      hovered: false
+    });
+  },
+
+  render: function() {
+    const {category,selected} = this.props;
+    let icon = category.icon.toUpperCase();
+    let IconComponent = Icons[icon];
+    const classNameIconListItem = this.state.hovered || selected?'desktopIconListItem hoveredListItem':'desktopIconListItem';
+    const classNameTitleListItem = this.state.hovered || selected?'desktopTitleListItem hoveredListItem':'desktopTitleListItem';
+    return (
+      <li
+        onMouseOver={this.mouseOver}
+        onMouseOut={this.mouseOut}>
+        <a
+          className={'desktopListItem'}
+          id={category.category_id}
+          value ={category.category_id}
+          onTouchTap = {this._handleTouchTap}>
+          <IconComponent className={classNameIconListItem}/>
+          <span className={classNameTitleListItem}>{category.name.toUpperCase()}</span>
+        </a>
+      </li>
+    );
+  }
+
+});
+
+
+
 
 function wrapList(ComposedComponent) {
   const StateWrapper = React.createClass({
@@ -499,8 +565,11 @@ function wrapList(ComposedComponent) {
     componentWillMount: function() {
       Tracker.autorun((a)=>{
         this.trackerId_a = a;
-        this.setState({
-          selectedIndex: Session.get('selectedItem')
+        var selectedItem = Session.get('selectedItem');
+        Tracker.nonreactive(()=>{
+          this.setState({
+            selectedIndex: selectedItem
+          });
         });
       });
     },
@@ -510,10 +579,7 @@ function wrapList(ComposedComponent) {
     },
 
     _handleUpdateSelectedIndex:function(e, index) {
-      this.setState({
-        selectedIndex: index,
-      });
-      Session.set('selectedItem',index);
+      
     },
 
     render:function() {

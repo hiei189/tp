@@ -12,12 +12,6 @@ br{
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-.overlayLeftNav{
-
-}
-
-
-
 html{
   font-family: 'Roboto', sans-serif;
 }
@@ -25,15 +19,21 @@ html{
 
 .leftNav{
   padding: 0px 16px 16px 16px !important;
+  -webkit-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -moz-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -ms-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    -o-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 }
 
+/********LEFTNAV**********/
 #leftNavListContainer{
   position:relative !important;
   height: 98% !important;
   min-height: 500px !important;
 }
 
-
+/*****INITIAL SCREEN LOADING**********/
 #divLogoLoading{
   position: absolute !important;
   width: 50% !important;
@@ -55,6 +55,8 @@ html{
   width: 100% !important;
 }
 
+
+/****CHILDREN ROUTER CONTAINER**********/
 #childrenContainer{
   padding-top:64px;
   padding-bottom:96px;
@@ -64,6 +66,9 @@ html{
   -ms-transition: 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
   -o-transition: 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 }
+
+
+/****PRODUCT TILE*******/
 
 .productTile{
   overflow: visible;
@@ -125,6 +130,8 @@ html{
 
 }
 
+
+/****ZOOM*******/
 .zoomable{
   -webkit-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
     -moz-transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
@@ -148,26 +155,35 @@ html{
     z-index: 1100;
 }
 
+
+/*****USER ICON-TEXT IN LEFTNAV*******/
 #divUserListItem{
   position: absolute !important;
   width: 100%;
   bottom: 0;
 }
 
+
+/**SMALL**/
 @media (max-width: 640px) {
+/****PRODUCT TILE*******/
   .productTile{
     width: calc(100% - 32px);
   }
 }
 
+/**MEDIUM**/
 @media only screen and (min-width:641px) and (max-width: 1023px) {
+/****PRODUCT TILE*******/
   .productTile{
     width: calc(50% - 32px);
   }
 }
 
-
+/**MEDIUM PARA ABAJO**/
 @media (max-width: 1024px) {
+
+/****LEFT NAV*******/
   .leftNav{
     z-index: 1300 !important;
     padding-top: 0px !important;
@@ -189,15 +205,57 @@ html{
   }
 }
 
+
+/**LARGE PARA ARRIBA**/
 @media (min-width: 1024px) {
+  .ProductsByCategoryPage{
+
+  }
+
+  .hoveredListItem{
+    color: #e91e63 !important;
+    fill: #e91e63 !important;
+  }
+  .desktopListItem{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
+    padding: 8px 4px;
+  }
+  .desktopListItem:hover{
+
+  }
+
+  .desktopIconListItem{
+    height: 28px !important;
+    width: auto !important;
+  }
+  .desktopTitleListItem{
+    margin-top: 12px;
+  }
+  .desktopList{
+    padding: 0px;
+    list-style: none;
+    font-size: 12px;
+  }
+
+/****LOGO LEFT NAV*******/
   #LogoNavContainer{
+    text-align: center;
+  }
+  #LogoNavTitle{
     display: none;
   }
+/****LEFT NAV*******/
   .leftNav{
     z-index: 1050 !important;
     margin-top: 64px !important;
     padding-top: 24px !important;
+    overflow:hidden !important;
   }
+
+/****PRODUCT LEFT NAV*******/
   .productTile{
     width: calc(33.3% - 32px);
   }

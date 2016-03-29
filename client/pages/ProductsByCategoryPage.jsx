@@ -90,7 +90,7 @@ ProductsByCategoryPage = React.createClass({
   render: function() {
     if (this.state.gotDataProducts && !this.state.productNotFound){
       return (
-          <div style={styles.root} >
+          <div style={styles.root} className={'ProductsByCategoryPage'} >
             <div style={styles.container}>
               {this.renderTiles()}
             </div>
