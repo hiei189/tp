@@ -364,6 +364,12 @@ const GetLeftList = React.createClass({
     gotUser:React.PropTypes.bool
   },
 
+  getInitialState: function() {
+    return {
+      selectedItem: Session.get('selectedItem')
+    };
+  },
+
   close:function(){
     switch(this.context.screensize){
       case 'small':
@@ -379,7 +385,10 @@ const GetLeftList = React.createClass({
     this.close();
     const clickedItem = event.currentTarget;
     Session.set('pageTitle',name);
-    Session.set('selectedItem',clickedItem);
+    this.setState({
+      selectedItem: clickedItem.id
+    });
+    //Session.set('selectedItem',clickedItem);
     this.context.router.push('/categories/'+clickedItem.id.toString());
   },
 
@@ -407,6 +416,7 @@ const GetLeftList = React.createClass({
     });
   },
   getCategoriesDesktop:function(){
+
     return this.props.categories.map((category)=>{
       let icon = category.icon.toUpperCase();
       let IconComponent = Icons[icon];
@@ -415,6 +425,7 @@ const GetLeftList = React.createClass({
           <Li
             key={category.category_id}
             category = {category}
+            selected = {this.state.selectedItem === category.category_id}
             onTouchTap = {this._handleTouchTap}/>
         ])
       );
@@ -510,7 +521,15 @@ var Li = React.createClass({
 
   _handleTouchTap:function(e){
     const {category} = this.props;
+    Session.set('selectedItem',e.currentTarget.id);
     this.props.onTouchTap(category.name,e);
+  },
+  componentWillMount: function() {
+    Tracker.autorun((a)=>{
+      this.trackerId_a = a;
+      var selected = Session.get('selectedItem');
+
+    });
   },
   getInitialState: function() {
     return {
@@ -579,7 +598,7 @@ function wrapList(ComposedComponent) {
     },
 
     _handleUpdateSelectedIndex:function(e, index) {
-      
+      Session.set('selectedItem',index);
     },
 
     render:function() {
