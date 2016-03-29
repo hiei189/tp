@@ -392,7 +392,7 @@ const GetLeftList = React.createClass({
     this.context.router.push('/categories/'+clickedItem.id.toString());
   },
 
-  _handleUserListTouch:function(event){
+  _handleCreateUserListTouch:function(event){
     this.close();
     Session.set('pageTitle','Crear usuario');
     switch(event.currentTarget.id.toString()){
@@ -418,8 +418,6 @@ const GetLeftList = React.createClass({
   getCategoriesDesktop:function(){
 
     return this.props.categories.map((category)=>{
-      let icon = category.icon.toUpperCase();
-      let IconComponent = Icons[icon];
       return(
         React.Children.toArray([
           <Li
@@ -485,12 +483,16 @@ const GetLeftList = React.createClass({
     this.context.router.push('/login');
   },
   _handleUserListTouch:function(){
-    this.close();
+    this.setState({
+      selectedItem: 'user'
+    });
     this.context.router.push('/user');
+    this.close();
   },
   render: function() {
     let smallScreen = this.context.screensize==='small'||this.context.screensize==='medium';
     let width = smallScreen?272:128;
+    const styleAvatarUser = Session.get('selectedItem')==='user'?styles.selectedAvatar:null;
     return (
       <SelectableList
         id = {'leftNavListContainer'}>
@@ -510,8 +512,17 @@ const GetLeftList = React.createClass({
         {smallScreen?<ListItem value={'user'}
           id={'divUserListItem'}
           onTouchTap={this._handleUserListTouch}
-          leftIcon = {<ActionAccountCircle/>}
-          primaryText = {'Usuario'}/>:null}
+          leftIcon = {<ActionAccountCircle style={styleAvatarUser}/>}
+          primaryText = {'Usuario'}/>:
+          <ul className={'desktopUserListItem'}>
+            <Li
+              key={'user'}
+              category = {{name:'usuario',category_id:'user'}}
+              selected = {this.state.selectedItem === 'user'}
+              Icon ={ActionAccountCircle}
+              onTouchTap = {this._handleUserListTouch}/>
+          </ul>
+        }
       </SelectableList>
     );
   }
@@ -548,9 +559,14 @@ var Li = React.createClass({
   },
 
   render: function() {
-    const {category,selected} = this.props;
-    let icon = category.icon.toUpperCase();
-    let IconComponent = Icons[icon];
+    const {category,selected,Icon} = this.props;
+    let IconComponent = '';
+    if(typeof Icon !== 'undefined'){
+      IconComponent = Icon;
+    }else{
+      const iconFromCategory = category.icon.toUpperCase();
+      IconComponent = Icons[iconFromCategory];
+    }
     const classNameIconListItem = this.state.hovered || selected?'desktopIconListItem hoveredListItem':'desktopIconListItem';
     const classNameTitleListItem = this.state.hovered || selected?'desktopTitleListItem hoveredListItem':'desktopTitleListItem';
     return (

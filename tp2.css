@@ -223,6 +223,14 @@ html{
     flex-direction: column;
     padding: 8px 4px;
   }
+  .desktopUserListItem{
+    padding: 0px;
+    list-style: none;
+    font-size: 12px;
+    position: absolute;
+    bottom: 48px;
+    width: 100%;
+  }
   .desktopListItem:hover{
 
   }

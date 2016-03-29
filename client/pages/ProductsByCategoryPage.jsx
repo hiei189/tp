@@ -35,7 +35,7 @@ ProductsByCategoryPage = React.createClass({
     if(typeof this.props.params.categoryId == 'undefined'){
       this.props.params.categoryId = '25';
     };
-    this.token = Session.get('token');
+    this.token = this.context.token;
   },
   componentDidMount: function() {
     //this.attachScrollListener();
