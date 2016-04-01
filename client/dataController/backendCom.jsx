@@ -82,6 +82,7 @@ backendCom = {
         }
       },
       (err,response)=>{
+
         callback(err,response);
         return;
       }
@@ -99,6 +100,7 @@ backendCom = {
         }
       },
       (err,response)=>{
+        console.log(response);
         callback(err,response);
         return;
       }

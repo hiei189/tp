@@ -31,6 +31,8 @@ theme =  getMuiTheme({
     selectedTextColor: Colors.pink500,
   },
   tabs:{
-    backgroundColor: Colors.white
+    backgroundColor: Colors.white,
+    textColor: ColorManipulator.fade(Colors.pink500, 0.5),
+    selectedTextColor: Colors.pink500
   }
 });
