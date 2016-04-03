@@ -33,7 +33,7 @@ ProductsByCategoryPage = React.createClass({
   },
 
   componentWillMount: function() {
-    console.log('component will mount');
+
     this.categories = Session.get('categories');
     if(typeof this.props.params.categoryId == 'undefined'){
       this.props.params.categoryId = '25';
@@ -85,26 +85,34 @@ ProductsByCategoryPage = React.createClass({
       case 'large':
       case 'xlarge':
       case 'xxlarge':
+      case 'small':
+      case 'medium':
+        //retorno o el objeto o el parent
         this.selectedCategoryObject = this.categories.find((category,idx,arr)=>{
-          return category.category_id === nextProps.params.categoryId
+          if(category.categories){
+            let childCategory = category.categories.find((category,idx,arr)=>{
+              return category.category_id === nextProps.params.categoryId;
+            });
+            if (typeof childCategory !== 'undefined') {
+              return childCategory
+            };
+          }
+          return category.category_id === nextProps.params.categoryId;
         });
-        console.log(this.selectedCategoryObject);
+
         Session.set('Category'+nextProps.params.categoryId,'LOADING');
         if(this.selectedCategoryObject.categories){
           Session.set('Category'+nextProps.params.categoryId,'LOADING');
           this.setState({
             gotProducts: false,
-            productsLoaded: 0
           });
           this.selectedCategoryObject.categories.map((category)=>{
             backendCom.getProductsByCategory(this.token.access_token,category.category_id,
             (err,response)=>{
               if(!err){
-                console.log(response.data);
                 Session.set('Category'+category.category_id,response.data);
                 this.setState({
                   gotProducts: true,
-                  productsLoaded: this.state.productsLoaded + 1
                 });
               }else {
                 Session.set('Category'+category.category_id,'ERROR');
@@ -115,16 +123,13 @@ ProductsByCategoryPage = React.createClass({
           Session.set('Category'+nextProps.params.categoryId,'LOADING');
           this.setState({
             gotProducts: false,
-            productsLoaded: 0
           });
           backendCom.getProductsByCategory(this.token.access_token,nextProps.params.categoryId,
           (err,response)=>{
             if(!err){
-              console.log(response.data);
               Session.set('Category'+nextProps.params.categoryId,response.data);
               this.setState({
                 gotProducts: true,
-                productsLoaded: this.state.productsLoaded + 1
               });
             }else{
               Session.set('Category'+nextProps.params.categoryId,'ERROR');
@@ -135,7 +140,6 @@ ProductsByCategoryPage = React.createClass({
     }
   },
   fetchNextPage:function(nextPage){
-    console.log('fetchNextPage');
     backendCom.getProductsByCategoryLimited(
       this.token.access_token,
       this.selectedCategory,
@@ -156,13 +160,11 @@ ProductsByCategoryPage = React.createClass({
   },
 
   resetInfinite:function(){
-    console.log('activeTab');
     this.nextPage = 1;
     //this.fetchNextPage(this.nextPage);
   },
 
   getDesktopTabs:function(){
-
     if(this.selectedCategoryObject.categories){
         let ProductsArray = this.selectedCategoryObject.categories.map((category)=>{
           return(
@@ -183,7 +185,8 @@ ProductsByCategoryPage = React.createClass({
 
     const {screensize} = this.context
     const {params} = this.props;
-
+    const smallScreen = screensize === 'small' || screensize === 'medium';
+    smallScreen? Session.set('selectedItem',params.categoryId):Session.set('selectedItem',this.selectedCategoryObject.category_id);
     if (this.state.gotDataProducts && !this.state.productNotFound){
       switch (screensize) {
         case 'small':
@@ -249,6 +252,7 @@ var ProductsComponent = React.createClass({
   },
   render: function() {
     let products =  Session.get('Category'+this.props.categoryId);
+
     if(products !== null && typeof products === 'object'){
       if(products.success){
         return (
@@ -259,20 +263,20 @@ var ProductsComponent = React.createClass({
           </div>
         );
       }else{
-        return <div>
+        return <div style={styles.root} className={'ProductsByCategoryPage'} >
           Aún no hay componentes en esta categoría!
         </div>
       }
     }else if(products === 'ERROR'){
-      return <div>
+      <div style={styles.root} className={'ProductsByCategoryPage'} >
         Hubo un error obteniendo la información.
       </div>
     }else if(products === 'LOADING'){
-      return <div style={{textAlign:'center',margintTop:'50%'}}>
+      return <div style={{textAlign:'center',marginTop:'150px'}}>
         <CircularProgress/>
       </div>
     }else{
-      return <div style={{textAlign:'center',margintTop:'50%'}}>
+      return <div style={{textAlign:'center',marginTop:'50%'}}>
       </div>
     }
 

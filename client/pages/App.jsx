@@ -309,17 +309,21 @@ App = React.createClass({
   },
 
   render() {
-    var appLoaded = this.state.gotToken && this.state.gotCategories && this.state.gotFbResponse;
+    let appLoaded = this.state.gotToken && this.state.gotCategories && this.state.gotFbResponse;
     let smallScreen = this.screensize==='small'||this.screensize==='medium';
     let leftNavWidth = smallScreen?272:112;
+    const styleAppBar = !smallScreen?{textAlign:'center'}:{};
+    let AppBarTitle = smallScreen?(this.state.pageTitle):(<div id={'logoAppBar'}>
+      <img style={{height:'52px'}} src={"/images/logoNoColor.png"}/>
+    </div>);
     //leftnavstyle     containerStyle={Object.assign({},{zIndex:this.state.leftNavZIndex,paddingTop:this.state.paddingTopNavBar})  }
     return (
       <div>
         {!appLoaded?(this.loadingPage()):(
           <div>
           <AppBar
-            title={this.state.pageTitle}
-            style={{position:'fixed'}}
+            title={AppBarTitle}
+            style={Object.assign({},{position:'fixed'},styleAppBar)}
             iconElementRight = {this.getShoppingcart()}
             showMenuIconButton = {!this.state.leftNavDocked}
             onLeftIconButtonTouchTap ={this.openMenu}
@@ -341,7 +345,6 @@ App = React.createClass({
               gotUser = {this.state.gotUser}
               router={this.context.router}/>
           </LeftNav>
-
           <div id={'childrenContainer'} style={{paddingLeft:this.state.moveValue}}>
             {this.props.children}
           </div>
@@ -377,6 +380,22 @@ const GetLeftList = React.createClass({
       this.props.close();
       break;
     };
+  },
+
+  componentWillMount: function() {
+    Tracker.autorun((a)=>{
+      this.trackerId_a = a;
+      var selectedItem = Session.get('selectedItem');
+      Tracker.nonreactive(()=>{
+        this.setState({
+          selectedItem: selectedItem
+        });
+      });
+    });
+  },
+
+  componentWillUnmount: function() {
+    this.trackerId_a.stop();
   },
 
   _handleTouchTap:function(name,event){
@@ -492,17 +511,20 @@ const GetLeftList = React.createClass({
   render: function() {
     let smallScreen = this.context.screensize==='small'||this.context.screensize==='medium';
     let width = smallScreen?272:128;
+    const displayNone = smallScreen?'':'noDisplay';
     const styleAvatarUser = Session.get('selectedItem')==='user'?styles.selectedAvatar:null;
     return (
       <SelectableList
         id = {'leftNavListContainer'}>
-        <div id ={'LogoNavContainer'}>
-          <Icons.LOGO_PANDA_DER id={'LogoNavIcon'} />
-          <h3 id={'LogoNavTitle'}>
-            {'Tulipanda'}
-          </h3>
+        <div className={displayNone}>
+          <div id ={'LogoNavContainer'}>
+            <Icons.LOGO_PANDA_DER id={'LogoNavIcon'} />
+            <h3 id={'LogoNavTitle'}>
+              {'Tulipanda'}
+            </h3>
+          </div>
+          <Divider/>
         </div>
-        <Divider/>
         {smallScreen?(
           this.getCategoriesMobile()):
             (<ul className={'desktopList'}>
@@ -532,14 +554,13 @@ var Li = React.createClass({
 
   _handleTouchTap:function(e){
     const {category} = this.props;
-    Session.set('selectedItem',e.currentTarget.id);
+    //Session.set('selectedItem',e.currentTarget.id);
     this.props.onTouchTap(category.name,e);
   },
   componentWillMount: function() {
     Tracker.autorun((a)=>{
       this.trackerId_a = a;
       var selected = Session.get('selectedItem');
-
     });
   },
   getInitialState: function() {
@@ -593,7 +614,7 @@ var Li = React.createClass({
 function wrapList(ComposedComponent) {
   const StateWrapper = React.createClass({
     getInitialState:function() {
-      Session.set('selectedItem','25');
+      //Session.set('selectedItem','25');
       return {selectedIndex: '25'};
     },
 
@@ -614,7 +635,7 @@ function wrapList(ComposedComponent) {
     },
 
     _handleUpdateSelectedIndex:function(e, index) {
-      Session.set('selectedItem',index);
+      //Session.set('selectedItem',index);
     },
 
     render:function() {

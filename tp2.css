@@ -106,6 +106,7 @@ html{
   -ms-flex: 60; /* IE 10 */
   flex: 60;
   height:190px;
+  padding-right: 5%;
   position:relative;
 }
 
@@ -205,9 +206,24 @@ html{
   }
 }
 
+.noDisplay{
+  display: none;
+}
+
 
 /**LARGE PARA ARRIBA**/
 @media (min-width: 1024px) {
+
+  #logoAppBar{
+    height:64px;
+    display:inline-block;
+    vertical-align:middle;
+    position:absolute;
+    left:0;
+    right: 0;
+    top:5px;
+  }
+
   .ProductsByCategoryPage{
 
   }
@@ -259,7 +275,6 @@ html{
   .leftNav{
     z-index: 1050 !important;
     margin-top: 64px !important;
-    padding-top: 24px !important;
     overflow:hidden !important;
   }
 

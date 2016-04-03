@@ -16,7 +16,8 @@ http
 reactrouter:react-router
 reactrouter:react-router-ssr
 base64
-ficshelf:media-query
 u2622:persistent-session
 jchavez:material-ui
 tracker
+blaze-html-templates
+ficshelf:media-query
