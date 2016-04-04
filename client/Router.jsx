@@ -10,7 +10,6 @@ Meteor.startup(function() {
       Session.set('fbResponse',{});
       Session.set('isShoppingCartEmpty',true);
       Session.set('shoppingCart',{});
-      Session.set('var','hola');
 
       data.initToken((err,response)=>{
           this.token = Session.get('token');
@@ -22,7 +21,6 @@ Meteor.startup(function() {
 
       //const browserHistory = ReactRouter.history.useQueries(ReactRouter.history.createHistory)();
       const Routes = (
-
           <Route path="/" component={App}>
             <IndexRoute component={ProductsByCategoryPage} />
             <Route path="/categories/:categoryId" component ={ProductsByCategoryPage}/>
@@ -34,9 +32,7 @@ Meteor.startup(function() {
             <Route path="/delivery" component = {DeliveryPage}/>
             <Route path="/stepper" component = {ShoppingStepsPage}/>
             <Route path="shoppingcart" component = {CartPage}/>
-            <Route path="page" component = {Page}/>
           </Route>
-
         );
       ReactRouterSSR.Run(Routes);
       //ReactDOM.render(Routes,document.getElementById('react-target'));

@@ -24,6 +24,7 @@ App = React.createClass({
   contextTypes:{
     router: React.PropTypes.object
   },
+
   childContextTypes : {
     muiTheme: React.PropTypes.object,
     screensize: React.PropTypes.string,
@@ -43,7 +44,6 @@ App = React.createClass({
   },
 
   getInitialState() {
-
     return {
       openMenu: false,
       gotToken:false,
@@ -84,7 +84,6 @@ App = React.createClass({
           });
         }
       });
-
     });
 
     Tracker.autorun((e)=>{
@@ -130,7 +129,6 @@ App = React.createClass({
             });
         }
       });
-
     });
 
     Tracker.autorun((b)=>{
@@ -143,7 +141,6 @@ App = React.createClass({
       });
     });
 
-
     Tracker.autorun((f)=>{
       this.trackerId_f = f;
       let fbUser = Session.get('fbUser');
@@ -152,7 +149,6 @@ App = React.createClass({
           fbUser: fbUser
         });
       });
-
     });
 
     Tracker.autorun((g)=>{
@@ -169,7 +165,6 @@ App = React.createClass({
             });
           }
         }
-
       });
     });
 
@@ -213,16 +208,11 @@ App = React.createClass({
     this.trackerId_i.stop();
   },
 
-  componentDidMount: function() {
-
-  },
-
   openMenu(){
     let openMenu = this.state.openMenu
     this.setState({
       openMenu: !openMenu
     });
-
     if(!openMenu && this.state.leftNavDocked){
       this.setState({
           moveValue:this.navbarWidth
@@ -242,14 +232,17 @@ App = React.createClass({
       </div>
     );
   },
+
   goToLogin(){
     if(!this.state.gotUser){
       this.context.router.push('/login')
     }
   },
+
   showCartPage(){
     this.context.router.push('/shoppingcart');
   },
+
   getShoppingcart(){
     var tooltipUser = (this.state.gotUser?this.state.user.firstname + ' ' + this.state.user.lastname:'Inicia sesión');
     return(
@@ -273,31 +266,29 @@ App = React.createClass({
       </div>
     );
   },
+
   closeLeftNav(){
     this.setState({
       openMenu: false,
       moveValue:0
     });
   },
-  _handleCloseSession(){
 
+  _handleCloseSession(){
     this.setState({
       gotToken: false,
       user:{},
       gotUser:false,
       fbUser:false
     });
-
     FB.logout(function(response) {
     console.log(response);
     });
-
     Session.setPersistent('user',{});
     Session.setPersistent('token',{});
     Session.setPersistent('shoppingCart',{});
     Session.setPersistent('cartshopNumber',0);
     Session.setPersistent('isShoppingCartEmpty',true);
-
     data.initToken((err,response)=>{
         if(!err){
             console.log(response);
@@ -353,10 +344,7 @@ App = React.createClass({
       </div>
     );
   }
-  });
-
-
-
+});
 
 const GetLeftList = React.createClass({
   contextTypes: {
@@ -399,15 +387,12 @@ const GetLeftList = React.createClass({
   },
 
   _handleTouchTap:function(name,event){
-
-    //console.log(i);
     this.close();
     const clickedItem = event.currentTarget;
     Session.set('pageTitle',name);
     this.setState({
       selectedItem: clickedItem.id
     });
-    //Session.set('selectedItem',clickedItem);
     this.context.router.push('/categories/'+clickedItem.id.toString());
   },
 
@@ -434,8 +419,8 @@ const GetLeftList = React.createClass({
         );
     });
   },
-  getCategoriesDesktop:function(){
 
+  getCategoriesDesktop:function(){
     return this.props.categories.map((category)=>{
       return(
         React.Children.toArray([
@@ -446,8 +431,7 @@ const GetLeftList = React.createClass({
             onTouchTap = {this._handleTouchTap}/>
         ])
       );
-      });
-
+    });
   },
 
   getCategoriesMobile:function(){
@@ -485,22 +469,27 @@ const GetLeftList = React.createClass({
         }
     });
   },
+
   _handleShoppingCart:function(){
     this.close();
     this.context.router.push('/shoppingcart');
   },
+
   _handleUpdateData:function(){
     this.close();
     this.context.router.push('/user');
   },
+
   _handleCloseSession:function(){
     this.close();
     this.props.handleCloseSession();
   },
+
   _handleGoToLogin:function(){
     this.close();
     this.context.router.push('/login');
   },
+
   _handleUserListTouch:function(){
     this.setState({
       selectedItem: 'user'
@@ -508,6 +497,7 @@ const GetLeftList = React.createClass({
     this.context.router.push('/user');
     this.close();
   },
+  
   render: function() {
     let smallScreen = this.context.screensize==='small'||this.context.screensize==='medium';
     let width = smallScreen?272:128;
