@@ -11,25 +11,39 @@ const styles={
   }
 }
 UserPage = React.createClass({
+  contextTypes:{
+    gotUser: React.PropTypes.bool,
+  },
   componentWillMount: function() {
-    Session.set('pageTitle','Mis datos');
+    const {gotUser} = this.context;
+    if (gotUser){
+      Session.set('pageTitle','Mis datos');
+    }
   },
   render: function() {
-    return (
-      <Tabs>
-        <Tab
-          icon={<div><MapsLocalShipping style={styles.icons}/> </div>}>
+    const {gotUser} = this.context;
+    if (gotUser){
+      return (
+        <Tabs>
+          <Tab
+            icon={<div><MapsLocalShipping style={styles.icons}/> </div>}>
 
-        </Tab>
-        <Tab
-          icon={<div><ActionHistory style={styles.icons}/></div>}>
+          </Tab>
+          <Tab
+            icon={<div><ActionHistory style={styles.icons}/></div>}>
 
-        </Tab>
-        <Tab
-          icon={<div><ActionPayment style={styles.icons}/></div>}>
-        </Tab>
-      </Tabs>
-    );
+          </Tab>
+          <Tab
+            icon={<div><ActionPayment style={styles.icons}/></div>}>
+          </Tab>
+        </Tabs>
+      );
+    }else{
+      return(
+        <LoginPage />
+      );
+    }
+
   }
 
 });

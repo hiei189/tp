@@ -11,7 +11,6 @@ standard-minifiers      # JS/CSS minifiers run for production mode
 es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
 
-react
 http
 reactrouter:react-router
 reactrouter:react-router-ssr
@@ -21,3 +20,4 @@ jchavez:material-ui
 tracker
 blaze-html-templates
 ficshelf:media-query
+react
