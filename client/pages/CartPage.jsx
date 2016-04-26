@@ -68,64 +68,61 @@ CartPage = React.createClass({
     Tracker.autorun((d)=>{
       this.trackerId_d = d;
       this.screensize = Session.get('device-screensize');
-      console.log(this.screensize);
-      switch (this.screensize) {
-        case "large":
-        case "xlarge":
-        case "xxlarge":
-          this.setState({
-            positionSummary:'fixed',
-            positionOverflowY:'auto'
-          });
-          break;
-        case "small":
-        case "medium":
-          this.setState({
-            positionSummary:'',
-            positionOverflowY:''
-          });
-          break;
-        default:
-          this.setState({
-            positionSummary:'fixed',
-            positionOverflowY:'auto'
-          });
-      };
+      Tracker.nonreactive(()=>{
+        switch (this.screensize) {
+          case "large":
+          case "xlarge":
+          case "xxlarge":
+            this.setState({
+              positionSummary:'fixed',
+              positionOverflowY:'auto'
+            });
+            break;
+          case "small":
+          case "medium":
+            this.setState({
+              positionSummary:'',
+              positionOverflowY:''
+            });
+            break;
+          default:
+            this.setState({
+              positionSummary:'fixed',
+              positionOverflowY:'auto'
+            });
+        };
+      });
     });
 
     Tracker.autorun((c)=>{
       this.trackerId_c = c;
-      if(Session.get('isShoppingCartEmpty')){
-        this.setState({
-          noProducts: true
-        });
-      }else{
-        this.shoppingCart = Session.get('shoppingCart'); //Leyendo carrito de compras
-        this.setState({
-          total: this.shoppingCart.totals[0].text,
-          gotProducts: false,
-          noProducts: false
-        });
-        let arrayProducts = [];
-        this.shoppingCart.products.map((product)=>{
-          arrayProducts = arrayProducts.concat(product);
-        });
-        this.setState({products: arrayProducts,gotProducts:true});
-      }
+      var isShoppingCartEmpty = Session.get('isShoppingCartEmpty');
+      this.shoppingCart = Session.get('shoppingCart');
+      Tracker.nonreactive(()=>{
+        if(isShoppingCartEmpty){
+          this.setState({
+            noProducts: true
+          });
+        }else{
+          this.shoppingCart = Session.get('shoppingCart'); //Leyendo carrito de compras
+          this.setState({
+            total: this.shoppingCart.totals[0].text,
+            gotProducts: false,
+            noProducts: false
+          });
+          let arrayProducts = [];
+          this.shoppingCart.products.map((product)=>{
+            arrayProducts = arrayProducts.concat(product);
+          });
+          this.setState({products: arrayProducts,gotProducts:true});
+        }
+      });
     });
-
-    Tracker.autorun((b)=>{
-      this.trackerId_b = b;
-      console.log(Session.get('var'));
-    });
-
-
   },
 
   componentWillUnmount: function() {
     this.trackerId_d.stop();
     this.trackerId_c.stop();
-    this.trackerId_b.stop();
   },
 
   renderTiles:function(){
@@ -138,7 +135,7 @@ CartPage = React.createClass({
 
   _handleBuy:function(){
     if(this.context.gotUser){
-      this.context.router.push('/shipping');
+      this.context.router.push('/shoppingdetails');
     }
     else{
       this.context.router.push('/login');

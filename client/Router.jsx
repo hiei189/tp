@@ -12,11 +12,12 @@ Meteor.startup(function() {
       Session.set('shoppingCart',{});
 
       data.initToken((err,response)=>{
-          this.token = Session.get('token');
-          data.initFB((response)=>{});
-          CartController.getAllItems(this.token.access_token,(err,response)=>{});
-          data.getCategories((err,response)=>{});
-
+          if(!err){
+            this.token = Session.get('token');
+            data.initFB((response)=>{});
+            CartController.getAllItems(this.token.access_token,(err,response)=>{});
+            data.getCategories((err,response)=>{});
+          }
         });
 
       //const browserHistory = ReactRouter.history.useQueries(ReactRouter.history.createHistory)();
@@ -32,6 +33,7 @@ Meteor.startup(function() {
             <Route path="/delivery" component = {DeliveryPage}/>
             <Route path="/stepper" component = {ShoppingStepsPage}/>
             <Route path="shoppingcart" component = {CartPage}/>
+            <Route path="shoppingdetails" component = {ShoppingDetails}/>
           </Route>
         );
       ReactRouterSSR.Run(Routes);

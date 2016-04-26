@@ -25,7 +25,6 @@ const styles = {
     width:'100%',
   },
   form:{
-    textAlign:'center',
     display:'flex',
     flexDirection:'column',
     alignItems:'center',
@@ -37,7 +36,7 @@ const styles = {
     margin:'auto',
     width:'60%',
     textAlign:'center',
-    color:Colors.pink800
+    color:Colors.pink500
   },
   footer:{
     position:'fixed',
@@ -92,7 +91,7 @@ Shipping = React.createClass({
       }
     });
 
-    
+
     formsController.getAddresses(this.token.access_token,(err,response)=>{
       if(response.data.success){
         this.setState({
@@ -312,8 +311,7 @@ Shipping = React.createClass({
     let { wordsError } = this.errorMessages;
 
     return (
-      <div>
-        <div style={styles.container}>
+        <div>
           <h2 style={styles.headers}>Datos de entrega</h2>
 
           <Formsy.Form
@@ -380,6 +378,7 @@ Shipping = React.createClass({
               filter={AutoComplete.noFilter}
               disabled = {this.state.disabledForm}
               required
+              hintText ={'Coloca un lugar. Ejemplos: Centro, California, etc'}
               fullWidth={true}
               style ={styles.field}
               errorText = {this.state.errorPlace}
@@ -392,9 +391,10 @@ Shipping = React.createClass({
               floatingLabelText="Dirección de entrega"
               type="string"
               id ="shippingAddress"
+              multiLine={true}
+              rows = {2}
               value = {this.state.shippingAddress}
               style ={styles.field}
-
               disabled = {this.state.disabledForm}
             />
             <FormsyText
@@ -404,10 +404,14 @@ Shipping = React.createClass({
               floatingLabelText="Referencia"
               type="string"
               id ="reference"
+              multiLine={true}
+              rows={2}
               value = {this.state.reference}
               style ={styles.field}
               disabled = {this.state.disabledForm}
             />
+
+
             {this.props.footer?<div style={styles.footer}>
               <h3 style={{marginRight:16}} >{'TOTAL: '+ this.state.total}</h3>
               <FloatingActionButton
@@ -418,7 +422,6 @@ Shipping = React.createClass({
 
           </Formsy.Form>
         </div>
-      </div>
     );
   }
 

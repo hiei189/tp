@@ -494,10 +494,11 @@ const GetLeftList = React.createClass({
     this.setState({
       selectedItem: 'user'
     });
+    Session.set('selectedItem','user');
     this.context.router.push('/user');
     this.close();
   },
-  
+
   render: function() {
     let smallScreen = this.context.screensize==='small'||this.context.screensize==='medium';
     let width = smallScreen?272:128;
@@ -548,10 +549,6 @@ var Li = React.createClass({
     this.props.onTouchTap(category.name,e);
   },
   componentWillMount: function() {
-    Tracker.autorun((a)=>{
-      this.trackerId_a = a;
-      var selected = Session.get('selectedItem');
-    });
   },
   getInitialState: function() {
     return {

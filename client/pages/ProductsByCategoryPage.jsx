@@ -250,7 +250,7 @@ var ProductsComponent = React.createClass({
       )
     })
   },
-  render: function() {
+  render: function() {  
     let products =  Session.get('Category'+this.props.categoryId);
 
     if(products !== null && typeof products === 'object'){

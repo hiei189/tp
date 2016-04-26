@@ -56,6 +56,16 @@ formsController = {
       this.delivery.hourShipping
     );
 
+  },
+  getDeliveryHours:function(token,callback){
+    backendCom.getDeliveryHours(
+      token,(err,response)=>{
+        if (!err){
+          Session.set('deliveryHours',response.data);
+          callback(response.data);
+        }
+      }
+    )
   }
 
 

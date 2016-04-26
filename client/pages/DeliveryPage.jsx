@@ -1,5 +1,5 @@
 const Colors = mui.Styles.Colors;
-const { TextField, TimePicker, SelectField, DatePicker,RaisedButton,MenuItem,AutoComplete,CircularProgress,FloatingActionButton} = mui;
+const {TextField, TimePicker, DropDownMenu, SelectField, DatePicker,RaisedButton,MenuItem,AutoComplete,CircularProgress,FloatingActionButton} = mui;
 const {ContentSend} = mui.SvgIcons;
 const {NavigationRefresh} = mui.SvgIcons;
 
@@ -31,7 +31,7 @@ const styles = {
     margin:'auto',
     width:'60%',
     textAlign:'center',
-    color:Colors.pink800
+    color:Colors.pink500
   },
   footer:{
     position:'fixed',
@@ -65,7 +65,8 @@ DeliveryPage = React.createClass({
       priceDelivery:'',
       message:'',
       total:'',
-      addressesLoading: true
+      addressesLoading: true,
+      deliveryHours: 'NO_DATA'
     };
   },
 
@@ -80,6 +81,13 @@ DeliveryPage = React.createClass({
     this.token = Session.get('token');
     backendCom.getOccasions(this.token.access_token,(err,response)=>{
       console.log(response);
+    });
+
+    formsController.getDeliveryHours(this.token.access_token,(response)=>{
+      this.setState({
+        deliveryHours: Session.get('deliveryHours')
+      });
+      console.log(Session.get('deliveryHours'));
     });
 
     Tracker.autorun((a)=>{
@@ -109,6 +117,28 @@ DeliveryPage = React.createClass({
     isDefaultRequiredValue: 'Este campo es requerido'
   },
 
+  getDeliveryHours:function(){
+    if(this.state.deliveryHours === 'NO_DATA'){
+      return
+      (<MenuItem>
+        <CircularProgress />
+      </MenuItem>);
+    }
+    else{
+      return this.state.deliveryHours.map((hour)=>{
+        return(
+          <MenuItem
+            key={hour.delivery_hour_id}
+            value = {hour.name}
+            primaryText={hour.name}/>
+        );
+      });
+    }
+  },
+
+  handleDeliveryMenu: function(event, index, deliveryMenu) {
+    this.setState({deliveryMenu})
+  },
 
   render: function() {
 
@@ -134,6 +164,16 @@ DeliveryPage = React.createClass({
             value={this.state.dateDelivery}
             style = {styles.field}
           />
+          <FormsySelect
+            name = {'deliveryHourMenu'}
+            ref = {'deliveryHourMenu'}
+            required
+            style={styles.field}
+            floatingLabelText="Elige una hora de entrega"
+            onChange={this.handleDeliveryMenu}>
+            {this.getDeliveryHours()}
+          </FormsySelect>
+
           <FormsyTime
             required
             floatingLabelText="Hora de entrega"
@@ -194,8 +234,9 @@ DeliveryPage = React.createClass({
           </div>:false}
 
         </Formsy.Form>
-
-
+        <div style={styles.field}>
+          {'Nota: el costo de envío se hace en el intervalo de una hora después de la hora seleccionada'}
+        </div>
 
       </div>
     );

@@ -100,7 +100,6 @@ backendCom = {
         }
       },
       (err,response)=>{
-        console.log(response);
         callback(err,response);
         return;
       }
@@ -409,6 +408,24 @@ backendCom = {
           message: message,
           anonymous: anonymous,
           delivery: "new"
+        }
+      },
+      (err,response)=>{
+        callback(err,response);
+        return;
+      }
+    );
+  },
+
+  getDeliveryHours:function(token,callback){
+    HTTP.call(
+      'GET',
+      basic_url+'delivery/hours',
+      {
+        headers:{
+          'Authorization':'Bearer '+ token,
+          'X-Oc-Merchant-Language' : 'es',
+          'X-Oc-Store-Id': '0'
         }
       },
       (err,response)=>{
