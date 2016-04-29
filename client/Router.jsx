@@ -1,6 +1,6 @@
 const {Route, Router,IndexRoute,browserHistory} = ReactRouter;
 Meteor.startup(function() {
-
+      injectTapEventPlugin();
       Session.set('pageTitle','Tulipanda');
       Session.set('cartshopNumber','0');
       Session.set('token',{});
@@ -28,9 +28,7 @@ Meteor.startup(function() {
             <Route path="/products/:productId" component ={ProductByIdPage}/>
             <Route path="/createuser" component ={CreateUserPage}/>
             <Route path="/login" component ={LoginPage}/>
-            <Route path="/shipping" component = {Shipping}/>
             <Route path="/user" component = {UserPage}/>
-            <Route path="/delivery" component = {DeliveryPage}/>
             <Route path="/stepper" component = {ShoppingStepsPage}/>
             <Route path="shoppingcart" component = {CartPage}/>
             <Route path="shoppingdetails" component = {ShoppingDetails}/>

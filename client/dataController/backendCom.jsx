@@ -391,7 +391,7 @@ backendCom = {
     );
   },
 
-  saveDelivery:function(day,hour,ocassion_id,message,anonymous,delivery,token,callback){
+  addDelivery:function(day,hour,ocassion_id,message,anonymous,token,callback){
     HTTP.call(
       'POST',
       basic_url + 'delivery',

@@ -64,9 +64,9 @@ DeliveryPage = React.createClass({
       occasions:'',
       priceDelivery:'',
       message:'',
-      total:'',
       addressesLoading: true,
-      deliveryHours: 'NO_DATA'
+      deliveryHours: 'NO_DATA',
+      selectedDeliveryHour: '10.00'
     };
   },
 
@@ -79,6 +79,8 @@ DeliveryPage = React.createClass({
       dateShipping: this.maxDate
     });
     this.token = Session.get('token');
+
+    //ESTO DEVUELVE NULL
     backendCom.getOccasions(this.token.access_token,(err,response)=>{
       console.log(response);
     });
@@ -87,7 +89,6 @@ DeliveryPage = React.createClass({
       this.setState({
         deliveryHours: Session.get('deliveryHours')
       });
-      console.log(Session.get('deliveryHours'));
     });
 
     Tracker.autorun((a)=>{
@@ -100,7 +101,6 @@ DeliveryPage = React.createClass({
       }else{
         this.shoppingCart = Session.get('shoppingCart');
         this.setState({
-          total: this.shoppingCart.totals[0].text,
           noProducts: false
         });
       }
@@ -135,9 +135,17 @@ DeliveryPage = React.createClass({
       });
     }
   },
+  validateForm:function(){
+    model = this.refs.deliveryForm.getModel();
+    this.props.validDelivery(model);
+  },
 
-  handleDeliveryMenu: function(event, index, deliveryMenu) {
-    this.setState({deliveryMenu})
+  invalidForm:function(){
+    this.props.invalidDelivery();
+  },
+
+  handleDeliveryMenu: function(event, index, selectedDeliveryHour) {
+    this.setState({selectedDeliveryHour})
   },
 
   render: function() {
@@ -151,6 +159,7 @@ DeliveryPage = React.createClass({
         <Formsy.Form
           onValidSubmit={this.submit}
           onValid={this.validateForm}
+          ref = {'deliveryForm'}
           onInvalid={this.invalidForm}
           style ={styles.form}>
           <FormsyDate
@@ -174,17 +183,6 @@ DeliveryPage = React.createClass({
             {this.getDeliveryHours()}
           </FormsySelect>
 
-          <FormsyTime
-            required
-            floatingLabelText="Hora de entrega"
-            textFieldStyle = {{width:'100%'}}
-            style = {styles.field}
-            format="24hr"
-            name = "hourDelivery"
-            ref="picker24hr"
-            value={this.state.hourDelivery}
-            onChange={this.handleChangeTimePicker12}
-          />
           <FormsyText
             required
             floatingLabelText="Motivo"
@@ -223,15 +221,6 @@ DeliveryPage = React.createClass({
               <NavigationRefresh style={{fill:'white'}}/>
             </RaisedButton>
           </div>
-
-
-          {this.props.footer?<div style={styles.footer}>
-            <h3 style={{marginRight:16}} >{'TOTAL: '+ this.state.total}</h3>
-            <FloatingActionButton
-              type="submit">
-              <ContentSend />
-            </FloatingActionButton>
-          </div>:false}
 
         </Formsy.Form>
         <div style={styles.field}>
