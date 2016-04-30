@@ -28,7 +28,6 @@ UserPage = React.createClass({
 
   render: function() {
     const {gotUser} = this.context;
-    console.log(gotUser);
     if (gotUser){
       return (
         <Tabs>

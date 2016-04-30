@@ -66,7 +66,12 @@ ShoppingDetails = React.createClass({
   },
 
   handleTabChange:function(value){
-    
+    //BORRAR ESTO EN PRODUCCION!
+    if (value === '0' || value === '1' || value ==='2'){
+      this.setState({
+        currentTab: value
+      });
+    }
   },
 
   handleValidShipping:function(idShipping,model){
@@ -169,7 +174,9 @@ ShoppingDetails = React.createClass({
           <Tabs value={this.state.currentTab} onChange={this.handleTabChange}>
             <Tab value = {'0'}
               icon={<div><MapsLocalShipping style={styles.icons}/></div>}>
-              <ShippingPage invalidShipping = {this.handleInvalidShipping} validShipping={this.handleValidShipping}/>
+              <Paper>
+                <ShippingPage invalidShipping = {this.handleInvalidShipping} validShipping={this.handleValidShipping}/>                
+              </Paper>
             </Tab>
             <Tab value = {'1'}
               icon={<div><ActionHistory style={styles.icons}/></div>}>
