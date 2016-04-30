@@ -14,18 +14,16 @@ const styles = {
   field: {
     margin: 'auto',
     width:'100%',
+    minWidth:'212',
   },
   fieldPrice: {
     margin: 'auto',
     width:'calc(100% - 88px)',
   },
   form:{
-    display:'flex',
-    flexDirection:'column',
-    alignItems:'center',
-    width:'60%',
-    minWidth:'256',
-    margin:'auto'
+    margin: 'auto',
+    width:'100%',
+    marginBottom:'50px'
   },
   headers:{
     margin:'auto',

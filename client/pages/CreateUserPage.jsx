@@ -93,9 +93,11 @@ CreateUserPage = React.createClass({
     callback = (err,response)=>{
       if(response.data.success){
         Session.set('user',response.data.data);
-        this.setState({
-          userCreated: true
-        });
+        if(this.isMounted()){
+          this.setState({
+            userCreated: true
+          });
+        }
       }else{
         console.log(response);
       }
@@ -155,7 +157,7 @@ CreateUserPage = React.createClass({
     },
 
   goHome:function(){
-    this.props.router.push('/');
+    this.context.router.push('/');
   },
   render: function() {
     return (

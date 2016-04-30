@@ -247,11 +247,11 @@ App = React.createClass({
     var tooltipUser = (this.state.gotUser?this.state.user.firstname + ' ' + this.state.user.lastname:'Inicia sesión');
     return(
       <div>
-        <IconButton
+        {/*<IconButton
           tooltip={tooltipUser}
           onTouchTap = {this.goToLogin}>
           <ActionAccountCircle color={Colors.white}/>
-        </IconButton>
+        </IconButton>*/}
         <IconButton
           tooltip="Carrito de compras"
           onTouchTap={this.showCartPage}>

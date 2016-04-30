@@ -4,6 +4,16 @@ const {ContentSend} = mui.SvgIcons;
 const Colors = mui.Styles.Colors;
 
 const styles={
+  paperContainer:{
+    width:'70%',
+    minWidth:256,
+    margin:'auto',
+    padding:'0 5%',
+    marginTop:20,
+    display:'flex',
+    flexDirection:'column',
+    justifyContent:'space-around'
+  },
   icons:{
     margin:'auto',
     width:28,
@@ -21,8 +31,13 @@ const styles={
     width:'100%',
     backgroundColor: Colors.grey100,
     minWidth: '100%',
-    alignItems:'center'
-  }
+    alignItems:'center',
+    zIndex: 1150
+  },
+  paperTitle:{
+    color: Colors.pink500
+  },
+
 }
 
 ShoppingDetails = React.createClass({
@@ -174,13 +189,21 @@ ShoppingDetails = React.createClass({
           <Tabs value={this.state.currentTab} onChange={this.handleTabChange}>
             <Tab value = {'0'}
               icon={<div><MapsLocalShipping style={styles.icons}/></div>}>
-              <Paper>
-                <ShippingPage invalidShipping = {this.handleInvalidShipping} validShipping={this.handleValidShipping}/>                
+              <Paper style={styles.paperContainer}>
+                <div>
+                  <h2 style={styles.paperTitle}>Datos de envío</h2>
+                </div>
+                <ShippingPage invalidShipping = {this.handleInvalidShipping} validShipping={this.handleValidShipping}/>
               </Paper>
             </Tab>
             <Tab value = {'1'}
               icon={<div><ActionHistory style={styles.icons}/></div>}>
-              <DeliveryPage invalidDelivery={this.handleInvalidDelivery} validDelivery={this.handleValidDelivery} />
+              <Paper style={styles.paperContainer}>
+                <div>
+                  <h2 style={styles.paperTitle}>Datos de entrega</h2>
+                </div>
+                <DeliveryPage invalidDelivery={this.handleInvalidDelivery} validDelivery={this.handleValidDelivery} />
+              </Paper>
             </Tab>
             <Tab value = {'2'}
               icon={<div><ActionPayment style={styles.icons}/></div>}>

@@ -23,20 +23,12 @@ const styles = {
   field: {
     margin: 'auto',
     width:'100%',
+    minWidth:'212',
   },
   form:{
-    display:'flex',
-    flexDirection:'column',
-    alignItems:'center',
-    width:'60%',
-    minWidth:'256',
-    margin:'auto'
-  },
-  headers:{
-    margin:'auto',
-    width:'60%',
-    textAlign:'center',
-    color:Colors.pink500
+    margin: 'auto',
+    width:'100%',
+    marginBottom:'50px'
   },
   footer:{
     position:'fixed',
@@ -49,6 +41,9 @@ const styles = {
     backgroundColor: Colors.grey100,
     minWidth: '100%',
     alignItems:'center'
+  },
+  paperTitle:{
+    color: Colors.pink500
   }
 }
 
@@ -76,12 +71,12 @@ ShippingPage = React.createClass({
     });
 
     formsController.getAddresses(this.token.access_token,(err,response)=>{
+      console.log(response);
       if(response.data.success){
         this.setState({
           savedAddress: response.data.data,
           noAddresses: false,
           addressesLoading:false
-
         });
       }else{
         this.setState({
@@ -274,8 +269,6 @@ ShippingPage = React.createClass({
   render: function() {
     let { wordsError } = this.errorMessages;
     return (
-        <div>
-          <h2 style={styles.headers}>Datos de entrega</h2>
 
           <Formsy.Form
             ref={'shippingForm'}
@@ -291,8 +284,8 @@ ShippingPage = React.createClass({
               style ={styles.field}
               floatingLabelText="Elige una dirección"
               value={this.state.selectedAddress}>
-              <MenuItem value={'X'} primaryText="Nueva dirección"/>
-              {!this.state.addressesLoading?this.getAddresses():<div/>}
+              <MenuItem value={'NUEVA DIRECCION'} primaryText="Nueva dirección"/>
+              {!this.state.addressesLoading && !this.state.noAddresses?this.getAddresses():<div/>}
             </FormsySelect>
 
             <FormsyText
@@ -375,7 +368,7 @@ ShippingPage = React.createClass({
               disabled = {this.state.disabledForm}
             />
           </Formsy.Form>
-        </div>
+
     );
   }
 

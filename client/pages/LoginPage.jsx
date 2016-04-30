@@ -3,10 +3,10 @@ const Colors = mui.Styles.Colors;
 
 const styles = {
   paperContainer:{
-    width:'40%',
+    width:'80%',
     minWidth:256,
     margin:'auto',
-    padding:20,
+    padding:'0 5%',
     marginTop:20
   },
   container: {
@@ -18,12 +18,11 @@ const styles = {
   field: {
     margin: 'auto',
     width:'100%',
-
+    minWidth:'212',
   },
   forms: {
     margin: 'auto',
-    width:'100%',
-    textAlign:'center'
+    width:'100%'
   },
   checkbox:{
     width:'100%',
@@ -40,11 +39,14 @@ const styles = {
   button:{
     margin: 'auto',
     width:'20%',
-    minWidth:'224',
-    marginTop:'16'
+    minWidth:'212',
+    marginTop:'12'
   },
-img:{
+  img:{
     width: '60%'
+  },
+  paperTitle:{
+    color: Colors.pink500
   }
 }
 
@@ -67,7 +69,8 @@ LoginPage = React.createClass({
       email: '',
       password:'',
       remember:false,
-      recoverPassword:false
+      recoverPassword:false,
+      userLogged: false
     };
   },
   getTitle: function(){
@@ -78,16 +81,20 @@ LoginPage = React.createClass({
   },
 
   handleLogin:function(model){
-    const {email,password} = model.login;
     console.log(model);
-    data.loginUser(this.state.remember,
-      this.state.email,
-      this.state.password,
-      this.context.token.access_token,
+    const {email,password} = model.login;
+    data.loginUser(false,
+      email,
+      password,
+      this.token.access_token,
       (err,response)=>{
         console.log(response);
         if(response.data.success){
-          this.context.router.goBack();
+          if(this.isMounted()){
+            this.setState({
+              userLogged: true
+            });
+          }
         }
       });
   },
@@ -106,6 +113,11 @@ LoginPage = React.createClass({
 
   handleRecoveryPassword:function(model){
     console.log(model);
+    backendCom.recoverPassword(model.email,this.token.access_token,
+      (err,response)=>{
+        console.log(err);
+        console.log(response);
+    });
   },
 
   createNewUser:function(){
@@ -115,18 +127,20 @@ LoginPage = React.createClass({
 
   errorMessages: {
     wordsError: "Solo use letras (a-z)",
-    isDefaultRequiredValue: 'Este campo es requerido'
+    isDefaultRequiredValue: 'Este campo es requerido',
+    isEmail: "Ingresa un email válido",
+    isExisty: "Este campo es requerido"
   },
 
   render: function() {
-    let { wordsError } = this.errorMessages;
+    let { wordsError,isEmail, isExisty } = this.errorMessages;
     return (
       <Paper style={styles.paperContainer}>
         <div style={styles.container}>
           {this.state.recoverPassword?
             (
               <div>
-              <h2>Recupera tu contraseña</h2>
+              <h2 style={styles.paperTitle}>Recupera tu contraseña</h2>
               <Formsy.Form
                 ref={'recoveryPasswordForm'}
                 onValidSubmit={this.handleRecoveryPassword}
@@ -136,7 +150,7 @@ LoginPage = React.createClass({
                   name='recovery.email'
                   ref='recovery.email'
                   validations='isEmail'
-                  validationError={wordsError}
+                  validationError={isEmail}
                   required
                   floatingLabelText="Correo electrónico"
                   hintText={'Ingresa el correo con el creaste tu cuenta'}
@@ -145,7 +159,7 @@ LoginPage = React.createClass({
                 /><br/>
 
                 <RaisedButton
-                  label="Recupera tu clave"
+                  label="Recuperar contraseña"
                   primary={true}
                   type={'submit'}
                   style ={styles.button}
@@ -156,7 +170,13 @@ LoginPage = React.createClass({
             :
             (
             <div>
-              <h2>Inicio de sesión</h2>
+              {this.state.userLogged?
+                (<DialogDefault
+                title={'Bienvenido, '+ Session.get('user').firstname}
+                onRequestClose={()=>this.context.router.goBack()}>
+                Te has iniciado sesión exitosamente!
+              </DialogDefault>):null}
+              <h2 style={styles.paperTitle}>Iniciar sesión</h2>
               <Formsy.Form
                 ref={'loginForm'}
                 onValidSubmit={this.handleLogin}
@@ -166,7 +186,7 @@ LoginPage = React.createClass({
                   name='login.email'
                   ref='login.email'
                   validations='isEmail'
-                  validationError={wordsError}
+                  validationError={isEmail}
                   required
                   floatingLabelText="Correo electrónico"
                   type="string"
@@ -179,7 +199,7 @@ LoginPage = React.createClass({
                   name='login.password'
                   ref='login.password'
                   validations='isExisty'
-                  validationError={wordsError}
+                  validationError={isExisty}
                   required
                   floatingLabelText="Contraseña"
                   type="password"
@@ -198,7 +218,6 @@ LoginPage = React.createClass({
 
                 <RaisedButton
                   label="Iniciar sesión"
-                  onTouchTap ={this.handleLogin}
                   primary={true}
                   type={'submit'}
                   style ={styles.button}
@@ -211,7 +230,7 @@ LoginPage = React.createClass({
                 /><br/>
 
               </Formsy.Form>
-              </div>
+            </div>
             )
           }
           <div style={styles.field}>
