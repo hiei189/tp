@@ -147,7 +147,8 @@ ShoppingDetails = React.createClass({
                       if (this.isMounted()){
                         this.setState({
                           loadingButton: false,
-                          currentTab: '1'
+                          currentTab: '1',
+                          disabledButton: true,
                         });
                       }
                   });
@@ -157,7 +158,8 @@ ShoppingDetails = React.createClass({
                   Session.set('shipping.id',model.address_id);
                   this.setState({
                     loadingButton: false,
-                    currentTab:'1'
+                    currentTab:'1',
+                    disabledButton: true,
                   });
                 }
               }

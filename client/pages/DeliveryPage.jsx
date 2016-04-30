@@ -22,8 +22,7 @@ const styles = {
   },
   form:{
     margin: 'auto',
-    width:'100%',
-    marginBottom:'50px'
+    width:'100%'
   },
   headers:{
     margin:'auto',
@@ -151,9 +150,7 @@ DeliveryPage = React.createClass({
     let { wordsError } = this.errorMessages;
 
     return (
-      <div>
-        <h2 style={styles.headers}>Datos de delivery</h2>
-
+      <div style={{marginBottom:'50px'}}>        
         <Formsy.Form
           onValidSubmit={this.submit}
           onValid={this.validateForm}
