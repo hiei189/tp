@@ -3,11 +3,12 @@ const Colors = mui.Styles.Colors;
 
 const styles = {
   paperContainer:{
-    width:'80%',
+    width:'33%',
     minWidth:256,
     margin:'auto',
-    padding:'0 5%',
-    marginTop:20
+    padding:'0 3% 5px',
+    marginTop:20,
+    textAlign:'center'
   },
   container: {
     display: 'flex',
@@ -22,7 +23,8 @@ const styles = {
   },
   forms: {
     margin: 'auto',
-    width:'100%'
+    width:'100%',
+    marginBottom: 15
   },
   checkbox:{
     width:'100%',

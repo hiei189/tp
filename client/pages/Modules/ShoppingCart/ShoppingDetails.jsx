@@ -5,14 +5,15 @@ const Colors = mui.Styles.Colors;
 
 const styles={
   paperContainer:{
-    width:'70%',
+    width:'50%',
     minWidth:256,
     margin:'auto',
-    padding:'0 5%',
+    padding:'0 3%',
     marginTop:20,
     display:'flex',
     flexDirection:'column',
-    justifyContent:'space-around'
+    justifyContent:'space-around',
+
   },
   icons:{
     margin:'auto',
@@ -32,10 +33,11 @@ const styles={
     backgroundColor: Colors.grey100,
     minWidth: '100%',
     alignItems:'center',
-    zIndex: 1150
+    zIndex: 1000
   },
   paperTitle:{
-    color: Colors.pink500
+    color: Colors.pink500,
+    textAlign:'center'
   },
 
 }
@@ -47,7 +49,7 @@ ShoppingDetails = React.createClass({
 
   getInitialState: function() {
     return {
-      currentTab: '0',
+      currentTab: 0,
       validCurrentForm: false,
       total: 0,
       noProducts: true,
@@ -82,10 +84,8 @@ ShoppingDetails = React.createClass({
 
   handleTabChange:function(value){
     //BORRAR ESTO EN PRODUCCION!
-    if (value === '0' || value === '1' || value ==='2'){
-      this.setState({
-        currentTab: value
-      });
+    if (value === 0 || value === 1 || value ===2){
+      
     }
   },
 
@@ -131,7 +131,7 @@ ShoppingDetails = React.createClass({
     if (gotUser){
       if(validCurrentForm){
         switch (this.state.currentTab) {
-          case '0':
+          case 0:
               let {model} = this.shipping;
               if(model.place_id!=='X')
               {
@@ -147,7 +147,7 @@ ShoppingDetails = React.createClass({
                       if (this.isMounted()){
                         this.setState({
                           loadingButton: false,
-                          currentTab: '1',
+                          currentTab: 1,
                           disabledButton: true,
                         });
                       }
@@ -158,20 +158,20 @@ ShoppingDetails = React.createClass({
                   Session.set('shipping.id',model.address_id);
                   this.setState({
                     loadingButton: false,
-                    currentTab:'1',
+                    currentTab:1,
                     disabledButton: true,
                   });
                 }
               }
               break;
-          case '1':
+          case 1:
               model = this.delivery.model;
               formsController.deliveryController.addDelivery(model,this.token.access_token,
                 (response)=>{
                   //falta obtener ID
                 });
             break;
-          case '3':
+          case 2:
 
               break;
           default:
@@ -189,28 +189,37 @@ ShoppingDetails = React.createClass({
       return (
         <div>
           <Tabs value={this.state.currentTab} onChange={this.handleTabChange}>
-            <Tab value = {'0'}
+            <Tab value = {0}
               icon={<div><MapsLocalShipping style={styles.icons}/></div>}>
-              <Paper style={styles.paperContainer}>
-                <div>
-                  <h2 style={styles.paperTitle}>Datos de envío</h2>
-                </div>
-                <ShippingPage invalidShipping = {this.handleInvalidShipping} validShipping={this.handleValidShipping}/>
-              </Paper>
+
             </Tab>
-            <Tab value = {'1'}
+            <Tab value = {1}
               icon={<div><ActionHistory style={styles.icons}/></div>}>
-              <Paper style={styles.paperContainer}>
-                <div>
-                  <h2 style={styles.paperTitle}>Datos de entrega</h2>
-                </div>
-                <DeliveryPage invalidDelivery={this.handleInvalidDelivery} validDelivery={this.handleValidDelivery} />
-              </Paper>
+
             </Tab>
-            <Tab value = {'2'}
+            <Tab value = {2}
               icon={<div><ActionPayment style={styles.icons}/></div>}>
             </Tab>
           </Tabs>
+
+          <SwipeableViews index={this.state.currentTab} onChangeIndex={this.handleTabChange}>
+            <Paper style={styles.paperContainer}>
+              <div>
+                <h2 style={styles.paperTitle}>Datos de envío</h2>
+              </div>
+              <ShippingPage invalidShipping = {this.handleInvalidShipping} validShipping={this.handleValidShipping}/>
+            </Paper>
+            <Paper style={styles.paperContainer}>
+              <div>
+                <h2 style={styles.paperTitle}>Datos de entrega</h2>
+              </div>
+              <DeliveryPage invalidDelivery={this.handleInvalidDelivery} validDelivery={this.handleValidDelivery} />
+            </Paper>
+            <Paper style={styles.paperContainer}>
+
+            </Paper>
+          </SwipeableViews>
+
           <div style={styles.footer}>
             <h3 style={{marginRight:16}} >{'TOTAL: '+ this.state.total}</h3>
             <FloatingActionButton

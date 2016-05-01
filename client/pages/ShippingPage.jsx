@@ -200,7 +200,7 @@ ShippingPage = React.createClass({
     this.setState({selectedAddress:value});
     this.shipping = value;
     formsController.shipping.address_id = value; //GUARDAR ADDRES_ID SELECCIONADO
-    if (value !== 'X'){
+    if (value !== 'NUEVA DIRECCION'){
       let address = findById(this.state.savedAddress.addresses,value);
       console.log(address);
       this.place_id=address.place_id;

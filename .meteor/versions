@@ -74,6 +74,7 @@ spacebars-compiler@1.0.7
 standard-minifiers@1.0.2
 templating@1.1.5
 templating-tools@1.0.0
+tmikeladze:react-swipeable-views@0.0.1
 tracker@1.0.9
 u2622:persistent-session@0.4.4
 ui@1.0.8
