@@ -82,7 +82,7 @@ ProductTile = React.createClass({
     //const productImg = this.props.zoom?'productImg zoomable':'productImg';
     const productImg = this.state.zoomed?'zoomed zoomable productImg':'zoomable productImg';
     return (
-      <div className={'productContainer'} >
+      <div className={'productContainer'}>
         <div className={'productImgContainer'}>
           <img
             id = {this.props.product.id}
