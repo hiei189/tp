@@ -85,7 +85,7 @@ ShoppingDetails = React.createClass({
   handleTabChange:function(value){
     //BORRAR ESTO EN PRODUCCION!
     if (value === 0 || value === 1 || value ===2){
-      
+      return;
     }
   },
 
@@ -191,34 +191,30 @@ ShoppingDetails = React.createClass({
           <Tabs value={this.state.currentTab} onChange={this.handleTabChange}>
             <Tab value = {0}
               icon={<div><MapsLocalShipping style={styles.icons}/></div>}>
-
+              <Paper style={styles.paperContainer}>
+                <div>
+                  <h2 style={styles.paperTitle}>Datos de envío</h2>
+                </div>
+                <ShippingPage invalidShipping = {this.handleInvalidShipping} validShipping={this.handleValidShipping}/>
+              </Paper>
             </Tab>
             <Tab value = {1}
               icon={<div><ActionHistory style={styles.icons}/></div>}>
-
+              <Paper style={styles.paperContainer}>
+                <div>
+                  <h2 style={styles.paperTitle}>Datos de entrega</h2>
+                </div>
+                <DeliveryPage invalidDelivery={this.handleInvalidDelivery} validDelivery={this.handleValidDelivery} />
+              </Paper>
             </Tab>
             <Tab value = {2}
               icon={<div><ActionPayment style={styles.icons}/></div>}>
+              <Paper style={styles.paperContainer}>
+
+              </Paper>
             </Tab>
           </Tabs>
 
-          <SwipeableViews index={this.state.currentTab} onChangeIndex={this.handleTabChange}>
-            <Paper style={styles.paperContainer}>
-              <div>
-                <h2 style={styles.paperTitle}>Datos de envío</h2>
-              </div>
-              <ShippingPage invalidShipping = {this.handleInvalidShipping} validShipping={this.handleValidShipping}/>
-            </Paper>
-            <Paper style={styles.paperContainer}>
-              <div>
-                <h2 style={styles.paperTitle}>Datos de entrega</h2>
-              </div>
-              <DeliveryPage invalidDelivery={this.handleInvalidDelivery} validDelivery={this.handleValidDelivery} />
-            </Paper>
-            <Paper style={styles.paperContainer}>
-
-            </Paper>
-          </SwipeableViews>
 
           <div style={styles.footer}>
             <h3 style={{marginRight:16}} >{'TOTAL: '+ this.state.total}</h3>

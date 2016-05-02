@@ -1,6 +1,6 @@
 const {Route, Router,IndexRoute,browserHistory} = ReactRouter;
 Meteor.startup(function() {
-      injectTapEventPlugin();
+      
       Session.set('pageTitle','Tulipanda');
       Session.set('cartshopNumber','0');
       Session.set('token',{});

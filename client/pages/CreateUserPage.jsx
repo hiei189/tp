@@ -1,7 +1,19 @@
-const { TextField, DatePicker, RadioButtonGroup,RadioButton,RaisedButton} = mui;
+const { TextField, DatePicker, RadioButtonGroup,RadioButton,RaisedButton,Paper} = mui;
 const Colors = mui.Styles.Colors;
 
 const styles = {
+  paperContainer:{
+    width:'50%',
+    minWidth:256,
+    margin:'auto',
+    padding:'0 3%',
+    marginTop:20,
+    display:'flex',
+    flexDirection:'column',
+    justifyContent:'space-around',
+    textAlign:'center'
+  },
+
   container: {
     display: 'flex',
     flexDirection:'column',
@@ -10,19 +22,19 @@ const styles = {
   },
   field: {
     margin: 'auto',
-    width:'60%',
-    minWidth:'256'
+    width:'100%',
+    minWidth:'212',
   },
   button:{
     margin: 'auto',
     width:'20%',
-    minWidth:'256',
-    marginTop:'24'
+    minWidth:'212',
+    marginTop:'12'
   },
   radiogroup:{
     margin:'auto',
     width:'60%',
-    minWidth:'256',
+    minWidth:'212',
     textAlign:'left'
   },
   radiobutton:{
@@ -33,14 +45,20 @@ const styles = {
 
   },
   form:{
-    textAlign:'center'
+    margin: 'auto',
+    width:'100%',
+    marginBottom: 15
   },
   headers:{
     margin:'auto',
     width:'60%',
     textAlign:'center',
     color:Colors.pink800
-  }
+  },
+  paperTitle:{
+    color: Colors.pink500,
+    textAlign:'center'
+  },
 }
 
 
@@ -161,14 +179,14 @@ CreateUserPage = React.createClass({
   },
   render: function() {
     return (
-      <div style={styles.container}>
+      <Paper style={styles.paperContainer}>
         {this.state.userCreated?
           (<DialogDefault
           title={'Bienvenido!'}
           onRequestClose={this.goHome}>
           Tu cuenta ha sido creada exitosamente!
         </DialogDefault>):null}
-        <h3 style={styles.headers}>Datos personales</h3>
+        <h2 style={styles.paperTitle}>Datos personales</h2>
         <form style={styles.form}>
           <TextField
             floatingLabelText="Nombres"
@@ -215,7 +233,7 @@ CreateUserPage = React.createClass({
             />
           </RadioButtonGroup>
           <br/>
-          <h3 style={styles.headers}>Datos de contacto</h3>
+          <h2 style={styles.paperTitle}>Datos de contacto</h2>
           <TextField
             floatingLabelText="Email"
             type="email"
@@ -259,7 +277,7 @@ CreateUserPage = React.createClass({
             style ={styles.button}
           /><br/>
         </form>
-      </div>
+      </Paper>
     );
   }
 
