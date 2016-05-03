@@ -6,7 +6,7 @@ const Colors = mui.Styles.Colors;
 const styles={
   paperContainer:{
     width:'50%',
-    minWidth:256,
+    minWidth:288,
     margin:'auto',
     padding:'0 3%',
     marginTop:20,
@@ -62,6 +62,7 @@ ShoppingDetails = React.createClass({
   componentWillMount: function() {
     this.shipping = {};
     this.delivery = {};
+    this.payment = {};
     this.token = Session.get('token');
     Tracker.autorun((a)=>{
       this.trackerId_a = a;
@@ -123,6 +124,18 @@ ShoppingDetails = React.createClass({
     });
     this.delivery.model = model;
     console.log(model);
+  },
+
+  handleInvalidPayment:function(){
+    this.setState({
+      disabledButton: true,
+      validPayment:false,
+      validCurrentForm:false
+    });
+  },
+
+  handleValidPayment:function(){
+
   },
 
   handleSubmit:function(){
@@ -210,7 +223,10 @@ ShoppingDetails = React.createClass({
             <Tab value = {2}
               icon={<div><ActionPayment style={styles.icons}/></div>}>
               <Paper style={styles.paperContainer}>
-
+                <div>
+                  <h2 style={styles.paperTitle}>Datos de pago</h2>
+                </div>
+                <PaymentPage invalidDelivery={this.handleInvalidPayment} validDelivery={this.handleValidPayment}/>
               </Paper>
             </Tab>
           </Tabs>

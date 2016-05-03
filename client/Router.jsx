@@ -1,6 +1,6 @@
 const {Route, Router,IndexRoute,browserHistory} = ReactRouter;
 Meteor.startup(function() {
-      
+
       Session.set('pageTitle','Tulipanda');
       Session.set('cartshopNumber','0');
       Session.set('token',{});
@@ -29,7 +29,6 @@ Meteor.startup(function() {
             <Route path="/createuser" component ={CreateUserPage}/>
             <Route path="/login" component ={LoginPage}/>
             <Route path="/user" component = {UserPage}/>
-            <Route path="/stepper" component = {ShoppingStepsPage}/>
             <Route path="shoppingcart" component = {CartPage}/>
             <Route path="shoppingdetails" component = {ShoppingDetails}/>
           </Route>

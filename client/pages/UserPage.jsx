@@ -1,4 +1,3 @@
-const {Tabs,Tab} = mui;
 const {MapsLocalShipping,ActionHistory,ActionPayment} =mui.SvgIcons;
 const Colors = mui.Styles.Colors;
 
@@ -15,37 +14,57 @@ const styles={
 UserPage = React.createClass({
   contextTypes:{
     gotUser: React.PropTypes.bool,
+    router:React.PropTypes.object
+  },
+  getInitialState: function() {
+    return {
+      gotUser: false,
+      user: {}
+    };
   },
 
   componentWillMount: function() {
-    const {gotUser} = this.context;
-    console.log(Session.get('user'));
+    const {router} = this.context;
     Session.set('selectedItem','user');
-    if (gotUser){
-      Session.set('pageTitle','Mis datos');
-    }
+    Tracker.autorun((a)=>{
+      const gotUser = Session.get('gotUser');
+      this.trackerId_a = a;
+      Tracker.nonreactive(()=>{
+        if(gotUser){
+          this.setState({
+            user: Session.get('user'),
+            gotUser:true
+          });
+        }else{
+          router.push('/login');
+          this.setState({
+            gotUser: false,
+            user: {}
+          });
+        }
+      });
+    });
+  },
+
+  componentWillUnmount: function() {
+    this.trackerId_a.stop();
   },
 
   render: function() {
-    const {gotUser} = this.context;
-    if (gotUser){
+    const {gotUser} = this.state;
+    if(gotUser){
       return (
-        <Tabs>
-          <Tab
-            icon={<div><MapsLocalShipping style={styles.icons}/></div>}>
-          </Tab>
-          <Tab
-            icon={<div><ActionHistory style={styles.icons}/></div>}>
-          </Tab>
-          <Tab
-            icon={<div><ActionPayment style={styles.icons}/></div>}>
-          </Tab>
-        </Tabs>
+        <div>
+
+        </div>
       );
     }else{
-      return(
-        <LoginPage />
+      return (
+        <div>
+          No estás logueado ... redireccionando!
+        </div>
       );
     }
+
   }
 });

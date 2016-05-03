@@ -29,29 +29,11 @@ const styles = {
     width:'60%',
     textAlign:'center',
     color:Colors.pink500
-  },
-  footer:{
-    position:'fixed',
-    display:'flex',
-    justifyContent:'flex-end',
-    left:0,
-    bottom:0,
-    height:60,
-    width:'100%',
-    backgroundColor: Colors.grey100,
-    minWidth: '100%',
-    alignItems:'center'
   }
 }
 
 DeliveryPage = React.createClass({
 
-  mixins: [React.addons.LinkedStateMixin],
-  getDefaultProps: function() {
-    return {
-      footer:true
-    };
-  },
   getInitialState: function() {
     this.placeFinished = 'NOT FINISHED';
     this.place_id = 'X';
@@ -87,26 +69,10 @@ DeliveryPage = React.createClass({
         deliveryHours: Session.get('deliveryHours')
       });
     });
-
-    Tracker.autorun((a)=>{
-      this.trackerId_a = a;
-
-      if(Session.get('isShoppingCartEmpty')){
-        this.setState({
-          noProducts: true
-        });
-      }else{
-        this.shoppingCart = Session.get('shoppingCart');
-        this.setState({
-          noProducts: false
-        });
-      }
-    });
-
   },
 
   componentWillUnmount:function(){
-    this.trackerId_a.stop();
+
   },
 
   errorMessages: {
@@ -141,7 +107,7 @@ DeliveryPage = React.createClass({
     this.props.invalidDelivery();
   },
 
-  handleDeliveryMenu: function(event, index, selectedDeliveryHour) {
+  handleDeliveryMenu: function(event, selectedDeliveryHour, index) {
     this.setState({selectedDeliveryHour})
   },
 
@@ -150,7 +116,7 @@ DeliveryPage = React.createClass({
     let { wordsError } = this.errorMessages;
 
     return (
-      <div style={{marginBottom:'50px'}}>        
+      <div style={{marginBottom:'50px'}}>
         <Formsy.Form
           onValidSubmit={this.submit}
           onValid={this.validateForm}

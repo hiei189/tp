@@ -68,6 +68,7 @@ data = {
               if(response.data.success){
                 Session.set('user',response.data.data);
                 Session.set('fbUser',true);
+                Session.set('gotUser',true);
                 CartController.getAllItems(token,(err,response)=>{});
               }
               callback(err,response);
@@ -87,8 +88,10 @@ data = {
           if(persistent){
             Session.setPersistent('token',token); //Si se solicita recordar sesion
             Session.setPersistent('user',response.data.data);
+            Session.setPersistent('gotUser',true);
           }else{
             Session.set('user',response.data.data);
+            Session.set('gotUser',true); 
           }
           callback(err,response);
           return;
