@@ -36,7 +36,7 @@ UserPage = React.createClass({
             gotUser:true
           });
         }else{
-          router.push('/login');
+
           this.setState({
             gotUser: false,
             user: {}
@@ -61,7 +61,7 @@ UserPage = React.createClass({
     }else{
       return (
         <div>
-          No estás logueado ... redireccionando!
+          <LoginPage />
         </div>
       );
     }
