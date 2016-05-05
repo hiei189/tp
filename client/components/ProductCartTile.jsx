@@ -176,7 +176,7 @@ ProductCartTile = React.createClass({
               </FlatButton>
             </div>
             <br/>
-            {'Precio: '+ this.props.product.total}
+            {/*{'Precio: '+ this.props.product.total}*/}
           </div>
           <div styles={styles.icons}>
             {this.state.isAppLoading?(
