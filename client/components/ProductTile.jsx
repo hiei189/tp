@@ -101,9 +101,9 @@ ProductTile = React.createClass({
           <div className={'productDescription'}>
             {this.props.product.description}
           </div>
-          {/*<div className={'productPriceText'} style={styles.priceText}>
+          <div className={'productPriceText'} style={styles.priceText}>
             {'S/. '+this.props.product.price}
-          </div>*/}
+          </div>
           <div className={'productIcons'} >
             {this.state.gotCartResponse?(
               <FloatingActionButton
