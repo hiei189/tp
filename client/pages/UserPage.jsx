@@ -1,4 +1,5 @@
 const {MapsLocalShipping,ActionHistory,ActionPayment} =mui.SvgIcons;
+const {Paper,MenuItem} = mui;
 const Colors = mui.Styles.Colors;
 
 const styles={
@@ -34,7 +35,21 @@ const styles={
     width:'60%',
     textAlign:'center',
     color:Colors.pink500
-  }
+  },
+  paperContainer:{
+    width:'50%',
+    minWidth:288,
+    margin:'auto',
+    padding:'0 3%',
+    marginTop:20,
+    display:'flex',
+    flexDirection:'column',
+    justifyContent:'space-around',
+  },
+  paperTitle:{
+    color: Colors.pink500,
+    textAlign:'center'
+  },
 }
 
 
@@ -55,7 +70,11 @@ UserPage = React.createClass({
 
   componentWillMount: function() {
     const {router} = this.context;
+    this.minDate = new Date();
+    this.maxDate = new Date();
+    this.minDate.setFullYear(this.minDate.getFullYear()-100);
     Session.set('selectedItem','user');
+    Session.set('pageTitle','Usuario');
     Tracker.autorun((a)=>{
       const gotUser = Session.get('gotUser');
       this.trackerId_a = a;
@@ -75,6 +94,12 @@ UserPage = React.createClass({
     });
   },
 
+  handleUserGenderMenu: function(event, gender, index) {
+    this.setState({
+      'user.gender': gender
+    });
+  },
+
   componentWillUnmount: function() {
     this.trackerId_a.stop();
   },
@@ -84,6 +109,10 @@ UserPage = React.createClass({
     console.log(user);
     if(gotUser){
       return (
+        <Paper style={styles.paperContainer}>
+          <div>
+            <h2 style={styles.paperTitle}>Datos de usuario</h2>
+          </div>
         <div style={{marginBottom:'50px'}}>
           <Formsy.Form
             ref={'userForm'}
@@ -97,13 +126,49 @@ UserPage = React.createClass({
               textFieldStyle = {{width:'100%'}}
               name = 'userFirstname'
               id ='userFirstname'
-              value={this.state.firstname}
+              value={user.firstname}
               style = {styles.field}
             />
+
+            <FormsyText
+              required
+              floatingLabelText="Apellidos"
+              textFieldStyle = {{width:'100%'}}
+              name = 'userLastname'
+              id ='userLastname'
+              value={user.lastname}
+              style = {styles.field}
+            />
+
+            <FormsyDate
+              required
+              floatingLabelText="Fecha de nacimiento"
+              textFieldStyle = {{width:'100%'}}
+              minDate = {this.minDate}
+              maxDate = {this.maxDate}
+              name = 'userBirth'
+              defaultDate={this.maxDate}
+              value={user.birth}
+              style = {styles.field}
+            />
+
+            <FormsySelect
+              name = {'userGender'}
+              ref = {'userGender'}
+              required
+              style={styles.field}
+              value = {user.gender}
+              floatingLabelText="Sexo"
+              onChange={this.handleUserGenderMenu}>
+              <MenuItem primaryText={'Hombre'} value={'M'}/>
+              <MenuItem primaryText={'Mujer'} value={'F'}/>
+            </FormsySelect>
 
 
           </Formsy.Form>
         </div>
+      </Paper>
+
       );
     }else{
       return (

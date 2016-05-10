@@ -45,7 +45,8 @@ DeliveryPage = React.createClass({
       message:'',
       addressesLoading: true,
       deliveryHours: 'NO_DATA',
-      selectedDeliveryHour: '10.00'
+      selectedDeliveryHour: '10.00',
+      birth:''
     };
   },
 
@@ -131,7 +132,7 @@ DeliveryPage = React.createClass({
             maxDate = {this.maxDate}
             name = 'dateDelivery'
             defaultDate={this.maxDate}
-            value={this.state.dateDelivery}
+            value={this.state.birth}
             style = {styles.field}
           />
           <FormsySelect

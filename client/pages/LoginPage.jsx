@@ -1,4 +1,4 @@
-const { TextField, Dialog, Checkbox,Divider,RaisedButton,Paper} = mui;
+const { TextField, Dialog, Checkbox,Divider,RaisedButton,Paper,CircularProgress} = mui;
 const Colors = mui.Styles.Colors;
 
 const styles = {
@@ -72,7 +72,9 @@ LoginPage = React.createClass({
       password:'',
       remember:false,
       recoverPassword:false,
-      userLogged: false
+      userLogged: false,
+      invalidLoginForm: true,
+      loadingLogin:false
     };
   },
   getTitle: function(){
@@ -83,18 +85,20 @@ LoginPage = React.createClass({
   },
 
   handleLogin:function(model){
-    console.log(model);
     const {email,password} = model.login;
+    this.setState({
+      loadingLogin: true
+    });
     data.loginUser(false,
       email,
       password,
       this.token.access_token,
       (err,response)=>{
-        console.log(response);
         if(response.data.success){
           if(this.isMounted()){
             this.setState({
-              userLogged: true
+              userLogged: true,
+              loadingLogin:false
             });
           }
         }
@@ -114,7 +118,6 @@ LoginPage = React.createClass({
   },
 
   handleRecoveryPassword:function(model){
-    console.log(model);
     backendCom.recoverPassword(model.email,this.token.access_token,
       (err,response)=>{
         console.log(err);
@@ -126,6 +129,16 @@ LoginPage = React.createClass({
     this.context.router.push('/createUser');
   },
 
+  invalidForm:function(){
+    this.setState({
+      invalidLoginForm: true
+    });
+  },
+  validateForm:function(){
+    this.setState({
+      invalidLoginForm: false
+    });
+  },
 
   errorMessages: {
     wordsError: "Solo use letras (a-z)",
@@ -136,6 +149,7 @@ LoginPage = React.createClass({
 
   render: function() {
     let { wordsError,isEmail, isExisty } = this.errorMessages;
+    const {loadingLogin} = this.state;
     return (
       <Paper style={styles.paperContainer}>
         <div style={styles.container}>
@@ -181,6 +195,8 @@ LoginPage = React.createClass({
               <h2 style={styles.paperTitle}>Iniciar sesión</h2>
               <Formsy.Form
                 ref={'loginForm'}
+                onValid={this.validateForm}
+                onInvalid = {this.invalidForm}
                 onValidSubmit={this.handleLogin}
                 style ={styles.forms}>
 
@@ -217,11 +233,13 @@ LoginPage = React.createClass({
                   checked = {this.state.remember}
                   labelStyle={{color:this.context.muiTheme.textField.hintColor,textAlign:'left'}}
                 /><br/>*/}
+                {loadingLogin?<CircularProgress />:null}
 
                 <RaisedButton
                   label="Iniciar sesión"
                   primary={true}
                   type={'submit'}
+                  disabled={this.state.invalidLoginForm}
                   style ={styles.button}
                 /><br/>
                 <RaisedButton
