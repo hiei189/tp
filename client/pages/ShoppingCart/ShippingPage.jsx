@@ -71,7 +71,6 @@ ShippingPage = React.createClass({
     });
 
     formsController.getAddresses(this.token.access_token,(err,response)=>{
-      console.log(response);
       if(response.data.success){
         this.setState({
           savedAddress: response.data.data,
@@ -202,7 +201,6 @@ ShippingPage = React.createClass({
     formsController.shipping.address_id = value; //GUARDAR ADDRES_ID SELECCIONADO
     if (value !== 'NUEVA DIRECCION'){
       let address = findById(this.state.savedAddress.addresses,value);
-      console.log(address);
       this.place_id=address.place_id;
       this.placeFinished = 'FINISHED';
       formsController.shipping.isSavedAddress = true;

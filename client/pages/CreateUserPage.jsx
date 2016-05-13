@@ -99,7 +99,6 @@ CreateUserPage = React.createClass({
 
     error = this.validateData();
     if(Object.keys(error).length != 0) {
-      console.log('hubo errores');
       this.forceUpdate();
       //return;
     }
@@ -117,7 +116,7 @@ CreateUserPage = React.createClass({
           });
         }
       }else{
-        console.log(response);
+
       }
     });
   },

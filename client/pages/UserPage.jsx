@@ -117,13 +117,13 @@ UserPage = React.createClass({
     equalsFieldPasswordError: "Las contraseñas no coinciden"
   },
   invalidForm:function(){
-    console.log('invalid form');
+
   },
 
   render: function() {
     const {gotUser,user} = this.state;
     const {isNumericError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError} = this.errorMessages;
-    console.log(user);
+
     if(gotUser){
       return (
         <Paper style={styles.paperContainer}>

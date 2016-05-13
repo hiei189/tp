@@ -277,7 +277,6 @@ App = React.createClass({
       fbUser:false
     });
     FB.logout(function(response) {
-    console.log(response);
     });
     Session.setPersistent('user',{});
     Session.setPersistent('token',{});
@@ -286,7 +285,6 @@ App = React.createClass({
     Session.setPersistent('isShoppingCartEmpty',true);
     data.initToken((err,response)=>{
         if(!err){
-            console.log(response);
             this.setState({
               gotToken: true
             });

@@ -1,6 +1,5 @@
 const {Route, Router,IndexRoute,browserHistory} = ReactRouter;
 Meteor.startup(function() {
-  console.log(mui);
   Session.set('pageTitle','Tulipanda');
   Session.set('cartshopNumber','0');
   Session.set('token',{});
