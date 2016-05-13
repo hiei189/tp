@@ -40,6 +40,7 @@ ProductTile = React.createClass({
   },
 
   _handleTouchTap:function(e){
+    console.log('clicked');
     this.context.router.push('/products/'+e.currentTarget.id);
   },
 
@@ -110,6 +111,7 @@ ProductTile = React.createClass({
               mini={true}
               style={styles.iconAddShopping}
               tooltip={"Agregar al carrito"}
+              onClick={()=>console.log('click')}
               onTouchTap={this.handleAddtoCart}>
               <ActionAddShoppingCart/>
             </FloatingActionButton>
