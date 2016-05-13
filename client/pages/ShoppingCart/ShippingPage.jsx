@@ -245,7 +245,7 @@ ShippingPage = React.createClass({
   },
 
   validateForm:function(){
-    const {validShipping} = this.props;
+    const {onValid} = this.props;
     if(this.place_id==='X'){
       this.setState({
         validForm: false
@@ -253,7 +253,7 @@ ShippingPage = React.createClass({
     }else{
       model = this.refs.shippingForm.getModel();
       model.place_id = this.place_id;
-      validShipping(this.shipping,model);
+      onValid(this.shipping,model);
       this.setState({
         validForm: true
       });
@@ -261,7 +261,7 @@ ShippingPage = React.createClass({
   },
 
   invalidForm:function(){
-    this.props.invalidShipping();
+    this.props.onInvalid();
     this.setState({
       validForm: false
     });

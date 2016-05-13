@@ -1,6 +1,4 @@
-const {ContentSend} = mui.SvgIcons;
-const { Paper, RaisedButton, CircularProgress,FloatingActionButton} = mui;
-const Colors = mui.Styles.Colors;
+const { Paper, RaisedButton, CircularProgress} = mui;
 
 var styles = {
   paper:{
@@ -21,18 +19,6 @@ var styles = {
     minWidth:300,
     fontFamily: 'Roboto, sans-serif',
     overflow:'auto'
-  },
-  footer:{
-    position:'fixed',
-    display:'flex',
-    justifyContent:'flex-end',
-    left:0,
-    bottom:0,
-    height:60,
-    width:'100%',
-    backgroundColor: Colors.grey100,
-    minWidth: '100%',
-    alignItems:'center'
   }
 };
 
@@ -153,12 +139,7 @@ CartPage = React.createClass({
                   {this.renderTiles()}
                 </div>
               </div>
-              <div style={styles.footer}>
-                <h3 style={{marginRight:16}} >{'TOTAL: '+ this.state.total}</h3>
-                <FloatingActionButton onTouchTap = {this._handleBuy}>
-                  <ContentSend />
-                </FloatingActionButton>
-              </div>
+              <Footer onSend = {this._handleBuy} total = {this.state.total} disabled={false}/>
             </div>
           )}
         </div>
@@ -182,54 +163,16 @@ CartPage = React.createClass({
 
 
 
-
-
-
-
-var ProductTilesArray = React.createClass({
-
-  componentWillMount: function() {
-    Tracker.autorun((c)=>{
-      this.trackerId = c;
-      this.screensize = Session.get('device-screensize');
-      switch(this.screensize){
-        case "large":
-        case "xlarge":
-        case "xxlarge":
-          this.setState({
-            widthPaper: "calc(33.3% - 32px)"
-          });
-          break;
-        case "medium":
-          this.setState({
-            widthPaper: "calc(50% - 32px)"
-          });
-          break;
-        case "small":
-          this.setState({
-            widthPaper: "calc(100% - 32px)"
-          });
-          break;
-      }
-    });
-  },
-
-  componentWillUnmount: function() {
-    this.trackerId.stop();
-  },
-
-  render: function() {
-    styles.paper.width = this.state.widthPaper;
-    return(
-      <Paper style={styles.paper} zDepth={2} rounded={true}>
-        <ProductCartTile
-          id={this.props.product.id}
-          key={this.props.product.id + 'inside'}
-          product={this.props.product}
-          zoom = {false}
-          picHeight={180}>
-        </ProductCartTile>
-      </Paper>
-    );
-  }
-});
+const ProductTilesArray = ({product})=>{
+  return(
+    <Paper className={'productTile'} zDepth={2} rounded={true}>
+      <ProductCartTile
+        id={product.id}
+        key={product.id + 'inside'}
+        product={product}
+        zoom = {false}
+        picHeight={180}>
+      </ProductCartTile>
+    </Paper>
+  );
+}

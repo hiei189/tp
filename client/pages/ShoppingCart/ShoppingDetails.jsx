@@ -22,19 +22,6 @@ const styles={
     height:28,
     fill: Colors.pink500
   },
-  footer:{
-    position:'fixed',
-    display:'flex',
-    justifyContent:'flex-end',
-    left:0,
-    bottom:0,
-    height:60,
-    width:'100%',
-    backgroundColor: Colors.grey100,
-    minWidth: '100%',
-    alignItems:'center',
-    zIndex: 1000
-  },
   paperTitle:{
     color: Colors.pink500,
     textAlign:'center'
@@ -204,41 +191,30 @@ ShoppingDetails = React.createClass({
           <Tabs value={this.state.currentTab} onChange={this.handleTabChange}>
             <Tab value = {0}
               icon={<div><MapsLocalShipping style={styles.icons}/></div>}>
-              <Paper style={styles.paperContainer}>
-                <div>
-                  <h2 style={styles.paperTitle}>Datos de envío</h2>
-                </div>
-                <ShippingPage invalidShipping = {this.handleInvalidShipping} validShipping={this.handleValidShipping}/>
-              </Paper>
+              <ShoppingDetailsTabTemplate
+                title={'Datos de envío'}
+                onInvalid = {this.handleInvalidShipping}
+                Component = {ShippingPage}
+                onValid = {this.handleValidShipping}/>
             </Tab>
             <Tab value = {1}
               icon={<div><ActionHistory style={styles.icons}/></div>}>
-              <Paper style={styles.paperContainer}>
-                <div>
-                  <h2 style={styles.paperTitle}>Datos de entrega</h2>
-                </div>
-                <DeliveryPage invalidDelivery={this.handleInvalidDelivery} validDelivery={this.handleValidDelivery} />
-              </Paper>
+              <ShoppingDetailsTabTemplate
+                title={'Datos de entrega'}
+                onInvalid = {this.handleInvalidDelivery}
+                Component = {DeliveryPage}
+                onValid = {this.handleValidDelivery}/>
             </Tab>
             <Tab value = {2}
               icon={<div><ActionPayment style={styles.icons}/></div>}>
-              <Paper style={styles.paperContainer}>
-                <div>
-                  <h2 style={styles.paperTitle}>Datos de pago</h2>
-                </div>
-                <PaymentPage invalidDelivery={this.handleInvalidPayment} validDelivery={this.handleValidPayment}/>
-              </Paper>
+              <ShoppingDetailsTabTemplate
+                title={'Datos de pago'}
+                onInvalid = {this.handleInvalidPayment}
+                Component = {PaymentPage}
+                onValid = {this.handleValidPayment}/>
             </Tab>
           </Tabs>
-
-
-          <div style={styles.footer}>
-            <h3 style={{marginRight:16}} >{'TOTAL: '+ this.state.total}</h3>
-            <FloatingActionButton
-              disabled = {this.state.disabledButton} type="submit" onTouchTap = {this.handleSubmit}>
-              <ContentSend />
-            </FloatingActionButton>
-          </div>
+          <Footer onSend = {this.handleSubmit} total = {this.state.total} disabled={this.state.disabledButton}/>
         </div>
       );
     }
@@ -247,8 +223,17 @@ ShoppingDetails = React.createClass({
         {'Debes estar logueado para comprar algo!'}
       </div>
     );
-
-
   }
-
 });
+
+
+const ShoppingDetailsTabTemplate = ({title,onInvalid,onValid,Component})=>{
+  return(
+    <Paper style={styles.paperContainer}>
+      <div>
+        <h2 style={styles.paperTitle}>{title}</h2>
+      </div>
+      <Component onInvalid = {onInvalid} onValid = {onValid} />
+    </Paper>
+  );
+}

@@ -247,11 +247,6 @@ App = React.createClass({
     var tooltipUser = (this.state.gotUser?this.state.user.firstname + ' ' + this.state.user.lastname:'Inicia sesión');
     return(
       <div>
-        {/*<IconButton
-          tooltip={tooltipUser}
-          onTouchTap = {this.goToLogin}>
-          <ActionAccountCircle color={Colors.white}/>
-        </IconButton>*/}
         <IconButton
           tooltip="Carrito de compras"
           onTouchTap={this.showCartPage}>
@@ -470,25 +465,11 @@ const GetLeftList = React.createClass({
     });
   },
 
-  _handleShoppingCart:function(){
-    this.close();
-    this.context.router.push('/shoppingcart');
-  },
-
-  _handleUpdateData:function(){
-    this.close();
-    this.context.router.push('/user');
-  },
-
   _handleCloseSession:function(){
     this.close();
     this.props.handleCloseSession();
   },
 
-  _handleGoToLogin:function(){
-    this.close();
-    this.context.router.push('/login');
-  },
 
   _handleUserListTouch:function(){
     this.setState({
@@ -548,8 +529,7 @@ var Li = React.createClass({
     //Session.set('selectedItem',e.currentTarget.id);
     this.props.onTouchTap(category.name,e);
   },
-  componentWillMount: function() {
-  },
+
   getInitialState: function() {
     return {
       hovered: false
@@ -592,7 +572,6 @@ var Li = React.createClass({
       </li>
     );
   }
-
 });
 
 

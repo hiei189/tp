@@ -64,6 +64,7 @@ UserPage = React.createClass({
       gotUser: false,
       user: {},
       firstname:'',
+      fbUser:false
 
     };
   },
@@ -82,7 +83,8 @@ UserPage = React.createClass({
         if(gotUser){
           this.setState({
             user: Session.get('user'),
-            gotUser:true
+            gotUser:true,
+            fbUser: Session.get('fbUser')
           });
         }else{
           this.setState({
@@ -104,8 +106,23 @@ UserPage = React.createClass({
     this.trackerId_a.stop();
   },
 
+  errorMessages:{
+    isNumericError:'Solo puedes ingresar números',
+    isDefaultRequiredValue: 'Este campo es requerido',
+    isWordsError: "Solo puede usar letras (a-z)",
+    isSpecialWordsError: "Solo puede usar letras (a-z)",
+    isEmailError: "Ingresa un email correcto",
+    minLength7Error: "Debes ingresar más de siete caracteres",
+    isExistyError:"Este campo es requerido",
+    equalsFieldPasswordError: "Las contraseñas no coinciden"
+  },
+  invalidForm:function(){
+    console.log('invalid form');
+  },
+
   render: function() {
     const {gotUser,user} = this.state;
+    const {isNumericError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError} = this.errorMessages;
     console.log(user);
     if(gotUser){
       return (
@@ -122,6 +139,10 @@ UserPage = React.createClass({
 
             <FormsyText
               required
+              validations={{'isSpecialWords':true}}
+              validationErrors={{
+                isSpecialWords: isSpecialWordsError
+              }}
               floatingLabelText="Nombres"
               textFieldStyle = {{width:'100%'}}
               name = 'userFirstname'
@@ -133,6 +154,10 @@ UserPage = React.createClass({
             <FormsyText
               required
               floatingLabelText="Apellidos"
+              validations={{'isSpecialWords':true}}
+              validationErrors={{
+                isSpecialWords: isSpecialWordsError
+              }}
               textFieldStyle = {{width:'100%'}}
               name = 'userLastname'
               id ='userLastname'
@@ -164,7 +189,65 @@ UserPage = React.createClass({
               <MenuItem primaryText={'Mujer'} value={'F'}/>
             </FormsySelect>
 
+            <FormsyText
+              required
+              validations={{'isEmail':true}}
+              validationErrors={{
+                isEmail: isEmailError
+              }}
+              floatingLabelText="Correo"
+              textFieldStyle = {{width:'100%'}}
+              name = 'userEmail'
+              id ='userEmail'
+              value={user.email}
+              style = {styles.field}
+            />
 
+            <FormsyText
+              required
+              validations={{'isNumeric':true}}
+              validationErrors={{
+                isNumeric: isNumericError
+              }}
+              floatingLabelText="Telefono"
+              textFieldStyle = {{width:'100%'}}
+              name = 'userTelephone'
+              id ='userTelephone'
+              type="number"
+              value={user.telephone}
+              style = {styles.field}
+            />
+          {/*{this.state.fbUser?null:null} OJO AGREGAR*/}
+            <FormsyText
+              required
+              validations={{minLength:7}}
+              validationErrors={{
+                minLength: minLength7Error
+              }}
+              floatingLabelText="Nueva contraseña"
+              textFieldStyle = {{width:'100%'}}
+              name = 'userPassword'
+              id ='userPassword'
+              type="password"
+              value={user.password}
+              style = {styles.field}
+            />
+
+            <FormsyText
+              required
+              validations={{minLength:7,equalsField:'userPassword'}}
+              validationErrors={{
+                minLength: minLength7Error,
+                equalsField: equalsFieldPasswordError
+              }}
+              floatingLabelText="Repite la nueva contraseña"
+              textFieldStyle = {{width:'100%'}}
+              name = 'userRepeatedPassword'
+              id ='userRepeatedPassword'
+              type="password"
+              value={user.repeatedPassword}
+              style = {styles.field}
+            />
           </Formsy.Form>
         </div>
       </Paper>

@@ -60,6 +60,7 @@ html{
 #childrenContainer{
   padding-top:64px;
   padding-bottom:96px;
+  min-width: 312px;
   transition: 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
   -webkit-transition: 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
   -moz-transition: 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
@@ -278,8 +279,24 @@ html{
     overflow:hidden !important;
   }
 
-/****PRODUCT LEFT NAV*******/
+/****PRODUCT *******/
+
+}
+
+@media only screen and (min-width:1024px) and (max-width: 1440px) {
   .productTile{
     width: calc(33.3% - 32px);
+  }
+}
+
+@media only screen and (min-width:1441px) and (max-width: 1919px) {
+  .productTile{
+    width: calc(25% - 32px);
+  }
+}
+
+@media only screen and (min-width:1920px) {
+  .productTile{
+    width: calc(20% - 32px);
   }
 }

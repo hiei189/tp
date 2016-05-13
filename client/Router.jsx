@@ -1,4 +1,5 @@
 const {Route, Router,IndexRoute,browserHistory} = ReactRouter;
+console.log(ReactRouter);
 Meteor.startup(function() {
 
       Session.set('pageTitle','Tulipanda');

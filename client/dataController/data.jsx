@@ -89,9 +89,11 @@ data = {
             Session.setPersistent('token',token); //Si se solicita recordar sesion
             Session.setPersistent('user',response.data.data);
             Session.setPersistent('gotUser',true);
+            Session.set('fbUser',false);
           }else{
             Session.set('user',response.data.data);
-            Session.set('gotUser',true); 
+            Session.set('gotUser',true);
+            Session.set('fbUser',false);
           }
           callback(err,response);
           return;
@@ -109,5 +111,19 @@ data = {
       }
       callback(err,response);
     });
+  },
+
+  getProductById:function(category,callback){
+    var token = Session.get('token');
+    backendCom.getProductById(token.access_token,category,(err,response)=>{
+      if(!err){
+        Session.set('product' + category.toString(),response.data);
+      }else{
+        throw new Meteor.Error('200','Error obteniendo el producto');
+      }
+      callback(err,response)
+    });
   }
+
+
 }

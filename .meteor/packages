@@ -12,7 +12,6 @@ es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
 
 http
-reactrouter:react-router
 reactrouter:react-router-ssr
 base64
 u2622:persistent-session
@@ -20,4 +19,5 @@ jchavez:material-ui
 tracker
 blaze-html-templates
 ficshelf:media-query
+reactrouter:react-router
 react

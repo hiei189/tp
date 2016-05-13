@@ -128,7 +128,7 @@ PaymentPage = React.createClass({
             required
             floatingLabelText="Nombres"
             hintText = "Nombres de facturación"
-            validations="isWords"
+            validations="isSpecialWords"
             validationErrors={wordsError}
             type="string"
             id ="ccfirstname"
@@ -141,7 +141,7 @@ PaymentPage = React.createClass({
             required
             floatingLabelText="Apellidos"
             hintText = "Apellidos de facturación"
-            validations="isWords"
+            validations="isSpecialWords"
             validationErrors = {wordsError}
             type="string"
             id ="cclastname"
@@ -165,7 +165,7 @@ PaymentPage = React.createClass({
             required
             floatingLabelText="Región"
             hintText = "Región/Departamento de facturación"
-            validations="isWords"
+            validations="isSpecialWords"
             validationErrors={wordsError}
             type="string"
             id ="ccRegion"
@@ -178,7 +178,7 @@ PaymentPage = React.createClass({
             required
             floatingLabelText="Ciudad"
             hintText = "Ciudad/Provincia de facturación"
-            validations="isWords"
+            validations="isSpecialWords"
             validationErrors={wordsError}
             type="string"
             id ="ccCity"
@@ -191,7 +191,7 @@ PaymentPage = React.createClass({
             required
             floatingLabelText="Código postal"
             hintText = "Código postal de facturación"
-            validations="isAlpha"
+            validations="isAlphanumeric"
             type="string"
             id ="ccPostCode"
             name = "ccPostCode"

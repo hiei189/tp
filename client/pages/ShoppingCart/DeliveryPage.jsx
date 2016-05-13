@@ -101,11 +101,11 @@ DeliveryPage = React.createClass({
   },
   validateForm:function(){
     model = this.refs.deliveryForm.getModel();
-    this.props.validDelivery(model);
+    this.props.onValid(model);
   },
 
   invalidForm:function(){
-    this.props.invalidDelivery();
+    this.props.onInvalid();
   },
 
   handleDeliveryMenu: function(event, selectedDeliveryHour, index) {
