@@ -40,7 +40,7 @@ ProductTile = React.createClass({
   },
 
   _handleTouchTap:function(e){
-    this.context.router.push('/products/'+e.currentTarget.id);
+    this.props.onTouchTap(e.currentTarget.id.toString());
   },
 
   handleAddtoCart:function(e){

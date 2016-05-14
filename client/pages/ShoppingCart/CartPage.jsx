@@ -147,28 +147,12 @@ CartPage = React.createClass({
   }
 });
 
-{/*<div style={styles.summary}>
-  <div style={{position:this.state.positionSummary,height:'80%',overflowY:this.state.positionOverflowY}}>
-    <h3> Detalle de compra </h3>
-    {this.state.gotProducts?
-      (<CartTable height={'300px'} items={this.state.products} total={this.state.total}/>):
-    (null)}
-    <RaisedButton
-      primary={true}
-      label={"COMPRAR"}
-      style={{float:'right',marginTop:'32'}}
-      onTouchTap={this._handleBuy}/>
-  </div>
-</div>*/}
-
-
 
 const ProductTilesArray = ({product})=>{
   return(
     <Paper className={'productTile'} zDepth={2} rounded={true}>
       <ProductCartTile
-        id={product.id}
-        key={product.id + 'inside'}
+        id={product.product_id}
         product={product}
         zoom = {false}
         picHeight={180}>

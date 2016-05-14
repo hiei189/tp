@@ -69,11 +69,7 @@ ProductCartTile = React.createClass({
   },
 
   _handleTouchTap:function(e){
-    this.context.router.push('/products/'+e.currentTarget.id);
-  },
-
-  handleRemove:function(){
-
+    this.context.router.push('/products/'+e.currentTarget.id.toString());
   },
 
   handleRequestClose:function(){
@@ -152,7 +148,7 @@ ProductCartTile = React.createClass({
         <div style={styles.productDataContainer} >
           <div style={styles.productTitle}
             onTouchTap={this._handleTouchTap}
-            id={this.props.product.key}>
+            id={this.props.id}>
             <h4>{this.props.product.name}</h4>
           </div><hr/>
           <div style={styles.productDescription}>
@@ -170,8 +166,7 @@ ProductCartTile = React.createClass({
               <FlatButton
                 style={styles.addremove}
                 primary={true}
-                onTouchTap={this.addItem}
-              >
+                onTouchTap={this.addItem}>
                 <ContentAdd color={Colors.pink800} style={styles.addremoveIcon}/>
               </FlatButton>
             </div>
@@ -195,7 +190,6 @@ ProductCartTile = React.createClass({
                 <ContentClear/>
               </FloatingActionButton>
             )}
-
           </div>
         </div>
         <Snackbar

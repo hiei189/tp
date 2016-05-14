@@ -33,30 +33,20 @@ ProductsByCategoryPage = React.createClass({
   },
 
   componentWillMount: function() {
-
     this.categories = Session.get('categories');
-    if(typeof this.props.params.categoryId == 'undefined'){
+    if(typeof this.props.params.categoryId === 'undefined'){
       this.props.params.categoryId = '25';
       this.selectedCategory = this.props.params.categoryId;
       Session.set('selectedItem','25');
     };
     this.token = this.context.token;
     this.getCategories(this.props);
-
     this.selectedCategory = this.props.params.categoryId;
-
-  },
-  componentDidMount: function() {
-    //this.attachScrollListener();
-    //this.attachScrollListener();
-    //this.nextPage = 0;
-    //this.fetchNextPage(0);
   },
 
   validateData:function(err,response){
     if(!err){
       if(response.data.success){
-        //this.attachScrollListener();
         this.setState({
           products:this.state.products.concat(response.data.data),
           gotDataProducts:true,
@@ -68,6 +58,7 @@ ProductsByCategoryPage = React.createClass({
       throw new Meteor.Error('200','Lost Connection to the server');
     }
   },
+
   componentWillReceiveProps: function(nextProps) {
     if (this.props.params.categoryId!==nextProps.params.categoryId){
       this.selectedCategory = nextProps.params.categoryId;
@@ -76,17 +67,22 @@ ProductsByCategoryPage = React.createClass({
         products: []
       });
       this.getCategories(nextProps);
-
     }
   },
 
+  trackCategory:function(category_id){
+    Tracker.autorun((a)=>{
+      const productsData = Session.get('Category'+category_id.toString());
+      console.log(productsData);
+      Tracker.nonreactive(()=>{
+        if(productsData === 'ERROR' || (productsData !== null && typeof productsData === 'object')){
+          a.stop();
+          return;
+        }
+      });
+    });
+  },
   getCategories:function(nextProps){
-    switch (this.context.screensize) {
-      case 'large':
-      case 'xlarge':
-      case 'xxlarge':
-      case 'small':
-      case 'medium':
         //retorno o el objeto o el parent
         this.selectedCategoryObject = this.categories.find((category,idx,arr)=>{
           if(category.categories){
@@ -100,44 +96,15 @@ ProductsByCategoryPage = React.createClass({
           return category.category_id === nextProps.params.categoryId;
         });
 
-        Session.set('Category'+nextProps.params.categoryId,'LOADING');
         if(this.selectedCategoryObject.categories){
-          Session.set('Category'+nextProps.params.categoryId,'LOADING');
-          this.setState({
-            gotProducts: false,
-          });
           this.selectedCategoryObject.categories.map((category)=>{
-            backendCom.getProductsByCategory(this.token.access_token,category.category_id,
-            (err,response)=>{
-              if(!err){
-                Session.set('Category'+category.category_id,response.data);
-                this.setState({
-                  gotProducts: true,
-                });
-              }else {
-                Session.set('Category'+category.category_id,'ERROR');
-              }
-            });
+            data.getProductsByCategory(category.category_id,(err,response)=>{});
+            this.trackCategory(category.category_id);
           });
         }else{
-          Session.set('Category'+nextProps.params.categoryId,'LOADING');
-          this.setState({
-            gotProducts: false,
-          });
-          backendCom.getProductsByCategory(this.token.access_token,nextProps.params.categoryId,
-          (err,response)=>{
-            if(!err){
-              Session.set('Category'+nextProps.params.categoryId,response.data);
-              this.setState({
-                gotProducts: true,
-              });
-            }else{
-              Session.set('Category'+nextProps.params.categoryId,'ERROR');
-            }
-          });
+          data.getProductsByCategory(nextProps.params.categoryId,(err,response)=>{});
+          this.trackCategory(nextProps.params.categoryId);
         }
-        break;
-    }
   },
   fetchNextPage:function(nextPage){
     backendCom.getProductsByCategoryLimited(
@@ -154,7 +121,7 @@ ProductsByCategoryPage = React.createClass({
         <ProductTilesArray
           router={this.context.router}
           key={product.id}
-          product={product} />
+          product={product}/>
       )
     })
   },
@@ -177,12 +144,9 @@ ProductsByCategoryPage = React.createClass({
     }else{
         return <ProductsComponent categoryId = {this.selectedCategoryObject.category_id} />
     }
-
-
   },
 
   render: function() {
-
     const {screensize} = this.context
     const {params} = this.props;
     const smallScreen = screensize === 'small' || screensize === 'medium';
@@ -202,9 +166,7 @@ ProductsByCategoryPage = React.createClass({
         case 'large':
         case 'xlarge':
         case 'xxlarge':
-          return(
-              this.getDesktopTabs()
-          );
+          return this.getDesktopTabs()
           break;
         default:
       }
@@ -221,91 +183,129 @@ ProductsByCategoryPage = React.createClass({
 
 var ProductsComponent = React.createClass({
   contextTypes:{
-    screensize: React.PropTypes.string,
-    token:React.PropTypes.object,
     router: React.PropTypes.object
-  }
-  ,
-  getInitialState: function() {
-    return {
-      gotProducts: false,
-      products: {}
-    };
   },
   componentWillMount: function() {
+    const {categoryId} = this.props;
+    Tracker.autorun((a)=>{
+      this.trackerId_a = a;
+      const products = Session.get('Category'+categoryId.toString());
+      Tracker.nonreactive(()=>{
+        if (typeof products === 'undefined' ){
+          this.setState({
+            products: 'LOADING'
+          });
+        }else{
+          this.setState({
+            products: products
+          });
+        }
+      });
+    });
+  },
 
+  componentWillReceiveProps: function(nextProps) {
+    if(nextProps.categoryId !== this.props.categoryId){
+      const {categoryId} = nextProps;
+      this.trackerId_a.stop();
+      Tracker.autorun((a)=>{
+        this.trackerId_a = a;
+        const products = Session.get('Category'+categoryId.toString());
+        Tracker.nonreactive(()=>{
+          if (typeof products === 'undefined' ){
+            this.setState({
+              products: 'LOADING'
+            });
+          }else{
+            this.setState({
+              products: products
+            });
+          }
+        });
+      });
+    }
   },
 
   componentWillUnmount: function() {
-
-  },
-
-  renderTiles:function(products){
-    return products.data.map((product)=>{
-      return(
-        <ProductTilesArray
-          router={this.context.router}
-          key={product.id}
-          product={product} />
-      )
-    })
-  },
-  render: function() {  
-    let products =  Session.get('Category'+this.props.categoryId);
-
-    if(products !== null && typeof products === 'object'){
-      if(products.success){
-        return (
-          <div style={styles.root} className={'ProductsByCategoryPage'} >
-            <div style={styles.container}>
-              {this.renderTiles(products)}
-            </div>
-          </div>
-        );
-      }else{
-        return <div style={styles.root} className={'ProductsByCategoryPage'} >
-          Aún no hay componentes en esta categoría!
-        </div>
-      }
-    }else if(products === 'ERROR'){
-      <div style={styles.root} className={'ProductsByCategoryPage'} >
-        Hubo un error obteniendo la información.
-      </div>
-    }else if(products === 'LOADING'){
-      return <div style={{textAlign:'center',marginTop:'150px'}}>
-        <CircularProgress/>
-      </div>
-    }else{
-      return <div style={{textAlign:'center',marginTop:'50%'}}>
-      </div>
+    if(this.trackerId_a){
+      this.trackerId_a.stop();
     }
-
-
-  }
-
-});
-
-
-
-var ProductTilesArray = React.createClass({
-  contextTypes: {
-    screensize: React.PropTypes.string
   },
 
-  _handleTouchTap:function(e){
-    this.props.router.push('/products/'+e.currentTarget.id);
+  getInitialState: function() {
+    const products = Session.get('Category'+this.props.categoryId.toString());
+    console.log(products);
+    if (typeof products === 'undefined' ){
+      return {
+        products: 'LOADING'
+      };
+    }else{
+      return {
+        products: products
+      };
+    }
   },
+
   render: function() {
+    const {categoryId} = this.props;
+    const {products} = this.state;
+    console.log(products);
     return(
-      <Paper className={'productTile'} zDepth={2} rounded={true}>
-        <ProductTile
-          id={this.props.product.id}
-          onTouchTap={this._handleTouchTap}
-          product={this.props.product}
-          zoom = {false}
-          picHeight={180}>
-        </ProductTile>
-      </Paper>
+      <ProductsByCategoryPagePresentation
+        products = {products}
+        router = {this.context.router}/>
     );
   }
 });
+
+const ProductsByCategoryPagePresentation = ({products,router})=>{
+  if(products !== null && typeof products === 'object'){
+    if(products.success){
+      return (
+        <div style={styles.root} className={'ProductsByCategoryPage'} >
+          <div style={styles.container}>
+            {
+              products.data.map((product)=>{
+                return(
+                  <ProductTilesArray
+                    router={router}
+                    key={product.id}
+                    product={product} />
+                );
+              })
+            }
+          </div>
+        </div>
+      );
+    }else{
+      return <div style={styles.root} className={'ProductsByCategoryPage'} >
+        Aún no hay componentes en esta categoría!
+      </div>
+    }
+  }else if(products === 'ERROR'){
+    <div style={styles.root} className={'ProductsByCategoryPage'} >
+      Hubo un error obteniendo la información.
+    </div>
+  }else if(products === 'LOADING'){
+    return <div style={{textAlign:'center',marginTop:'150px'}}>
+      <CircularProgress/>
+    </div>
+  }else{
+    return <div style={{textAlign:'center',marginTop:'50%'}}>
+    </div>
+  }
+};
+
+const ProductTilesArray = ({product,router})=>{
+  return(
+    <Paper className={'productTile'} zDepth={2} rounded={true}>
+      <ProductTile
+        id={product.id}
+        onTouchTap={(e)=>router.push('/products/'+e)}
+        product={product}
+        zoom = {false}
+        picHeight={180}>
+      </ProductTile>
+    </Paper>
+  );
+}

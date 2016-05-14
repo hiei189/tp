@@ -121,7 +121,21 @@ data = {
       }else{
         throw new Meteor.Error('200','Error obteniendo el producto');
       }
-      callback(err,response)
+      callback(err,response);
+    });
+  },
+
+  getProductsByCategory:function(category_id,callback){
+    var token = Session.get('token');
+    backendCom.getProductsByCategory(token.access_token,category_id,
+    (err,response)=>{
+      if(!err){
+        Session.set('Category'+category_id.toString(),response.data);
+      }else {
+        Session.set('Category'+category_id.toString(),'ERROR');
+        throw new Meteor.Error('200','Error obteniendo los productos');
+      }
+      callback(err,response);
     });
   }
 

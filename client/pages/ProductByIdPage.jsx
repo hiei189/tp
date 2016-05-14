@@ -103,7 +103,8 @@ const styles={
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    padding:8
+    padding:8,
+    margin: 16
   },
   paper:{
     overflow:'visible',
