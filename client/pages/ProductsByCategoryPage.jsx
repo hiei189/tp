@@ -70,20 +70,8 @@ ProductsByCategoryPage = React.createClass({
     }
   },
 
-  trackCategory:function(category_id){
-    Tracker.autorun((a)=>{
-      const productsData = Session.get('Category'+category_id.toString());
-      console.log(productsData);
-      Tracker.nonreactive(()=>{
-        if(productsData === 'ERROR' || (productsData !== null && typeof productsData === 'object')){
-          a.stop();
-          return;
-        }
-      });
-    });
-  },
   getCategories:function(nextProps){
-        //retorno o el objeto o el parent
+        //retorno o el child o el parent en caso de cambio de screensize
         this.selectedCategoryObject = this.categories.find((category,idx,arr)=>{
           if(category.categories){
             let childCategory = category.categories.find((category,idx,arr)=>{
@@ -99,11 +87,9 @@ ProductsByCategoryPage = React.createClass({
         if(this.selectedCategoryObject.categories){
           this.selectedCategoryObject.categories.map((category)=>{
             data.getProductsByCategory(category.category_id,(err,response)=>{});
-            this.trackCategory(category.category_id);
           });
         }else{
           data.getProductsByCategory(nextProps.params.categoryId,(err,response)=>{});
-          this.trackCategory(nextProps.params.categoryId);
         }
   },
   fetchNextPage:function(nextPage){
@@ -234,7 +220,6 @@ var ProductsComponent = React.createClass({
 
   getInitialState: function() {
     const products = Session.get('Category'+this.props.categoryId.toString());
-    console.log(products);
     if (typeof products === 'undefined' ){
       return {
         products: 'LOADING'
@@ -249,7 +234,6 @@ var ProductsComponent = React.createClass({
   render: function() {
     const {categoryId} = this.props;
     const {products} = this.state;
-    console.log(products);
     return(
       <ProductsByCategoryPagePresentation
         products = {products}
