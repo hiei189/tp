@@ -73,7 +73,7 @@ html{
 
 .productTile{
   overflow: visible;
-  height: 190px;
+  height: 200px;
   margin: 16px;
 }
 
@@ -90,7 +90,7 @@ html{
   -webkit-flex: 40; /* Safari 6.1+ */
   -ms-flex: 40; /* IE 10 */
   flex: 40;
-  height:190px;
+  height:200px;
   display: -webkit-flex;
   display: flex;
   align-items:center;
@@ -99,37 +99,72 @@ html{
 
 .productImg{
   width:100%;
-  max-height:190px;
+  max-height:200px;
 }
 
 .productDataContainer{
   -webkit-flex: 60; /* Safari 6.1+ */
   -ms-flex: 60; /* IE 10 */
   flex: 60;
-  height:190px;
-  padding-right: 5%;
+  height:200px;
+  padding-right: 3%;
   position:relative;
+  padding-left:0%;
 }
-
+.productCodeFullText{
+  margin-bottom: 11px;
+  margin-top: -6px;
+}
 .productTitle{
-  padding-left:5%;
   margin-bottom:-8px;
   color:black;
+  max-height: 30px;
+  overflow: visible;
+
+}
+
+.productKey{
+  font-weight: 500;
 }
 
 .productDescription{
-  padding-left:5%;
   overflow:auto;
-  height:80px;
+  height:70px;
 }
 
 .productPriceText{
-  padding-left:5%;
   overflow:auto;
+  position: absolute;
+  bottom: 10px;
+  color: #AD1457;
+}
+
+.productCartQtyContent{
+  margin-left: 8px;
+  display: inline-block;
+}
+
+.productCartQtyIcons{
+  mnargin-left:0px;
+  min-width: 0 !important;
+}
+
+.productCartQty{
+  margin: 10px;
 }
 
 .productIcons{
+  position: absolute;
+  right: 8px;
+  bottom: -30px;
+  width: 50px;
+  height: 54px;
+  text-align: center;
+}
 
+.productCartQtyIcon{
+  margin-left: 0px;
+  vertical-align:middle;
 }
 
 
@@ -143,11 +178,10 @@ html{
 }
 
 .zoomed{
-  -webkit-transform: scale(1.75);
-    -ms-transform: scale(1.75);
-    -o-transform: scale(1.75);
-    transform: scale(1.75);
-    position: absolute;
+  -webkit-transform: scale(1.85);
+    -ms-transform: scale(1.85);
+    -o-transform: scale(1.85);
+    transform: scale(1.85);
     top:0;
     bottom: 0;
     left: 0;
@@ -155,6 +189,7 @@ html{
     margin: auto;
     width: auto;
     z-index: 1100;
+    position: fixed;
 }
 
 

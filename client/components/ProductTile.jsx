@@ -1,22 +1,5 @@
 const {ActionAddShoppingCart} = mui.SvgIcons;
-const Colors = mui.Styles.Colors;
 const {IconButton,FloatingActionButton,Snackbar,CircularProgress,FlatButton} = mui;
-
-const styles= {
- iconAddShopping:{
-   position:'absolute',
-   bottom: '-16',
-   right: '8px'
- },
- iconProgress:{
-   position:'absolute',
-   bottom: '-19',
-   right: '3px'
- },
- priceText:{
-   color:Colors.pink800
- }
-};
 
 ProductTile = React.createClass({
 
@@ -31,12 +14,6 @@ ProductTile = React.createClass({
   contextTypes: {
     router: React.PropTypes.object,
     token: React.PropTypes.object,
-  },
-
-  componentDidMount: function() {
-  },
-
-  componentWillMount: function() {
   },
 
   _handleTouchTap:function(e){
@@ -86,7 +63,6 @@ ProductTile = React.createClass({
         <div className={'productImgContainer'}>
           <img
             id = {this.props.product.id}
-            style={styles.image}
             src={this.props.product.image}
             className={productImg}
             onTouchTap={this.onTouchTapImg}
@@ -98,17 +74,19 @@ ProductTile = React.createClass({
             id={this.props.product.id}>
             <h4>{this.props.product.name}</h4>
           </div><hr/>
+          <div className={'productCodeFullText'}>
+            <span className={'productKey'}>Código: </span> <span>{this.props.product.sku}</span><br/>
+          </div>
           <div className={'productDescription'}>
             {this.props.product.description}
           </div>
-          <div className={'productPriceText'} style={styles.priceText}>
+          <div className={'productPriceText'}>
             {'S/. '+this.props.product.price}
           </div>
           <div className={'productIcons'} >
             {this.state.gotCartResponse?(
               <FloatingActionButton
               mini={true}
-              style={styles.iconAddShopping}
               tooltip={"Agregar al carrito"}
               onTouchTap={this.handleAddtoCart}>
               <ActionAddShoppingCart/>
@@ -117,7 +95,6 @@ ProductTile = React.createClass({
               <CircularProgress
                 size={0.5}
                 tooltip = {"Cargando"}
-                style={styles.iconProgress}
               />
             )}
           </div>
