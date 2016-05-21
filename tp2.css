@@ -29,8 +29,8 @@ html{
 /********LEFTNAV**********/
 #leftNavListContainer{
   position:relative !important;
-  height: 98% !important;
   min-height: 500px !important;
+  padding-bottom: 48px !important;
 }
 
 /*****INITIAL SCREEN LOADING**********/

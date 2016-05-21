@@ -496,16 +496,21 @@ const GetLeftList = React.createClass({
           <Divider/>
         </div>
         {smallScreen?(
-          this.getCategoriesMobile()):
+          this.getCategoriesMobile()
+        ):
             (<ul className={'desktopList'}>
             {this.getCategoriesDesktop()}
           </ul>)
         }
-        {smallScreen?<ListItem value={'user'}
-          id={'divUserListItem'}
-          onTouchTap={this._handleUserListTouch}
-          leftIcon = {<ActionAccountCircle style={styleAvatarUser}/>}
-          primaryText = {'Usuario'}/>:
+        {smallScreen?
+          <div>
+            <ListItem
+            value={'user'}
+            id={'divUserListItem'}
+            onTouchTap={this._handleUserListTouch}
+            leftIcon = {<ActionAccountCircle style={styleAvatarUser}/>}
+            primaryText = {'Usuario'}/>
+        </div>:
           <ul className={'desktopUserListItem'}>
             <Li
               key={'user'}
