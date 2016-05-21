@@ -503,14 +503,14 @@ const GetLeftList = React.createClass({
           </ul>)
         }
         {smallScreen?
-          <div>
+          
             <ListItem
             value={'user'}
             id={'divUserListItem'}
             onTouchTap={this._handleUserListTouch}
             leftIcon = {<ActionAccountCircle style={styleAvatarUser}/>}
             primaryText = {'Usuario'}/>
-        </div>:
+        :
           <ul className={'desktopUserListItem'}>
             <Li
               key={'user'}
