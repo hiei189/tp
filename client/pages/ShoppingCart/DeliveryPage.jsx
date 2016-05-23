@@ -46,7 +46,9 @@ DeliveryPage = React.createClass({
       addressesLoading: true,
       deliveryHours: 'NO_DATA',
       selectedDeliveryHour: '10.00',
-      birth:''
+      birth:'',
+      fechatest:'',
+      typeDate:'string'
     };
   },
 
@@ -111,6 +113,14 @@ DeliveryPage = React.createClass({
     this.setState({selectedDeliveryHour})
   },
 
+  onFocusDate:function(){
+    if(this.state.typeDate !== 'date') {this.setState({typeDate: 'date'})}
+  },
+
+  onBlurDate:function() {
+    if(this.state.typeDate !== 'string') {this.setState({typeDate: 'string'})}
+  },
+
   render: function() {
 
     let { wordsError } = this.errorMessages;
@@ -123,7 +133,20 @@ DeliveryPage = React.createClass({
           ref = {'deliveryForm'}
           onInvalid={this.invalidForm}
           style ={styles.form}>
-          <FormsyDate
+
+          <FormsyText
+            required
+            floatingLabelText="Fecha de entrega"
+            style = {styles.field}
+            type={this.state.typeDate}
+            onFocus={this.onFocusDate}
+            onBlur={this.onBlurDate}
+            name = "dateDelivery"
+            value={this.state.fechatest}
+            style ={styles.field}
+          />
+
+          {/*<FormsyDate
             required
             floatingLabelText="Fecha de entrega"
             textFieldStyle = {{width:'100%'}}
@@ -133,7 +156,7 @@ DeliveryPage = React.createClass({
             defaultDate={this.maxDate}
             value={this.state.birth}
             style = {styles.field}
-          />
+          />*/}
           <FormsySelect
             name = {'deliveryHourMenu'}
             ref = {'deliveryHourMenu'}

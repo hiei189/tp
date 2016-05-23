@@ -70,10 +70,12 @@ ShoppingDetails = React.createClass({
     });
   },
 
-  handleTabChange:function(value){
-    //BORRAR ESTO EN PRODUCCION!
-    if (value === 0 || value === 1 || value ===2){
-      return;
+  handleTabChange:function(value,a,b){
+    //BORRAR ESTO EN PRODUCCION
+    if (value === 0 || value === 1 || value === 2){
+      this.setState({
+        currentTab: this.state.currentTab
+      });
     }
   },
 
@@ -168,7 +170,7 @@ ShoppingDetails = React.createClass({
               model = this.delivery.model;
               formsController.deliveryController.addDelivery(model,this.token.access_token,
                 (response)=>{
-                  //falta obtener ID
+                  console.log(response);
                 });
             break;
           case 2:
