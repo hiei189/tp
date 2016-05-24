@@ -1,4 +1,4 @@
-let basic_url = 'http://api.tulipanda.pe/rest/';
+let basic_url = 'https://api.tulipanda.pe/rest/';
 
 backendCom = {
   getTokenGuest: function(oldToken,callback){

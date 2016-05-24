@@ -29,7 +29,8 @@ html{
 /********LEFTNAV**********/
 #leftNavListContainer{
   position:relative !important;
-  min-height: 500px !important;
+  min-height: 90% !important;
+  /*min-height: 500px !important;*/
   padding-bottom: 48px !important;
 }
 
@@ -112,8 +113,7 @@ html{
   padding-left:0%;
 }
 .productCodeFullText{
-  margin-bottom: 11px;
-  margin-top: -6px;
+  margin-bottom: 7px;
 }
 .productTitle{
   margin-bottom:-8px;
@@ -136,7 +136,6 @@ html{
   overflow:auto;
   position: absolute;
   bottom: 10px;
-  color: #AD1457;
 }
 
 .productCartQtyContent{
@@ -149,22 +148,9 @@ html{
   min-width: 0 !important;
 }
 
-.productCartQty{
-  margin: 10px;
-}
 
 .productIcons{
-  position: absolute;
-  right: 8px;
-  bottom: -30px;
-  width: 50px;
-  height: 54px;
-  text-align: center;
-}
 
-.productCartQtyIcon{
-  margin-left: 0px;
-  vertical-align:middle;
 }
 
 
@@ -178,10 +164,11 @@ html{
 }
 
 .zoomed{
-  -webkit-transform: scale(1.85);
-    -ms-transform: scale(1.85);
-    -o-transform: scale(1.85);
-    transform: scale(1.85);
+  -webkit-transform: scale(1.75);
+    -ms-transform: scale(1.75);
+    -o-transform: scale(1.75);
+    transform: scale(1.75);
+    position: absolute;
     top:0;
     bottom: 0;
     left: 0;
@@ -189,7 +176,6 @@ html{
     margin: auto;
     width: auto;
     z-index: 1100;
-    position: fixed;
 }
 
 
