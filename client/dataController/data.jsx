@@ -137,7 +137,36 @@ data = {
       }
       callback(err,response);
     });
+  },
+
+  getProductsByCategoryLimited(category_id,page,callback){
+    var token = Session.get('token');
+    const offset = 9;
+    backendCom.getProductsByCategoryLimited(
+      token.access_token,
+      category_id,
+      offset,page,(err,response)=>{
+        if (err){
+          Session.set('Category'+category_id.toString(),'ERROR');
+          throw new Meteor.Error('200','Error obteniendo los productos');
+        }
+        Session.set('Category'+category_id.toString(),response.data);
+        callback(response.data);
+    });
+  },
+
+  createUser:function(model,callback){
+    var token = Session.get('token');
+    console.log(model);
+    backendCom.createUser(token.access_token,model.firstname,model.lastname,model.email,
+    model.telephone,model.password,model.repeatedPassword,model.gender,
+    (err,response)=>{
+      if(!err){
+        callback(response.data);
+        if(response.data.success){
+          Session.set('user',response.data.data);
+        }
+      }
+    });
   }
-
-
 }

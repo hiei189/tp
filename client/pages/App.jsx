@@ -401,12 +401,14 @@ const GetLeftList = React.createClass({
 
   renderNested:function(category){
     return category.categories.map((category)=>{
+      const styleText = Session.get('selectedItem')==category.category_id?styles.selectedCategory:null;
       return (
           <ListItem
             key={category.category_id}
             id={category.category_id}
             onTouchTap = {this._handleTouchTap.bind(this,category.name)}
             primaryText = {category.name}
+            style={styleText}
             name = {category.name}
             value={category.category_id}/>
         );
@@ -431,6 +433,7 @@ const GetLeftList = React.createClass({
     //innerDivStyle={{paddingTop:'24px',paddingBottom:'24px'}}
     return this.props.categories.map((category)=>{
       const styleAvatar = Session.get('selectedItem')==category.category_id?styles.selectedAvatar:null;
+      const styleText = Session.get('selectedItem')==category.category_id?styles.selectedCategory:null;
       let icon = category.icon.toUpperCase();
       let IconComponent = Icons[icon];
         if(category.categories){
@@ -442,6 +445,7 @@ const GetLeftList = React.createClass({
                 leftIcon = {<IconComponent style={styleAvatar}/>}
                 onTouchTap = {this._handleTouchTap.bind(this,category.name)}
                 primaryText = {category.name}
+                style={styleText}
                 nestedItems={this.renderNested(category)}
                 value={category.category_id}/>
             ])
@@ -453,6 +457,7 @@ const GetLeftList = React.createClass({
                 id={category.category_id}
                 key={category.category_id}
                 leftIcon = {<IconComponent style={styleAvatar}/>}
+                style={styleText}
                 onTouchTap = {this._handleTouchTap.bind(this,category.name)}
                 primaryText = {category.name}
                 value={category.category_id}

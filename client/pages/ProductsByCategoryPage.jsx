@@ -16,7 +16,7 @@ var styles = {
 
 
 ProductsByCategoryPage = React.createClass({
-  mixins : [InfiniteScrollMixin],
+  // mixins : [InfiniteScrollMixin],
 
   contextTypes: {
     screensize: React.PropTypes.string,
@@ -44,18 +44,13 @@ ProductsByCategoryPage = React.createClass({
     this.selectedCategory = this.props.params.categoryId;
   },
 
-  validateData:function(err,response){
-    if(!err){
-      if(response.data.success){
-        this.setState({
-          products:this.state.products.concat(response.data.data),
-          gotDataProducts:true,
-          productNotFound:false
-        });
-      }else{
-      }
-    }else{
-      throw new Meteor.Error('200','Lost Connection to the server');
+  validateData:function(response){
+    if(response.success){
+      this.setState({
+        products:this.state.products.concat(response.data),
+        gotDataProducts:true,
+        productNotFound:false
+      });
     }
   },
 
@@ -85,6 +80,7 @@ ProductsByCategoryPage = React.createClass({
         });
 
         if(this.selectedCategoryObject.categories){
+          data.getProductsByCategory(nextProps.params.categoryId,(err,response)=>{});
           this.selectedCategoryObject.categories.map((category)=>{
             data.getProductsByCategory(category.category_id,(err,response)=>{});
           });
@@ -93,23 +89,21 @@ ProductsByCategoryPage = React.createClass({
         }
   },
   fetchNextPage:function(nextPage){
-    backendCom.getProductsByCategoryLimited(
-      this.token.access_token,
+    data.getProductsByCategoryLimited(
       this.selectedCategory,
-      9,nextPage,(err,response)=>{
-        this.validateData(err,response);
+      nextPage,(response)=>{
+        this.validateData(response);
     });
   },
 
   renderTiles:function(){
-    return this.state.products.map((product)=>{
+
       return(
-        <ProductTilesArray
-          router={this.context.router}
-          key={product.id}
-          product={product}/>
+        <ProductsComponent
+          categoryId = {this.selectedCategory}
+          />
       )
-    })
+
   },
 
   resetInfinite:function(){
@@ -137,7 +131,6 @@ ProductsByCategoryPage = React.createClass({
     const {params} = this.props;
     const smallScreen = screensize === 'small' || screensize === 'medium';
     smallScreen? Session.set('selectedItem',params.categoryId):Session.set('selectedItem',this.selectedCategoryObject.category_id);
-    if (this.state.gotDataProducts && !this.state.productNotFound){
       switch (screensize) {
         case 'small':
         case 'medium':
@@ -156,13 +149,6 @@ ProductsByCategoryPage = React.createClass({
           break;
         default:
       }
-    }else if(!this.state.gotDataProducts){
-      return (<div></div>)
-    }else if(this.state.gotDataProducts && this.state.productNotFound){
-      return(
-        <div>Categoría no encontrada!</div>
-      )
-    }
   }
 });
 
@@ -174,9 +160,9 @@ var ProductsComponent = React.createClass({
   componentWillMount: function() {
     const {categoryId} = this.props;
     Tracker.autorun((a)=>{
-      this.trackerId_a = a;
       const products = Session.get('Category'+categoryId.toString());
       Tracker.nonreactive(()=>{
+        this.trackerId_a = a;
         if (typeof products === 'undefined' ){
           this.setState({
             products: 'LOADING'
@@ -263,7 +249,7 @@ const ProductsByCategoryPagePresentation = ({products,router})=>{
       );
     }else{
       return <div style={styles.root} className={'ProductsByCategoryPage'} >
-        Aún no hay componentes en esta categoría!
+        Aún no hay productos en esta categoría!
       </div>
     }
   }else if(products === 'ERROR'){
@@ -271,7 +257,7 @@ const ProductsByCategoryPagePresentation = ({products,router})=>{
       Hubo un error obteniendo la información.
     </div>
   }else if(products === 'LOADING'){
-    return <div style={{textAlign:'center',marginTop:'150px'}}>
+    return <div style={{textAlign:'center',margin:'150px auto 0 auto'}}>
       <CircularProgress/>
     </div>
   }else{

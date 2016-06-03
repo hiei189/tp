@@ -1,4 +1,4 @@
-const { TextField, DatePicker, RadioButtonGroup,RadioButton,RaisedButton,Paper} = mui;
+const { TextField, DatePicker, RadioButtonGroup,RadioButton,RaisedButton,Paper, Menu, MenuItem} = mui;
 const Colors = mui.Styles.Colors;
 
 const styles = {
@@ -31,12 +31,6 @@ const styles = {
     minWidth:'212',
     marginTop:'12'
   },
-  radiogroup:{
-    margin:'auto',
-    width:'60%',
-    minWidth:'212',
-    textAlign:'left'
-  },
   radiobutton:{
     flex:0.5,
     display:'flex'
@@ -66,7 +60,6 @@ CreateUserPage = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
   contextTypes : {
-    handleOpenLoginDialog: React.PropTypes.func,
     router: React.PropTypes.object
   },
 
@@ -78,95 +71,49 @@ CreateUserPage = React.createClass({
     this.error = {};
     this.error.name = '';
     return {
-      name: '',
-      lastname:'',
-      address:'',
-      city:'',
-      email:'',
-      telephone:'',
-      password:'',
-      passconfirm:'',
-      birth:'',
-      gender:'male',
-      messageName:'',
-      errorName:false,
-      error:false,
-      success:1,
-      userCreated:false
+      userCreated:false,
+      typeDate:'string'
     };
   },
-  createUser:function(){
 
-    error = this.validateData();
-    if(Object.keys(error).length != 0) {
-      this.forceUpdate();
-      //return;
-    }
-
-    this.token = Session.get('token');
-
-    backendCom.createUser(this.token.access_token,this.state.name,this.state.lastname,this.state.email,
-    this.state.telephone,this.state.password,this.state.passconfirm,this.state.gender,
-    callback = (err,response)=>{
-      if(response.data.success){
-        Session.set('user',response.data.data);
+  createUser:function(model){
+    data.createUser(model,(res)=>{
+      if(res.success){
         if(this.isMounted()){
           this.setState({
-            userCreated: true
+            userCreated: true,
+            showError:false,
+            showDialog:true
           });
         }
       }else{
-
-      }
-    });
-  },
-  componentDidMount: function() {
-
-  },
-  validateData:function(){
-
-    this.error={};
-    if(this.state.name===''){
-        this.error.name = "Este campo es necesario";
-      }
-    if(this.state.email==='')
-      {
-        this.error.email= "Este campo es necesario";
-      }
-
-    if(this.state.lastname==='')
-      {
-
-        this.error.lastname="Este campo es necesario";
-      }
-
-    if(this.state.telephone==='')
-      {
-        this.error.telephone= "Este campo es necesario";
-      }
-
-    if(this.state.password!==this.state.passconfirm)
-      {
-        this.error.password= "Las contraseñas no coinciden";
-      }
-
-      if(this.state.password=='')
-        {
-          this.error.password= "Este campo es necesario";
+        if(this.isMounted()){
+          this.setState({
+            showError: true,
+            showDialog:true,
+            errorBackendMessages: res.error
+          });
         }
-      return(this.error);
+      }
 
-  },
-  componentWillMount: function() {
-    this.minDate = new Date();
-    this.maxDate = new Date();
-    this.minDate.setFullYear(this.minDate.getFullYear()-80);
-    this.maxDate.setFullYear(this.maxDate.getFullYear()-10);
-    this.setState({
-      birth: this.maxDate
     });
+  },
+
+  componentWillMount: function() {
     Session.set('pageTitle', 'Crear usuario');
   },
+
+  errorMessages:{
+    isNumericError:'Solo puedes ingresar números',
+    isDefaultRequiredValue: 'Este campo es requerido',
+    isWordsError: "Solo puede usar letras (a-z)",
+    isSpecialWordsError: "Solo puede usar letras (a-z)",
+    isEmailError: "Ingresa un email correcto",
+    minLength7Error: "Debes ingresar más de siete caracteres",
+    isExistyError:"Este campo es requerido",
+    equalsFieldPasswordError: "Las contraseñas no coinciden"
+  },
+
   handleChange: function(e) {
     this.setState(
       {[e.currentTarget.id]:e.target.value}
@@ -176,108 +123,227 @@ CreateUserPage = React.createClass({
   goHome:function(){
     this.context.router.push('/');
   },
+
+  validForm:function(){
+    this.setState({
+      invalidCreateUser: false
+    });
+  },
+
+  invalidForm:function(){
+    this.setState({
+      invalidCreateUser: true
+    });
+  },
+
+  handleUserGenderMenu: function(event, gender, index) {
+    this.setState({
+      'gender': gender
+    });
+  },
+
+  onFocusDate:function(){
+    if(this.state.typeDate !== 'date') {this.setState({typeDate: 'date'})}
+  },
+
+  onBlurDate:function() {
+    if(this.state.typeDate !== 'string') {this.setState({typeDate: 'string'})}
+  },
+
+  getErrorBackendMessages(){
+    const {errorBackendMessages} = this.state;
+    return Object.keys(errorBackendMessages).map((error)=>{
+      const errorMessage = errorBackendMessages[error];
+      return
+      <li>
+        {errorMessage}
+      </li>
+    })
+  },
+
   render: function() {
+    const {isNumericError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError} = this.errorMessages;
+    const {showDialog, showError,errorBackendMessages} = this.state;
     return (
       <Paper style={styles.paperContainer}>
-        {this.state.userCreated?
-          (<DialogDefault
-          title={'Bienvenido!'}
-          onRequestClose={this.goHome}>
-          Tu cuenta ha sido creada exitosamente!
-        </DialogDefault>):null}
-        <h2 style={styles.paperTitle}>Datos personales</h2>
-        <form style={styles.form}>
-          <TextField
+        {showDialog?
+          (showError?
+          <DialogDefault
+            onRequestClose = {()=>this.setState({
+              showDialog:false
+            })}
+            title={'No se pudo crear tu cuenta!'}>
+            Ocurrieron los siguientes errores al crear tu cuenta:
+            <ErrorMessages errorBackendMessages = {errorBackendMessages} />
+          </DialogDefault>
+            :
+          <DialogDefault
+            title={'Bienvenido!, ' + this.state.firstname}
+            onRequestClose={this.goHome}>
+            Tu cuenta ha sido creada exitosamente!
+          </DialogDefault>):null}
+
+        <Formsy.Form
+          onValidSubmit={this.createUser}
+          onValid={this.validForm}
+          ref = {'createForm'}
+          onInvalid={this.invalidForm}
+          style ={styles.form}>
+
+          <h2 style={styles.paperTitle}>Datos personales</h2>
+          <FormsyText
+            required
+            validations={{'isSpecialWords':true}}
+            validationErrors={{
+              isSpecialWords: isSpecialWordsError
+            }}
+            type="string"
             floatingLabelText="Nombres"
-            type="string"
-            id ="name"
-            value={this.state.name}
-            onChange={this.handleChange}
+            textFieldStyle = {{width:'100%'}}
+            id ="firstname"
+            name = "firstname"
+            value={this.state.firstname}
             style ={styles.field}
-            errorText={this.error.name}
-          /><br/>
-          <TextField
+          />
+
+          <FormsyText
+            required
             floatingLabelText="Apellidos"
-            id ="lastname"
-            value={this.state.lastname}
+            validations={{'isSpecialWords':true}}
+            validationErrors={{
+              isSpecialWords: isSpecialWordsError
+            }}
+            textFieldStyle = {{width:'100%'}}
             type="string"
-            onChange={this.handleChange}
+            id ="lastname"
+            name = "lastname"
+            value={this.state.lastname}
             style ={styles.field}
-            errorText={this.error.lastname}
-          /><br/>
-          <DatePicker
+          />
+
+          <FormsyText
+            required
             floatingLabelText="Fecha de nacimiento"
             textFieldStyle = {{width:'100%'}}
-            minDate = {this.minDate}
-            maxDate = {this.maxDate}
-            defaultDate={this.maxDate}
-            valueLink={this.linkState('birth')}
             style = {styles.field}
-            errorText={this.error.birth}
-          /><br/>
+            type={this.state.typeDate}
+            onFocus={this.onFocusDate}
+            onBlur={this.onBlurDate}
+            name = "datebirth"
+            id = "datebirth"
+            value = {this.state.datebith}
+          />
 
-          <RadioButtonGroup name="gender"
-            value={this.state.gender}
-            defaultSelected="M"
-            id='gender'
-            onChange={this.handleChange}
-            style={styles.radiogroup}>
-            <RadioButton
-              value="M"
-              label="Hombre"
-            />
-            <RadioButton
-              value="F"
-              label="Mujer"
-            />
-          </RadioButtonGroup>
+          <FormsySelect
+            name = {'gender'}
+            ref = {'gender'}
+            required
+            style={styles.field}
+            value = {this.state.gender}
+            floatingLabelText="Sexo"
+            id = 'gender'
+            onChange={this.handleUserGenderMenu}>
+            <MenuItem primaryText={'Hombre'} value={'M'}/>
+            <MenuItem primaryText={'Mujer'} value={'F'}/>
+          </FormsySelect>
+
           <br/>
           <h2 style={styles.paperTitle}>Datos de contacto</h2>
-          <TextField
-            floatingLabelText="Email"
-            type="email"
-            id='email'
-            onChange={this.handleChange}
+
+          <FormsyText
+            required
+            validations={{'isEmail':true}}
+            validationErrors={{
+              isEmail: isEmailError
+            }}
+            floatingLabelText="Correo"
+            textFieldStyle = {{width:'100%'}}
+            name = 'email'
+            type = 'email'
+            id ='email'
             value={this.state.email}
-            style ={styles.field}
-            errorText={this.error.email}
-          /><br/>
-          <TextField
-            floatingLabelText="Teléfono"
+            style = {styles.field}
+          />
+
+          <FormsyText
+            required
+            validations={{'isNumeric':true}}
+            validationErrors={{
+              isNumeric: isNumericError
+            }}
+            floatingLabelText="Telefono"
+            textFieldStyle = {{width:'100%'}}
+            name = 'telephone'
+            id ='telephone'
             type="number"
-            id='telephone'
-            onChange={this.handleChange}
             value={this.state.telephone}
-            style ={styles.field}
-            errorText={this.error.telephone}
-          /><br/>
-          <TextField
-            floatingLabelText="Contraseña"
+            style = {styles.field}
+          />
+        {/*{this.state.fbUser?null:null} OJO AGREGAR*/}
+          <FormsyText
+            required
+            validations={{minLength:7}}
+            validationErrors={{
+              minLength: minLength7Error
+            }}
+            floatingLabelText="Nueva contraseña"
+            textFieldStyle = {{width:'100%'}}
+            name = 'password'
+            id ='password'
             type="password"
-            id='password'
-            onChange={this.handleChange}
             value={this.state.password}
-            style ={styles.field}
-            errorText={this.error.password}
-          /><br/>
-          <TextField
-            floatingLabelText="Repetir contraseña"
+            style = {styles.field}
+          />
+
+          <FormsyText
+            required
+            validations={{minLength:7,equalsField:'password'}}
+            validationErrors={{
+              minLength: minLength7Error,
+              equalsField: equalsFieldPasswordError
+            }}
+            floatingLabelText="Repite la nueva contraseña"
+            textFieldStyle = {{width:'100%'}}
+            name = 'repeatedPassword'
+            id ='repeatedPassword'
             type="password"
-            id='passconfirm'
-            value={this.state.passconfirm}
-            onChange={this.handleChange}
-            style ={styles.field}
-            errorText={this.error.password}
-          /><br/>
+            value={this.state.repeatedPassword}
+            style = {styles.field}
+          />
           <RaisedButton
             label="Crear usuario"
             primary={true}
-            onTouchTap = {this.createUser}
+            type = {'submit'}
+            disabled = {this.state.invalidCreateUser}
             style ={styles.button}
-          /><br/>
-        </form>
+          />
+        </Formsy.Form>
       </Paper>
     );
   }
 
 });
+
+function mapObject(object, callback) {
+  return Object.keys(object).map(function (key) {
+    return callback(key, object[key]);
+  });
+}
+
+const ErrorMessages = ({errorBackendMessages}) => {
+  return (
+    <ul>
+      {mapObject(errorBackendMessages,(error,errorMessage)=>{
+        return <Lierror key={error} error = {errorMessage} />
+      })}
+    </ul>
+  )
+}
+
+const Lierror = ({error}) => {
+  return (
+    <li>
+      {error}
+    </li>
+  )
+}

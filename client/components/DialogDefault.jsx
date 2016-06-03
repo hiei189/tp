@@ -20,7 +20,9 @@ DialogDefault = React.createClass({
 
   handleClose:function(){
     this.setState({open: false});
-    this.props.onRequestClose();
+    if (this.props.onRequestClose){
+      this.props.onRequestClose();
+    }
   },
 
 

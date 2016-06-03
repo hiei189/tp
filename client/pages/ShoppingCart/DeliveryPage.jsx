@@ -142,7 +142,6 @@ DeliveryPage = React.createClass({
             onFocus={this.onFocusDate}
             onBlur={this.onBlurDate}
             name = "dateDelivery"
-            value={this.state.fechatest}
             style ={styles.field}
           />
 

@@ -1,5 +1,5 @@
 const {MapsLocalShipping,ActionHistory,ActionPayment} =mui.SvgIcons;
-const {Paper,MenuItem} = mui;
+const {Paper,MenuItem,RaisedButton} = mui;
 const Colors = mui.Styles.Colors;
 
 const styles={
@@ -9,6 +9,13 @@ const styles={
     color:'white',
     height:28,
     fill: Colors.pink500
+  },
+  button:{
+    margin: 'auto',
+    width:'20%',
+    minWidth:'212',
+    marginTop:'12',
+    display:'flex'
   },
   container: {
     display: 'flex',
@@ -28,7 +35,8 @@ const styles={
   },
   form:{
     margin: 'auto',
-    width:'100%'
+    width:'100%',
+    marginBottom: 15
   },
   headers:{
     margin:'auto',
@@ -120,10 +128,26 @@ UserPage = React.createClass({
 
   },
 
+  onValid:function(model){
+    console.log(model);
+  },
+
+  onFocusDate:function(){
+    if(this.state.typeDate !== 'date') {this.setState({typeDate: 'date'})}
+  },
+
+  onBlurDate:function() {
+    if(this.state.typeDate !== 'string') {this.setState({typeDate: 'string'})}
+  },
+
+  onValidSubmit:function(model){
+    console.log(model);
+  },
+
   render: function() {
     const {gotUser,user} = this.state;
     const {isNumericError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError} = this.errorMessages;
-
+    console.log(user);
     if(gotUser){
       return (
         <Paper style={styles.paperContainer}>
@@ -133,7 +157,8 @@ UserPage = React.createClass({
         <div style={{marginBottom:'50px'}}>
           <Formsy.Form
             ref={'userForm'}
-            onValidSubmit={this.submitUserForm}
+            onValid = {this.onValid}
+            onValidSubmit={this.onValidSubmit}
             onInvalid = {this.invalidForm}
             style ={styles.form}>
 
@@ -145,8 +170,8 @@ UserPage = React.createClass({
               }}
               floatingLabelText="Nombres"
               textFieldStyle = {{width:'100%'}}
-              name = 'userFirstname'
-              id ='userFirstname'
+              name = 'firstname'
+              id ='firstname'
               value={user.firstname}
               style = {styles.field}
             />
@@ -159,27 +184,28 @@ UserPage = React.createClass({
                 isSpecialWords: isSpecialWordsError
               }}
               textFieldStyle = {{width:'100%'}}
-              name = 'userLastname'
-              id ='userLastname'
+              name = 'lastname'
+              id ='lastname'
               value={user.lastname}
               style = {styles.field}
             />
 
-            <FormsyDate
+            <FormsyText
               required
               floatingLabelText="Fecha de nacimiento"
               textFieldStyle = {{width:'100%'}}
-              minDate = {this.minDate}
-              maxDate = {this.maxDate}
-              name = 'userBirth'
-              defaultDate={this.maxDate}
-              value={user.birth}
               style = {styles.field}
+              type={this.state.typeDate}
+              onFocus={this.onFocusDate}
+              onBlur={this.onBlurDate}
+              name = "birth"
+              id = "birth"
+              value = {user.birth}
             />
 
             <FormsySelect
-              name = {'userGender'}
-              ref = {'userGender'}
+              name = {'gender'}
+              ref = {'gender'}
               required
               style={styles.field}
               value = {user.gender}
@@ -197,8 +223,8 @@ UserPage = React.createClass({
               }}
               floatingLabelText="Correo"
               textFieldStyle = {{width:'100%'}}
-              name = 'userEmail'
-              id ='userEmail'
+              name = 'email'
+              id ='email'
               value={user.email}
               style = {styles.field}
             />
@@ -211,8 +237,8 @@ UserPage = React.createClass({
               }}
               floatingLabelText="Telefono"
               textFieldStyle = {{width:'100%'}}
-              name = 'userTelephone'
-              id ='userTelephone'
+              name = 'telephone'
+              id ='telephone'
               type="number"
               value={user.telephone}
               style = {styles.field}
@@ -226,8 +252,8 @@ UserPage = React.createClass({
               }}
               floatingLabelText="Nueva contraseña"
               textFieldStyle = {{width:'100%'}}
-              name = 'userPassword'
-              id ='userPassword'
+              name = 'password'
+              id ='password'
               type="password"
               value={user.password}
               style = {styles.field}
@@ -235,18 +261,26 @@ UserPage = React.createClass({
 
             <FormsyText
               required
-              validations={{minLength:7,equalsField:'userPassword'}}
+              validations={{minLength:7,equalsField:'password'}}
               validationErrors={{
                 minLength: minLength7Error,
                 equalsField: equalsFieldPasswordError
               }}
               floatingLabelText="Repite la nueva contraseña"
               textFieldStyle = {{width:'100%'}}
-              name = 'userRepeatedPassword'
-              id ='userRepeatedPassword'
+              name = 'repeatedPassword'
+              id ='repeatedPassword'
               type="password"
               value={user.repeatedPassword}
               style = {styles.field}
+            />
+
+            <RaisedButton
+              label="Actualizar"
+              primary={true}
+              type = {'submit'}
+              disabled = {this.state.invalidUpdate}
+              style ={styles.button}
             />
           </Formsy.Form>
         </div>
