@@ -74,7 +74,10 @@ LoginPage = React.createClass({
       recoverPassword:false,
       userLogged: false,
       invalidLoginForm: true,
-      loadingLogin:false
+      loadingLogin:false,
+      showDialog:false,
+      showError:false,
+      errorBackendMessages: ''
     };
   },
   getTitle: function(){
@@ -92,17 +95,28 @@ LoginPage = React.createClass({
     data.loginUser(false,
       email,
       password,
-      this.token.access_token,
-      (err,response)=>{
-        if(response.data.success){
+      (res)=>{
+        console.log(res);
+        if(res.success){
           if(this.isMounted()){
             this.setState({
               userLogged: true,
+              loadingLogin:false,
+              showError:false,
+              showDialog:true
+            });
+          }
+        }else{
+          if(this.isMounted()){
+            this.setState({
+              showError: true,
+              showDialog: true,
+              errorBackendMessages: res.error,
               loadingLogin:false
             });
           }
         }
-      });
+    });
   },
 
   recoverPassword:function(){
@@ -149,7 +163,7 @@ LoginPage = React.createClass({
 
   render: function() {
     let { wordsError,isEmail, isExisty } = this.errorMessages;
-    const {loadingLogin} = this.state;
+    const {loadingLogin,showDialog,showError,errorBackendMessages} = this.state;
     return (
       <Paper style={styles.paperContainer}>
         <div style={styles.container}>
@@ -186,12 +200,23 @@ LoginPage = React.createClass({
             :
             (
             <div>
-              {this.state.userLogged?
+              {showDialog?
+                (showError?
+                (<DialogDefault
+                  onRequestClose = {()=>this.setState({
+                    showDialog:false,
+                    showError:false
+                  })}
+                  title={'No se pudo iniciar sesión!'}>
+                  Ocurrieron los siguientes errores al iniciar sesión:
+                  <ErrorMessages errorBackendMessages = {errorBackendMessages} />
+                </DialogDefault>)
+                 :
                 (<DialogDefault
                 title={'Bienvenido, '+ Session.get('user').firstname}
                 onRequestClose={()=>this.context.router.goBack()}>
-                Te has iniciado sesión exitosamente!
-              </DialogDefault>):null}
+                Has iniciado sesión exitosamente!
+              </DialogDefault>)):null}
               <h2 style={styles.paperTitle}>Iniciar sesión</h2>
               <Formsy.Form
                 ref={'loginForm'}
@@ -233,7 +258,7 @@ LoginPage = React.createClass({
                   checked = {this.state.remember}
                   labelStyle={{color:this.context.muiTheme.textField.hintColor,textAlign:'left'}}
                 /><br/>*/}
-                {loadingLogin?<CircularProgress />:null}
+                {loadingLogin?<CircularProgress style={{display:'flex',margin:'auto'}} />:null}
 
                 <RaisedButton
                   label="Iniciar sesión"

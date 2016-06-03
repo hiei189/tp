@@ -124,7 +124,7 @@ CartPage = React.createClass({
       this.context.router.push('/shoppingdetails');
     }
     else{
-      this.context.router.push('/login');
+      this.context.router.push('/user');
     }
   },
 

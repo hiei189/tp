@@ -129,7 +129,7 @@ UserPage = React.createClass({
   },
 
   onValid:function(model){
-    console.log(model);
+
   },
 
   onFocusDate:function(){
@@ -141,13 +141,13 @@ UserPage = React.createClass({
   },
 
   onValidSubmit:function(model){
-    console.log(model);
+    
   },
 
   render: function() {
     const {gotUser,user} = this.state;
     const {isNumericError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError} = this.errorMessages;
-    console.log(user);
+
     if(gotUser){
       return (
         <Paper style={styles.paperContainer}>

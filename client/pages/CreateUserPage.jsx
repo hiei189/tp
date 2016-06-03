@@ -323,27 +323,3 @@ CreateUserPage = React.createClass({
   }
 
 });
-
-function mapObject(object, callback) {
-  return Object.keys(object).map(function (key) {
-    return callback(key, object[key]);
-  });
-}
-
-const ErrorMessages = ({errorBackendMessages}) => {
-  return (
-    <ul>
-      {mapObject(errorBackendMessages,(error,errorMessage)=>{
-        return <Lierror key={error} error = {errorMessage} />
-      })}
-    </ul>
-  )
-}
-
-const Lierror = ({error}) => {
-  return (
-    <li>
-      {error}
-    </li>
-  )
-}

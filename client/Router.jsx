@@ -26,7 +26,6 @@ Meteor.startup(function() {
       <Route path="/categories/:categoryId" component ={ProductsByCategoryPage}/>
       <Route path="/products/:productId" component ={ProductByIdPage}/>
       <Route path="/createuser" component ={CreateUserPage}/>
-      <Route path="/login" component ={LoginPage}/>
       <Route path="/user" component = {UserPage}/>
       <Route path="shoppingcart" component = {CartPage}/>
       <Route path="shoppingdetails" component = {ShoppingDetails}/>

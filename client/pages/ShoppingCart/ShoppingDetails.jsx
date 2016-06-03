@@ -180,7 +180,7 @@ ShoppingDetails = React.createClass({
         }
       }
     }else{
-      this.context.router.push('/login');
+      this.context.router.push('/user');
     }
   },
 

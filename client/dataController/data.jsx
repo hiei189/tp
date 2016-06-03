@@ -80,8 +80,9 @@ data = {
     });
   },
 
-  loginUser:function(persistent,email,password,token,callback){
-    backendCom.loginUser(token,email,password,
+  loginUser:function(persistent,email,password,callback){
+    var token = Session.get('token');
+    backendCom.loginUser(token.access_token,email,password,
       (err,response)=>{
         if(response.data.success){
           CartController.getAllItems(token,(err,response)=>{});
@@ -95,9 +96,9 @@ data = {
             Session.set('gotUser',true);
             Session.set('fbUser',false);
           }
-          callback(err,response);
           return;
         }
+        callback(response.data);
     });
   },
 
@@ -165,6 +166,7 @@ data = {
         callback(response.data);
         if(response.data.success){
           Session.set('user',response.data.data);
+          Session.set('gotUser',true);
         }
       }
     });
