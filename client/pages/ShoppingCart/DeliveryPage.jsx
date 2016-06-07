@@ -134,15 +134,13 @@ DeliveryPage = React.createClass({
           onInvalid={this.invalidForm}
           style ={styles.form}>
 
-          <FormsyText
+          <FormsyDate
             required
             floatingLabelText="Fecha de entrega"
-            style = {styles.field}
-            type={this.state.typeDate}
+            textFieldStyle = {styles.field}
             onFocus={this.onFocusDate}
             onBlur={this.onBlurDate}
             name = "dateDelivery"
-            style ={styles.field}
           />
 
           {/*<FormsyDate

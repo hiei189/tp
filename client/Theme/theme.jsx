@@ -10,7 +10,7 @@ theme =  getMuiTheme({
   fontFamily: 'Roboto, sans-serif',
   palette: {
     primary1Color: Colors.pink500,
-    primary2Color: Colors.yellow500,
+    primary2Color: Colors.teal500,
     primary3Color: Colors.lightBlack,
     accent1Color: Colors.pink500,
     accent2Color: Colors.grey100,

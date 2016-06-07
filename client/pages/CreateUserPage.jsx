@@ -57,7 +57,6 @@ const styles = {
 
 
 CreateUserPage = React.createClass({
-  mixins: [React.addons.LinkedStateMixin],
 
   contextTypes : {
     router: React.PropTypes.object
@@ -77,13 +76,16 @@ CreateUserPage = React.createClass({
   },
 
   createUser:function(model){
+    console.log(model);
+    //model.datebirth = utils.createDateFromString(model.datebirth);
     data.createUser(model,(res)=>{
       if(res.success){
         if(this.isMounted()){
           this.setState({
             userCreated: true,
             showError:false,
-            showDialog:true
+            showDialog:true,
+            createdUser: res.data
           });
         }
       }else{
@@ -178,7 +180,7 @@ CreateUserPage = React.createClass({
           </DialogDefault>
             :
           <DialogDefault
-            title={'Bienvenido!, ' + this.state.firstname}
+            title={'Bienvenido!, ' + this.state.createdUser.firstname}
             onRequestClose={this.goHome}>
             Tu cuenta ha sido creada exitosamente!
           </DialogDefault>):null}
@@ -221,12 +223,10 @@ CreateUserPage = React.createClass({
             style ={styles.field}
           />
 
-          <FormsyText
+        <FormsyDate
             required
             floatingLabelText="Fecha de nacimiento"
-            textFieldStyle = {{width:'100%'}}
-            style = {styles.field}
-            type={this.state.typeDate}
+            textFieldStyle = {styles.field}
             onFocus={this.onFocusDate}
             onBlur={this.onBlurDate}
             name = "datebirth"

@@ -112,7 +112,6 @@ ShoppingDetails = React.createClass({
       validCurrentForm:true
     });
     this.delivery.model = model;
-    console.log(model);
   },
 
   handleInvalidPayment:function(){

@@ -116,7 +116,7 @@ data = {
 
   getProductById:function(category,callback){
     var token = Session.get('token');
-    backendCom.getProductById(token.access_token,category,(err,response)=>{
+    backendCom.getProductById(token.access_token,category,'500x500',(err,response)=>{
       if(!err){
         Session.set('product' + category.toString(),response.data);
       }else{
@@ -128,7 +128,7 @@ data = {
 
   getProductsByCategory:function(category_id,callback){
     var token = Session.get('token');
-    backendCom.getProductsByCategory(token.access_token,category_id,
+    backendCom.getProductsByCategory(token.access_token,category_id, '200x200',
     (err,response)=>{
       if(!err){
         Session.set('Category'+category_id.toString(),response.data);
@@ -160,7 +160,7 @@ data = {
     var token = Session.get('token');
     console.log(model);
     backendCom.createUser(token.access_token,model.firstname,model.lastname,model.email,
-    model.telephone,model.password,model.repeatedPassword,model.gender,
+    model.telephone,model.password,model.repeatedPassword,model.gender,model.datebirth,
     (err,response)=>{
       if(!err){
         callback(response.data);

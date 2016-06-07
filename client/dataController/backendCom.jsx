@@ -4,7 +4,6 @@ backendCom = {
   getTokenGuest: function(oldToken,callback){
     let _oldToken = '';
 
-
     if (!typeof oldToken === 'undefined'){
       if(Object.keys(oldToken).length !== 0){
         _oldToken = oldToken.access_token;
@@ -70,19 +69,19 @@ backendCom = {
     );
   },
 
-  getProductsByCategory: function(token,category_id,callback){
+  getProductsByCategory: function(token,category_id,size,callback){
     HTTP.call(
       'GET',
       basic_url + 'products/category/'+category_id,
       {
         headers:{
           'Authorization': 'Bearer '+token,
+          'X-Oc-Image-Dimension': size,
           'X-Oc-Merchant-Language' : 'es',
           'X-Oc-Store-Id': '0'
         }
       },
       (err,response)=>{
-
         callback(err,response);
         return;
       }
@@ -105,7 +104,7 @@ backendCom = {
       }
     );
   },
-  getProductById: function(token,product_id,callback){
+  getProductById: function(token,product_id,size,callback){
     HTTP.call(
       'GET',
       basic_url + 'products/'+product_id.toString(),
@@ -113,6 +112,7 @@ backendCom = {
         headers:{
           'Authorization': 'Bearer '+token,
           'X-Oc-Merchant-Language' : 'es',
+          'X-Oc-Image-Dimension': size,
           'X-Oc-Store-Id': '0'
         }
       },
@@ -122,7 +122,9 @@ backendCom = {
     );
     return;
   },
-  createUser:function(token,name,lastname,email,telephone,pass,passconfirm,gender,callback){
+  createUser:function(token,name,lastname,email,telephone,pass,passconfirm,gender,datebirth,callback){
+    console.log(datebirth);
+    const jsonDatebirth = JSON.stringify(datebirth);
     HTTP.call(
       'POST',
       basic_url + 'register',
@@ -134,7 +136,7 @@ backendCom = {
           //no hay fecha de nacimiento?
         	"firstname": name,//( nombres *obligatorio)
           "lastname": lastname,//( apellidos *obligatorio)
-          "dob": new Date(),
+          "dob": jsonDatebirth,
           "email": email, //( email *obligatorio)
         	"telephone": telephone,//( telefono *obligatorio)
         	"password": pass,//( password*obligatorio)
@@ -150,6 +152,7 @@ backendCom = {
         }
       },
       (err,response)=>{
+        console.log(response);
         callback(err,response);
         return;
       }

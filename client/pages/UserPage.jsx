@@ -2,6 +2,8 @@ const {MapsLocalShipping,ActionHistory,ActionPayment} =mui.SvgIcons;
 const {Paper,MenuItem,RaisedButton} = mui;
 const Colors = mui.Styles.Colors;
 
+
+
 const styles={
   icons:{
     margin:'auto',
@@ -103,6 +105,9 @@ UserPage = React.createClass({
       });
     });
   },
+  componentDidMount: function() {
+
+  },
 
   handleUserGenderMenu: function(event, gender, index) {
     this.setState({
@@ -141,7 +146,7 @@ UserPage = React.createClass({
   },
 
   onValidSubmit:function(model){
-    
+
   },
 
   render: function() {
@@ -154,8 +159,8 @@ UserPage = React.createClass({
           <div>
             <h2 style={styles.paperTitle}>Datos de usuario</h2>
           </div>
-        <div style={{marginBottom:'50px'}}>
-          <Formsy.Form
+          <div style={{marginBottom:'50px'}}>
+            <Formsy.Form
             ref={'userForm'}
             onValid = {this.onValid}
             onValidSubmit={this.onValidSubmit}
@@ -190,12 +195,10 @@ UserPage = React.createClass({
               style = {styles.field}
             />
 
-            <FormsyText
+            <FormsyDate
               required
               floatingLabelText="Fecha de nacimiento"
-              textFieldStyle = {{width:'100%'}}
-              style = {styles.field}
-              type={this.state.typeDate}
+              textFieldStyle = {styles.field}          
               onFocus={this.onFocusDate}
               onBlur={this.onBlurDate}
               name = "birth"
