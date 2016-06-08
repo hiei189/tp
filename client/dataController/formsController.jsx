@@ -6,8 +6,8 @@ formsController = {
     });
   },
 
-  getPlaces:function(search,token,callback){
-    backendCom.getPlaces(search,token,(err,response)=>{
+  searchInPlaces:function(search,token,callback){
+    backendCom.searchInPlaces(search,token,(err,response)=>{
       console.log(response);
       if(!err){
         if(response.content!=="[]"){

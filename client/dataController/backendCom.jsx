@@ -123,8 +123,7 @@ backendCom = {
     return;
   },
   createUser:function(token,name,lastname,email,telephone,pass,passconfirm,gender,datebirth,callback){
-    console.log(datebirth);
-    const jsonDatebirth = JSON.stringify(datebirth);
+    const parsedDate = Date.parse(datebirth);
     HTTP.call(
       'POST',
       basic_url + 'register',
@@ -136,7 +135,7 @@ backendCom = {
           //no hay fecha de nacimiento?
         	"firstname": name,//( nombres *obligatorio)
           "lastname": lastname,//( apellidos *obligatorio)
-          "dob": jsonDatebirth,
+          "dob": parsedDate,
           "email": email, //( email *obligatorio)
         	"telephone": telephone,//( telefono *obligatorio)
         	"password": pass,//( password*obligatorio)
@@ -152,7 +151,6 @@ backendCom = {
         }
       },
       (err,response)=>{
-        console.log(response);
         callback(err,response);
         return;
       }
@@ -212,7 +210,6 @@ backendCom = {
         }
       },
       (err,response)=>{
-        //console.log(response);
         callback(err,response);
         return;
       }
@@ -318,7 +315,11 @@ backendCom = {
     );
   },
 
-  getPlaces:function(search,token,callback){
+  getPlaces:function () {
+    
+  },
+
+  searchInPlaces:function(search,token,callback){
     HTTP.call(
         'GET',
         basic_url + 'places/search/'+search,
@@ -395,6 +396,7 @@ backendCom = {
   },
 
   addDelivery:function(day,hour,ocassion_id,message,anonymous,token,callback){
+    const parsedDay = Date.parse(day);
     HTTP.call(
       'POST',
       basic_url + 'delivery',
@@ -405,7 +407,7 @@ backendCom = {
           'X-Oc-Store-Id': '0'
         },
         data:{
-          day:day,
+          day:parsedDay,
           hour: hour,
           ocassion_id:ocassion_id,
           message: message,

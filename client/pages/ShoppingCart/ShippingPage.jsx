@@ -109,7 +109,9 @@ ShippingPage = React.createClass({
       shippingPlace:'',
       shippingAddress:'',
       reference:'',
-      placesDataSource:['Ingresa un lugar'],
+      placesDataSource: [{
+        text: 'Escoge un lugar válido',
+        value: <MenuItem primaryText={'Ingresa un lugar. Puedes elegir entre La Esperanza, Victor Larco Herrera, El Porvenir/Alto Trujillo, Trujillo, El Porvenir, Huanchaco, Florencia de Mora, Laredo, Moche, Salaverry'} disabled={true}/>}],
       addressesLoading: true,
       errors:{},
       total: 0,
@@ -150,7 +152,7 @@ ShippingPage = React.createClass({
           }]
       });
 
-      formsController.getPlaces(search,this.token.access_token,(places)=>{
+      formsController.searchInPlaces(search,this.token.access_token,(places)=>{
         if (places !== 'NO_DATA'){
           var arrayPlaces = places.map((place)=>{
             return  {
@@ -179,7 +181,9 @@ ShippingPage = React.createClass({
       });
     }else{
       this.setState({
-        placesDataSource: ['Ingresa un lugar']
+        placesDataSource: [{
+          text: 'Escoge un lugar válido',
+          value: <MenuItem primaryText={'Ingresa un lugar. Puedes elegir entre La Esperanza, Victor Larco Herrera, El Porvenir/Alto Trujillo, Trujillo, El Porvenir, Huanchaco, Florencia de Mora, Laredo, Moche, Salaverry'} disabled={true}/>}]
       });
     }
   },
@@ -334,7 +338,6 @@ ShippingPage = React.createClass({
               filter={AutoComplete.noFilter}
               disabled = {this.state.disabledForm}
               required
-              hintText ={'Coloca un lugar. Ejemplos: Centro, California, etc'}
               fullWidth={true}
               style ={styles.field}
               errorText = {this.state.errorPlace}

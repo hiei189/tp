@@ -1,5 +1,5 @@
 const Colors = mui.Styles.Colors;
-const {TextField, TimePicker, DropDownMenu, SelectField, DatePicker,RaisedButton,MenuItem,AutoComplete,CircularProgress,FloatingActionButton} = mui;
+const {TextField, TimePicker, DropDownMenu, SelectField, DatePicker,RaisedButton,MenuItem,CircularProgress,FloatingActionButton} = mui;
 const {ContentSend} = mui.SvgIcons;
 const {NavigationRefresh} = mui.SvgIcons;
 
@@ -67,9 +67,11 @@ DeliveryPage = React.createClass({
     });
 
     formsController.getDeliveryHours(this.token.access_token,(response)=>{
-      this.setState({
-        deliveryHours: Session.get('deliveryHours')
-      });
+      if(this.isMounted()){
+        this.setState({
+          deliveryHours: Session.get('deliveryHours')
+        });
+      }
     });
   },
 
