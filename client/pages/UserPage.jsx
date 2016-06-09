@@ -74,8 +74,10 @@ UserPage = React.createClass({
       gotUser: false,
       user: {},
       firstname:'',
-      fbUser:false
-
+      fbUser:false,
+      showDialog: false,
+      showError: false,
+      disabledButton:true
     };
   },
 
@@ -130,11 +132,15 @@ UserPage = React.createClass({
     equalsFieldPasswordError: "Las contraseñas no coinciden"
   },
   invalidForm:function(){
-
+    this.setState({
+      disabledButton:true
+    });
   },
 
-  onValid:function(model){
-
+  onValid:function(){
+    this.setState({
+      disabledButton:false
+    });
   },
 
   onFocusDate:function(){
@@ -146,16 +152,45 @@ UserPage = React.createClass({
   },
 
   onValidSubmit:function(model){
-
+    data.updateUserData(model,(res)=>{
+      if(res.success){
+        if(this.isMounted()){
+          this.setState({
+            showDialog:true,
+            showError:false,
+            user:model
+          });
+          Session.set('user',model);
+        }
+      }else{
+        if(this.isMounted()){
+          this.setState({
+            showDialog: true,
+            showError:true,
+            errorBackendMessages: res.error
+          });
+        }
+      }
+    });
   },
 
   render: function() {
-    const {gotUser,user} = this.state;
+    const {gotUser,user,showDialog,showError,errorBackendMessages,disabledButton} = this.state;
     const {isNumericError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError} = this.errorMessages;
 
     if(gotUser){
       return (
         <Paper style={styles.paperContainer}>
+          {showDialog?(showError?
+            <DialogDefault onRequestClose={()=>this.setState({showDialog:false})} title={'Cuenta no actualizada'}>
+              Hubieron errores actualizando tu cuenta:
+              <ErrorMessages errorBackendMessages = {errorBackendMessages}/>
+            </DialogDefault>
+            :
+            <DialogDefault onRequestClose={()=>this.setState({showDialog:false})} title={'Cuenta actualizada'}>
+              Tus datos fueron actualizados correctamente!
+            </DialogDefault>
+          ):null}
           <div>
             <h2 style={styles.paperTitle}>Datos de usuario</h2>
           </div>
@@ -198,12 +233,12 @@ UserPage = React.createClass({
             <FormsyDate
               required
               floatingLabelText="Fecha de nacimiento"
-              textFieldStyle = {styles.field}          
+              textFieldStyle = {styles.field}
               onFocus={this.onFocusDate}
               onBlur={this.onBlurDate}
-              name = "birth"
-              id = "birth"
-              value = {user.birth}
+              name = "dob"
+              id = "dob"
+              value = {user.dob}
             />
 
             <FormsySelect
@@ -248,7 +283,6 @@ UserPage = React.createClass({
             />
           {/*{this.state.fbUser?null:null} OJO AGREGAR*/}
             <FormsyText
-              required
               validations={{minLength:7}}
               validationErrors={{
                 minLength: minLength7Error
@@ -263,7 +297,6 @@ UserPage = React.createClass({
             />
 
             <FormsyText
-              required
               validations={{minLength:7,equalsField:'password'}}
               validationErrors={{
                 minLength: minLength7Error,
@@ -282,7 +315,7 @@ UserPage = React.createClass({
               label="Actualizar"
               primary={true}
               type = {'submit'}
-              disabled = {this.state.invalidUpdate}
+              disabled = {disabledButton}
               style ={styles.button}
             />
           </Formsy.Form>

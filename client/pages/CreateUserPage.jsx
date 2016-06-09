@@ -152,17 +152,6 @@ CreateUserPage = React.createClass({
     if(this.state.typeDate !== 'string') {this.setState({typeDate: 'string'})}
   },
 
-  getErrorBackendMessages(){
-    const {errorBackendMessages} = this.state;
-    return Object.keys(errorBackendMessages).map((error)=>{
-      const errorMessage = errorBackendMessages[error];
-      return
-      <li>
-        {errorMessage}
-      </li>
-    })
-  },
-
   render: function() {
     const {isNumericError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError} = this.errorMessages;
     const {showDialog, showError,errorBackendMessages} = this.state;

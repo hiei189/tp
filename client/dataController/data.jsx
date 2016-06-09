@@ -170,5 +170,21 @@ data = {
         }
       }
     });
+  },
+
+  updateUserData:function(model,callback){
+    var token = Session.get('token');
+    backendCom.updateUserData(token.access_token,model.firstname,model.lastname,model.dob,
+    model.email, model.telephone,model.gender,
+      (err,response)=>{
+        console.log(response);
+        if(!err){
+          callback(response.data);
+          if(response.data.success){
+
+          }
+        }
+      }
+    )
   }
 }

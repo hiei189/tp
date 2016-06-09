@@ -179,6 +179,30 @@ backendCom = {
     );
   },
 
+  updateUserData:function(token,firstname,lastname,datebirth,email,telephone,gender,callback){
+    HTTP.call(
+      'POST',
+      basic_url + 'account',
+      {
+        headers:{
+          'Authorization':'Bearer '+token,
+        },
+        data:{
+          'firstname': firstname,
+          'lastname' : lastname,
+          'dob': datebirth,
+          'email': email,
+          'telephone': telephone,
+          'gender' : gender
+        }
+      },
+      (err,response)=>{
+        callback(err,response);
+        return;
+      }
+    )
+  },
+
   socialLogin:function(email,fbToken,token,callback){
     HTTP.call(
       'POST',
@@ -316,7 +340,7 @@ backendCom = {
   },
 
   getPlaces:function () {
-    
+
   },
 
   searchInPlaces:function(search,token,callback){
