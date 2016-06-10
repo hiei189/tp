@@ -1,7 +1,6 @@
 formsController = {
   getAddresses:function(token,callback){
     backendCom.getAddresses(token,(err,response)=>{
-      console.log(response);
       callback(err,response);
     });
   },
@@ -19,7 +18,6 @@ formsController = {
   searchInPlaces:function(search,callback){
     const token = Session.get('token');
     backendCom.searchInPlaces(search,token.access_token,(err,response)=>{
-      console.log(response);
       if(!err){
         if(response.content!=="[]"){
           callback(response.data);
@@ -45,7 +43,6 @@ formsController = {
         model.reference,
         token,
         (err,response)=>{
-          console.log(response);
           if(response.data.success){
             callback(response.data);
           }else{
@@ -72,8 +69,6 @@ formsController = {
         '0', //revisar anonymous
         token,
         (err,response)=>{
-          console.log(err);
-          console.log(response);
           //NO RECIBE DATA DE RESPUESTA,PERO SI GRABA.
           if(response.data.success){
             callback(response.data);

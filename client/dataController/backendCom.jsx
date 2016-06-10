@@ -371,7 +371,6 @@ backendCom = {
         }
       },
       (err,response)=>{
-        console.log(response);
         callback(err,response);
         return;
       });
