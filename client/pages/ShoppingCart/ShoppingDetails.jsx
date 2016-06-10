@@ -135,8 +135,8 @@ ShoppingDetails = React.createClass({
           case 0:
               let {model} = this.shipping;
               if(model.place_id!=='X')
-              {
-                model.place_id = this.place_id;
+              { console.log(this.place_id);
+                //model.place_id = this.place_id;
                 if(model.selectedAddress === 'NUEVA DIRECCION'){
                   this.setState({
                     loadingButton: true
@@ -193,7 +193,7 @@ ShoppingDetails = React.createClass({
             <Tab value = {0}
               icon={<div><MapsLocalShipping style={styles.icons}/></div>}>
               <ShoppingDetailsTabTemplate
-                title={'Datos de envío'}
+                title={'Dirección de entrega'}
                 onInvalid = {this.handleInvalidShipping}
                 Component = {ShippingPage}
                 onValid = {this.handleValidShipping}/>

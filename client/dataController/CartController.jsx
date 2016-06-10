@@ -46,18 +46,26 @@ CartController = {
     let items={};
     let qty = 0;
     backendCom.getAllCart(token,(err,response)=>{
-      if(response.data.success){
+      if(!response.data){
+        Session.set('isShoppingCartEmpty',true);
+        Session.set('cartshopNumber','0');
+        Session.set('shoppingCart','');
+        return;
+      }
+
+      if (response.data.success){
         response.data.data.products.map((item)=>{
           qty = qty + Number(item.quantity);
         });
         Session.set('shoppingCart',response.data.data);
         Session.set('cartshopNumber',(qty).toString());
         Session.set('isShoppingCartEmpty',false);
-      }else{
+      }else {
         Session.set('isShoppingCartEmpty',true);
         Session.set('cartshopNumber','0');
         Session.set('shoppingCart','');
       }
+
       callback(err,response);
       return
     });

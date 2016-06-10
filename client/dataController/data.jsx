@@ -85,7 +85,7 @@ data = {
     backendCom.loginUser(token.access_token,email,password,
       (err,response)=>{
         if(response.data.success){
-          CartController.getAllItems(token,(err,response)=>{});
+          CartController.getAllItems(token.access_token,(err,response)=>{});
           if(persistent){
             Session.setPersistent('token',token); //Si se solicita recordar sesion
             Session.setPersistent('user',response.data.data);
@@ -158,7 +158,6 @@ data = {
 
   createUser:function(model,callback){
     var token = Session.get('token');
-    console.log(model);
     backendCom.createUser(token.access_token,model.firstname,model.lastname,model.email,
     model.telephone,model.password,model.repeatedPassword,model.gender,model.datebirth,
     (err,response)=>{
@@ -177,7 +176,6 @@ data = {
     backendCom.updateUserData(token.access_token,model.firstname,model.lastname,model.dob,
     model.email, model.telephone,model.gender,
       (err,response)=>{
-        console.log(response);
         if(!err){
           callback(response.data);
           if(response.data.success){
@@ -185,6 +183,23 @@ data = {
           }
         }
       }
-    )
+    );
+  },
+
+  updatePassword:function(password,repeatedPassword,callback){
+    var token = Session.get('token');
+    if(password.length>6){
+      if(password === repeatedPassword){
+        backendCom.updatePassword(token.access_token,password,repeatedPassword,
+          (err,response)=>{
+            if(err){
+              throw new Meteor.error('Error updating password');
+            }
+            callback(response.data);
+            return;
+          }
+        )
+      }
+    }
   }
 }

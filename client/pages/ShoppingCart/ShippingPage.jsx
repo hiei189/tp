@@ -71,6 +71,7 @@ ShippingPage = React.createClass({
     });
 
     formsController.getAddresses(this.token.access_token,(err,response)=>{
+      console.log(response);
       if(response.data.success){
         this.setState({
           savedAddress: response.data.data,
@@ -81,6 +82,15 @@ ShippingPage = React.createClass({
         this.setState({
           noAddresses: true,
           addressesLoading:false
+        });
+      }
+    });
+
+    formsController.getAllPlaces((res)=>{
+      if(this.isMounted()){
+        this.setState({
+          allPlaces: res,
+          gotAllPlaces:true
         });
       }
     });
@@ -118,7 +128,9 @@ ShippingPage = React.createClass({
       errorPlace:'',
       place:'',
       validForm:false,
-      selectedAddress: 'NUEVA DIRECCION'
+      selectedAddress: 'NUEVA DIRECCION',
+      gotAllPlaces: false,
+      placeIdMenu:''
     };
   },
 
@@ -131,62 +143,62 @@ ShippingPage = React.createClass({
     });
   },
 
-  _handleAutoComplete:function(search){
-
-    this.placeFinished = 'NOT FINISHED';
-    this.place_id = 'X';
-    formsController.shipping.place_id = this.place_id;
-
-    this.setState({
-      place: search
-    });
-    if(search.length>=3){
-      this.setState({
-        placesDataSource: [{
-          text:'Escoge un lugar válido',
-          value: (
-            <MenuItem disabled={true}>
-              <CircularProgress size={0.5} style={{textAlign:'center',width:'100%',margin:0,padding:0}}/>
-            </MenuItem>
-              )
-          }]
-      });
-
-      formsController.searchInPlaces(search,this.token.access_token,(places)=>{
-        if (places !== 'NO_DATA'){
-          var arrayPlaces = places.map((place)=>{
-            return  {
-                text: place.name,
-                value:
-                  (<MenuItem
-                    primaryText={place.name}
-                    id={place.place_id}
-                    onTouchTap = {this._handleTouchMenuAutoComplete}
-                   />),
-              }
-          });
-          this.setState({
-            placesDataSource: arrayPlaces
-          });
-        }else{
-          this.setState({
-            placesDataSource: [{
-              text:'No encontramos ese lugar',
-              value: (
-                <MenuItem primaryText={'No encontramos ese lugar'} disabled={true}/>
-              )
-              }]
-          });
-        }
-      });
-    }else{
-      this.setState({
-        placesDataSource: [{
-          text: 'Escoge un lugar válido',
-          value: <MenuItem primaryText={'Ingresa un lugar. Puedes elegir entre La Esperanza, Victor Larco Herrera, El Porvenir/Alto Trujillo, Trujillo, El Porvenir, Huanchaco, Florencia de Mora, Laredo, Moche, Salaverry'} disabled={true}/>}]
-      });
-    }
-  },
+  // _handleAutoComplete:function(search){
+  //
+  //   this.placeFinished = 'NOT FINISHED';
+  //   this.place_id = 'X';
+  //   formsController.shipping.place_id = this.place_id;
+  //
+  //   this.setState({
+  //     place: search
+  //   });
+  //   if(search.length>=3){
+  //     this.setState({
+  //       placesDataSource: [{
+  //         text:'Escoge un lugar válido',
+  //         value: (
+  //           <MenuItem disabled={true}>
+  //             <CircularProgress size={0.5} style={{textAlign:'center',width:'100%',margin:0,padding:0}}/>
+  //           </MenuItem>
+  //             )
+  //         }]
+  //     });
+  //
+  //     formsController.searchInPlaces(search,(places)=>{
+  //       if (places !== 'NO_DATA'){
+  //         var arrayPlaces = places.map((place)=>{
+  //           return  {
+  //               text: place.name,
+  //               value:
+  //                 (<MenuItem
+  //                   primaryText={place.name}
+  //                   id={place.place_id}
+  //                   onTouchTap = {this._handleTouchMenuAutoComplete}
+  //                  />),
+  //             }
+  //         });
+  //         this.setState({
+  //           placesDataSource: arrayPlaces
+  //         });
+  //       }else{
+  //         this.setState({
+  //           placesDataSource: [{
+  //             text:'No encontramos ese lugar',
+  //             value: (
+  //               <MenuItem primaryText={'No encontramos ese lugar'} disabled={true}/>
+  //             )
+  //             }]
+  //         });
+  //       }
+  //     });
+  //   }else{
+  //     this.setState({
+  //       placesDataSource: [{
+  //         text: 'Escoge un lugar válido',
+  //         value: <MenuItem primaryText={'Ingresa un lugar. Puedes elegir entre La Esperanza, Victor Larco Herrera, El Porvenir/Alto Trujillo, Trujillo, El Porvenir, Huanchaco, Florencia de Mora, Laredo, Moche, Salaverry'} disabled={true}/>}]
+  //     });
+  //   }
+  // },
 
   getAddresses: function(){
     return this.state.savedAddress.addresses.map((address)=>{
@@ -208,6 +220,7 @@ ShippingPage = React.createClass({
       this.place_id=address.place_id;
       this.placeFinished = 'FINISHED';
       formsController.shipping.isSavedAddress = true;
+      console.log(address);
       this.setState({
         disabledForm: true,
         firstname: address.firstname,
@@ -215,7 +228,8 @@ ShippingPage = React.createClass({
         telephone: address.telephone,
         place: address.place,
         shippingAddress:address.address_1,
-        reference: address.reference
+        reference: address.reference,
+        placeIdMenu:address.place_id
       });
     }else{
       this.placeFinished = 'NOT FINISHED';
@@ -228,38 +242,48 @@ ShippingPage = React.createClass({
         telephone: '',
         place: '',
         shippingAddress: '',
-        reference: ''
+        reference: '',
+        placeIdMenu:''
       });
     }
-    this.validatePlace();
+    //this.validatePlace(); DESCOMENTAR CON AutoComplete
   },
 
-  validatePlace:function(event){
-   if(this.place_id === 'X'){
-     this.setState({
-       errorPlace: 'Debe seleccionar un lugar válido'
-     });
-   }else{
-     this.setState({
-       errorPlace: ''
-     });
-   }
-  },
+  //DESCOMENTAR CON AutoComplete
+  // validatePlace:function(event){
+  //  if(this.place_id === 'X'){
+  //    this.setState({
+  //      errorPlace: 'Debe seleccionar un lugar válido'
+  //    });
+  //  }else{
+  //    this.setState({
+  //      errorPlace: ''
+  //    });
+  //  }
+  // },
 
   validateForm:function(){
     const {onValid} = this.props;
-    if(this.place_id==='X'){
-      this.setState({
-        validForm: false
-      });
-    }else{
-      model = this.refs.shippingForm.getModel();
-      model.place_id = this.place_id;
-      onValid(this.shipping,model);
-      this.setState({
+    const model = this.refs.shippingForm.getModel();
+    this.setState({
         validForm: true
-      });
-    }
+    });
+    onValid(this.shipping,model);
+    //CON AUTO COMPLETE DESCOMENTAR
+    // const {onValid} = this.props;
+    // if(this.place_id==='X'){
+    //   this.setState({
+    //     validForm: false
+    //   });
+    // }else{
+    //   model = this.refs.shippingForm.getModel();
+    //   console.log(model);
+    //   model.place_id = this.place_id;
+    //   onValid(this.shipping,model);
+    //   this.setState({
+    //     validForm: true
+    //   });
+    // }
   },
 
   invalidForm:function(){
@@ -269,10 +293,16 @@ ShippingPage = React.createClass({
     });
   },
 
+  getAllPlaces:function(){
+    return this.state.allPlaces.map((place)=>{
+      return <MenuItem key={place.place_id} value={place.place_id} primaryText={place.name}/>
+    });
+  },
+
   render: function() {
     let { wordsError } = this.errorMessages;
+    const { gotAllPlaces } = this.state;
     return (
-
           <Formsy.Form
             ref={'shippingForm'}
             onValid={this.validateForm}
@@ -328,7 +358,22 @@ ShippingPage = React.createClass({
               value = {this.state.telephone}
               disabled = {this.state.disabledForm}
             />
-            <AutoComplete floatingLabelText="Lugar"
+
+            <FormsySelect
+              name='place_id'
+              ref = 'place_id'
+              required
+              floatingLabelText="Lugar"
+              id ="place_id"
+              style ={styles.field}
+              onChange = {this.handlePlaceMenu}
+              value = {this.state.placeIdMenu}
+              disabled = {this.state.disabledForm}
+              >
+              {gotAllPlaces?this.getAllPlaces():<CircularProgress size={0.5}/>}
+            </FormsySelect>
+
+            {/*<AutoComplete floatingLabelText="Lugar"
               type="string"
               id ="shippingPlace"
               searchText = {this.state.place}
@@ -341,7 +386,7 @@ ShippingPage = React.createClass({
               fullWidth={true}
               style ={styles.field}
               errorText = {this.state.errorPlace}
-              dataSource = {this.state.placesDataSource}/>
+              dataSource = {this.state.placesDataSource}/>*/}
 
             <FormsyText
               name='shippingAddress'
@@ -370,8 +415,6 @@ ShippingPage = React.createClass({
               disabled = {this.state.disabledForm}
             />
           </Formsy.Form>
-
     );
   }
-
 });

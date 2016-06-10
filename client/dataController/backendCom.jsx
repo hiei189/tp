@@ -203,6 +203,28 @@ backendCom = {
     )
   },
 
+  updatePassword:function(token, password, confirm, callback){
+    HTTP.call(
+      'PUT',
+      basic_url + 'account/password',
+      {
+        headers:{
+          'Authorization':'Bearer '+token,
+          'X-Oc-Merchant-Language' : 'es',
+          'X-Oc-Store-Id': '0'
+        },
+        data: {
+          'password': password,
+          'confirm': confirm
+        }
+      },
+      (err,response)=>{
+        callback(err,response);
+        return;
+      }
+    )
+  },
+
   socialLogin:function(email,fbToken,token,callback){
     HTTP.call(
       'POST',
@@ -339,8 +361,20 @@ backendCom = {
     );
   },
 
-  getPlaces:function () {
-
+  getAllPlaces:function (token,callback) {
+    HTTP.call(
+      'GET',
+      basic_url + 'places',
+      {
+        headers:{
+          Authorization: 'Bearer ' + token
+        }
+      },
+      (err,response)=>{
+        console.log(response);
+        callback(err,response);
+        return;
+      });
   },
 
   searchInPlaces:function(search,token,callback){

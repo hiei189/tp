@@ -77,7 +77,9 @@ UserPage = React.createClass({
       fbUser:false,
       showDialog: false,
       showError: false,
-      disabledButton:true
+      disabledButton:true,
+      password:'',
+      repeatedPassword:''
     };
   },
 
@@ -106,9 +108,6 @@ UserPage = React.createClass({
         }
       });
     });
-  },
-  componentDidMount: function() {
-
   },
 
   handleUserGenderMenu: function(event, gender, index) {
@@ -152,13 +151,16 @@ UserPage = React.createClass({
   },
 
   onValidSubmit:function(model){
-    data.updateUserData(model,(res)=>{
+
+    const updateData=()=>{
+      data.updateUserData(model,(res)=>{
       if(res.success){
         if(this.isMounted()){
           this.setState({
             showDialog:true,
             showError:false,
-            user:model
+            user:model,
+            gotUserUpdated:true
           });
           Session.set('user',model);
         }
@@ -167,30 +169,84 @@ UserPage = React.createClass({
           this.setState({
             showDialog: true,
             showError:true,
-            errorBackendMessages: res.error
+            errorBackendMessages: res.error,
+            gotUserUpdated:false
           });
         }
       }
-    });
+    })};
+
+    const {password,repeatedPassword} = model;
+
+    const updatePassword= () => {data.updatePassword(password,repeatedPassword,
+      (res)=>{
+        if(res.success){
+          if(this.isMounted()){
+            this.setState({
+              gotPassUpdated:true,
+              password:'',
+              repeatedPassword:''
+            });
+          }
+        }
+    })};
+
+
+    if(password){
+      this.setState({
+        shouldWait2Responses: true
+      });
+      updateData();
+      updatePassword();
+    }else{
+      this.setState({
+        shouldWait2Responses:false
+      });
+      updateData();
+    }
+
+  },
+
+  showDialog:function(){
+    const {showDialog,showError,shouldWait2Responses,errorBackendMessages,gotPassUpdated,gotUserUpdated} = this.state;
+    if(showDialog){
+      if(showError){
+        return (
+          <DialogDefault onRequestClose={()=>this.setState({showDialog:false})} title={'Cuenta no actualizada'}>
+            Hubieron errores actualizando tu cuenta:
+            <ErrorMessages errorBackendMessages = {errorBackendMessages}/>
+          </DialogDefault>
+        );
+      }else{
+        if(shouldWait2Responses){
+          if(gotPassUpdated && gotUserUpdated){
+            return(
+              <DialogDefault onRequestClose={()=>this.setState({showDialog:false,shouldWait2Responses:false})} title={'Cuenta actualizada'}>
+                Tus datos y tu contraseña fueron actualizados correctamente!
+              </DialogDefault>
+            );
+          }else{
+            return null;
+          }
+        }else{
+          return (<DialogDefault onRequestClose={()=>this.setState({showDialog:false})} title={'Cuenta actualizada'}>
+            Tus datos fueron actualizados correctamente!
+          </DialogDefault>);
+        }
+      }
+    }
+    return null;
+
   },
 
   render: function() {
-    const {gotUser,user,showDialog,showError,errorBackendMessages,disabledButton} = this.state;
+    const {gotUser,user,showDialog,showError,errorBackendMessages,disabledButton, password,repeatedPassword} = this.state;
     const {isNumericError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError} = this.errorMessages;
 
     if(gotUser){
       return (
         <Paper style={styles.paperContainer}>
-          {showDialog?(showError?
-            <DialogDefault onRequestClose={()=>this.setState({showDialog:false})} title={'Cuenta no actualizada'}>
-              Hubieron errores actualizando tu cuenta:
-              <ErrorMessages errorBackendMessages = {errorBackendMessages}/>
-            </DialogDefault>
-            :
-            <DialogDefault onRequestClose={()=>this.setState({showDialog:false})} title={'Cuenta actualizada'}>
-              Tus datos fueron actualizados correctamente!
-            </DialogDefault>
-          ):null}
+          {this.showDialog()}
           <div>
             <h2 style={styles.paperTitle}>Datos de usuario</h2>
           </div>
@@ -292,7 +348,7 @@ UserPage = React.createClass({
               name = 'password'
               id ='password'
               type="password"
-              value={user.password}
+              value={password}
               style = {styles.field}
             />
 
@@ -307,7 +363,7 @@ UserPage = React.createClass({
               name = 'repeatedPassword'
               id ='repeatedPassword'
               type="password"
-              value={user.repeatedPassword}
+              value={repeatedPassword}
               style = {styles.field}
             />
 

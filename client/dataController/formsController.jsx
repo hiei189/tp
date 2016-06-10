@@ -6,8 +6,19 @@ formsController = {
     });
   },
 
-  searchInPlaces:function(search,token,callback){
-    backendCom.searchInPlaces(search,token,(err,response)=>{
+  getAllPlaces:function(callback){
+    const token = Session.get('token');
+    backendCom.getAllPlaces(token.access_token,(err,response)=>{
+      if(err){
+        throw new Meteor.error('Error getting available places');
+      }
+      callback(response.data);
+    });
+  },
+
+  searchInPlaces:function(search,callback){
+    const token = Session.get('token');
+    backendCom.searchInPlaces(search,token.access_token,(err,response)=>{
       console.log(response);
       if(!err){
         if(response.content!=="[]"){
@@ -34,6 +45,7 @@ formsController = {
         model.reference,
         token,
         (err,response)=>{
+          console.log(response);
           if(response.data.success){
             callback(response.data);
           }else{
