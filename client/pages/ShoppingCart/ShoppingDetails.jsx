@@ -135,13 +135,13 @@ ShoppingDetails = React.createClass({
           case 0:
               let {model} = this.shipping;
               if(model.place_id!=='X')
-              { console.log(this.place_id);
+              {
                 //model.place_id = this.place_id;
                 if(model.selectedAddress === 'NUEVA DIRECCION'){
                   this.setState({
                     loadingButton: true
                   });
-                  formsController.shippingController.addAddress(model,this.token.access_token,
+                  formsController.shippingController.addAddress(model,
                     (response)=>{
                       Session.set('shipping.model',response.data);
                       Session.set('shipping.id',response.data.address_id);
@@ -169,7 +169,6 @@ ShoppingDetails = React.createClass({
               model = this.delivery.model;
               formsController.deliveryController.addDelivery(model,this.token.access_token,
                 (response)=>{
-                  console.log(response);
                 });
             break;
           case 2:

@@ -33,7 +33,8 @@ formsController = {
   },
 
   shippingController:{
-    addAddress:function(model,token,callback){
+    addAddress:function(model,callback){
+      const token = Session.get('token');
       backendCom.addAddress(
         model.firstname,
         model.lastname,
@@ -41,13 +42,53 @@ formsController = {
         model.place_id,
         model.shippingAddress,
         model.reference,
-        token,
+        token.access_token,
         (err,response)=>{
           if(response.data.success){
             callback(response.data);
           }else{
 
           }
+        }
+      );
+    },
+
+    updateAddress:function(model,callback){
+      const token = Session.get('token');
+      backendCom.updateAddress(
+        model.firstname,
+        model.lastname,
+        model.telephone,
+        model.place_id,
+        model.shippingAddress,
+        model.reference,
+        model.selectedAddress,
+        token.access_token,
+        (err,response)=>{
+          if(err){
+            throw new Meteor.error('Error de conexion');
+          }
+          callback(response.data);
+        }
+      );
+    },
+
+    removeAddress:function(model,callback){
+      const token = Session.get('token');
+      backendCom.removeAddress(
+        model.firstname,
+        model.lastname,
+        model.telephone,
+        model.place_id,
+        model.shippingAddress,
+        model.reference,
+        model.selectedAddress,
+        token.access_token,
+        (err,response)=>{
+          if(err){
+            throw new Meteor.error('Error de conexion');
+          }
+          callback(response.data);
         }
       );
     }

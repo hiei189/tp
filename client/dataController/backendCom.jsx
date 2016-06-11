@@ -418,6 +418,62 @@ backendCom = {
     );
   },
 
+  updateAddress:function(firstname,lastname,telephone,place_id,address,reference, address_id, token, callback){
+    HTTP.call(
+      'POST',
+      basic_url + 'shippingaddress',
+      {
+        headers:{
+          'Authorization':'Bearer '+token,
+          'X-Oc-Merchant-Language' : 'es',
+          'X-Oc-Store-Id': '0'
+        },
+        data:{
+          'firstname': firstname,
+          'lastname': lastname,
+          'telephone': telephone,
+          'place_id': place_id,
+          'address_1': address,
+          'reference': reference,
+          'address_id':address_id,
+          'shipping_address': 'edit'
+        }
+      },
+      (err,response)=>{
+        callback(err,response);
+        return;
+      }
+    );
+  },
+
+  removeAddress:function(firstname,lastname,telephone,place_id,address,reference, address_id,token,callback){
+    HTTP.call(
+      'POST',
+      basic_url + 'shippingaddress',
+      {
+        headers:{
+          'Authorization':'Bearer '+token,
+          'X-Oc-Merchant-Language' : 'es',
+          'X-Oc-Store-Id': '0'
+        },
+        data:{
+          'firstname': firstname,
+          'lastname': lastname,
+          'telephone': telephone,
+          'place_id': place_id,
+          'address_1': address,
+          'reference': reference,
+          'address_id':address_id,
+          'shipping_address': 'delete'
+        }
+      },
+      (err,response)=>{
+        callback(err,response);
+        return;
+      }
+    );
+  },
+
   getAddresses:function(token,callback){
     HTTP.call(
       'GET',

@@ -1,5 +1,5 @@
-const { TextField,TimePicker, SelectField, DatePicker,RaisedButton,MenuItem,CircularProgress,AutoComplete,FloatingActionButton} = mui;
-const {ContentSend} = mui.SvgIcons;
+const { TextField,IconButton, TimePicker, SelectField, DatePicker,RaisedButton,MenuItem,CircularProgress,AutoComplete,FloatingActionButton} = mui;
+const { ContentSend,ImageEdit,ContentRemoveCircleOutline, ActionCheckCircle } = mui.SvgIcons;
 
 const Colors = mui.Styles.Colors;
 
@@ -24,6 +24,10 @@ const styles = {
     margin: 'auto',
     width:'100%',
     minWidth:'212',
+  },
+  fieldWithIcons: {
+    margin: 'auto',
+    width:'100%'
   },
   form:{
     margin: 'auto',
@@ -71,7 +75,6 @@ ShippingPage = React.createClass({
     });
 
     formsController.getAddresses(this.token.access_token,(err,response)=>{
-      console.log(response);
       if(response.data.success){
         this.setState({
           savedAddress: response.data.data,
@@ -130,7 +133,9 @@ ShippingPage = React.createClass({
       validForm:false,
       selectedAddress: 'NUEVA DIRECCION',
       gotAllPlaces: false,
-      placeIdMenu:''
+      placeIdMenu:'',
+      showIcons:false,
+      showCheck:false
     };
   },
 
@@ -214,13 +219,12 @@ ShippingPage = React.createClass({
   handleChangeMenuAddresses:function(event, value, index){
     this.setState({selectedAddress:value});
     this.shipping = value;
-    formsController.shipping.address_id = value; //GUARDAR ADDRES_ID SELECCIONADO
+    formsController.shipping.address_id = value; //GUARDAR ADDRESS_ID SELECCIONADO
     if (value !== 'NUEVA DIRECCION'){
       let address = findById(this.state.savedAddress.addresses,value);
       this.place_id=address.place_id;
       this.placeFinished = 'FINISHED';
       formsController.shipping.isSavedAddress = true;
-      console.log(address);
       this.setState({
         disabledForm: true,
         firstname: address.firstname,
@@ -229,24 +233,33 @@ ShippingPage = React.createClass({
         place: address.place,
         shippingAddress:address.address_1,
         reference: address.reference,
-        placeIdMenu:address.place_id
+        placeIdMenu:address.place_id,
+        disabledIcons: false,
+        showCheck: false,
+        showIcons:true
       });
     }else{
       this.placeFinished = 'NOT FINISHED';
       formsController.shipping.isSavedAddress = false;  //DETERMINAR SI HUBO CAMBIO
       this.place_id = 'X';
-      this.setState({
-        disabledForm: false,
-        firstname: '',
-        lastname: '',
-        telephone: '',
-        place: '',
-        shippingAddress: '',
-        reference: '',
-        placeIdMenu:''
-      });
+      this.emptyForm();
     }
     //this.validatePlace(); DESCOMENTAR CON AutoComplete
+  },
+
+  emptyForm:function(){
+    this.setState({
+      disabledForm: false,
+      firstname: '',
+      lastname: '',
+      telephone: '',
+      place: '',
+      shippingAddress: '',
+      reference: '',
+      placeIdMenu:'',
+      disabledIcons:true,
+      showIcons:false
+    });
   },
 
   //DESCOMENTAR CON AutoComplete
@@ -299,28 +312,89 @@ ShippingPage = React.createClass({
     });
   },
 
+  makeEditCurrentAddress:function(){
+    this.setState({
+      disabledForm:false,
+      showCheck:true
+    });
+  },
+
+  saveEditCurrentAddress:function(){
+    const { validForm } = this.state;
+    if(validForm){
+      const model = this.refs.shippingForm.getModel();
+      formsController.shippingController.updateAddress(model,
+        (res)=>{
+          if(res.success){
+            if(this.isMounted()){
+              this.setState({
+                disabledForm:true,
+                showCheck:false,
+              });
+            }
+          }
+        });
+    }
+  },
+
+  removeCurrentAddress:function(){
+    const { selectedAddress } = this.state;
+    const { addresses } = this.state.savedAddress;
+    const model = this.refs.shippingForm.getModel();
+    formsController.shippingController.removeAddress(model,(res)=>{
+      if(res.success){
+        if(this.isMounted()){
+          const newAdresses = addresses.filter((obj) =>{
+            return obj.address_id !== selectedAddress;
+          });
+          this.setState({
+            'savedAddress': {...this.state.savedAddress,addresses:newAdresses},
+            'selectedAddress': 'NUEVA DIRECCION'
+          });
+          this.emptyForm();
+        }
+      }
+    })
+  },
+
   render: function() {
     let { wordsError } = this.errorMessages;
-    const { gotAllPlaces } = this.state;
+    const { gotAllPlaces,disabledIcons,showCheck,showIcons } = this.state;
     return (
           <Formsy.Form
             ref={'shippingForm'}
             onValid={this.validateForm}
             onInvalid={this.invalidForm}
             style ={styles.form}>
-
-            <FormsySelect
-              name='selectedAddress'
-              ref='selectedAddress'
-              required
-              onChange={this.handleChangeMenuAddresses}
-              style ={styles.field}
-              floatingLabelText="Elige una dirección"
-              value={this.state.selectedAddress}>
-              <MenuItem value={'NUEVA DIRECCION'} primaryText="Nueva dirección"/>
-              {!this.state.addressesLoading && !this.state.noAddresses?this.getAddresses():<div/>}
-            </FormsySelect>
-
+            <div style={{display:'flex'}}>
+              <div style={{width:'100%'}}>
+                <FormsySelect
+                  name='selectedAddress'
+                  ref='selectedAddress'
+                  required
+                  onChange={this.handleChangeMenuAddresses}
+                  style ={styles.fieldWithIcons}
+                  fullWidth={true}
+                  floatingLabelText="Elige una dirección"
+                  value={this.state.selectedAddress}>
+                  <MenuItem value={'NUEVA DIRECCION'} primaryText="Nueva dirección"/>
+                  {!this.state.addressesLoading && !this.state.noAddresses?this.getAddresses():<div/>}
+                </FormsySelect>
+              </div>
+              {showIcons?
+                <div style={{minWidth:'96px',alignSelf:'center'}}>
+                  {showCheck?
+                  <IconButton tooltip={'Editar dirección'} onTouchTap={this.saveEditCurrentAddress}>
+                    <ActionCheckCircle />
+                  </IconButton> :
+                  <IconButton tooltip={'Editar dirección'} disabled={disabledIcons} onTouchTap={this.makeEditCurrentAddress}>
+                    <ImageEdit />
+                  </IconButton>}
+                  <IconButton tooltip={'Borrar dirección'} disabled={disabledIcons} onTouchTap={this.removeCurrentAddress}>
+                    <ContentRemoveCircleOutline  />
+                  </IconButton>
+                </div>:null}
+            </div>
             <FormsyText
               name='firstname'
               ref='firstname'
