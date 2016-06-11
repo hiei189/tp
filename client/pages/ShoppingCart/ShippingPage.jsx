@@ -1,5 +1,5 @@
-const { TextField,IconButton, TimePicker, SelectField, DatePicker,RaisedButton,MenuItem,CircularProgress,AutoComplete,FloatingActionButton} = mui;
-const { ContentSend,ImageEdit,ContentRemoveCircleOutline, ActionCheckCircle } = mui.SvgIcons;
+const { TextField,IconButton, Snackbar, TimePicker, SelectField, DatePicker,RaisedButton,MenuItem,CircularProgress,AutoComplete,FloatingActionButton} = mui;
+const { ContentSend,ImageEdit,ActionDelete, ActionCheckCircle } = mui.SvgIcons;
 
 const Colors = mui.Styles.Colors;
 
@@ -75,17 +75,19 @@ ShippingPage = React.createClass({
     });
 
     formsController.getAddresses(this.token.access_token,(err,response)=>{
-      if(response.data.success){
-        this.setState({
-          savedAddress: response.data.data,
-          noAddresses: false,
-          addressesLoading:false
-        });
-      }else{
-        this.setState({
-          noAddresses: true,
-          addressesLoading:false
-        });
+      if(this.isMounted()){
+        if(response.data.success){
+          this.setState({
+            savedAddress: response.data.data,
+            noAddresses: false,
+            addressesLoading:false
+          });
+        }else{
+          this.setState({
+            noAddresses: true,
+            addressesLoading:false
+          });
+        }
       }
     });
 
@@ -135,7 +137,9 @@ ShippingPage = React.createClass({
       gotAllPlaces: false,
       placeIdMenu:'',
       showIcons:false,
-      showCheck:false
+      showCheck:false,
+      openSnackbarRemove:false,
+      openSnackbarEdit: false
     };
   },
 
@@ -216,49 +220,57 @@ ShippingPage = React.createClass({
     });
   },
 
-  handleChangeMenuAddresses:function(event, value, index){
-    this.setState({selectedAddress:value});
-    this.shipping = value;
-    formsController.shipping.address_id = value; //GUARDAR ADDRESS_ID SELECCIONADO
-    if (value !== 'NUEVA DIRECCION'){
-      let address = findById(this.state.savedAddress.addresses,value);
+  handleChangeMenuAddresses:function(event, selectedAddress, index){
+    const { savedAddress } = this.state;
+    this.setState({selectedAddress});
+    this.shipping = selectedAddress;
+    formsController.shipping.address_id = selectedAddress; //GUARDAR ADDRESS_ID SELECCIONADO
+    if (selectedAddress !== 'NUEVA DIRECCION'){
+      let address = findById(this.state.savedAddress.addresses,selectedAddress);
       this.place_id=address.place_id;
       this.placeFinished = 'FINISHED';
       formsController.shipping.isSavedAddress = true;
       this.setState({
         disabledForm: true,
-        firstname: address.firstname,
-        lastname: address.lastname,
-        telephone: address.telephone,
-        place: address.place,
-        shippingAddress:address.address_1,
-        reference: address.reference,
-        placeIdMenu:address.place_id,
-        disabledIcons: false,
         showCheck: false,
         showIcons:true
       });
+      this.fillForm(savedAddress,selectedAddress);
     }else{
       this.placeFinished = 'NOT FINISHED';
       formsController.shipping.isSavedAddress = false;  //DETERMINAR SI HUBO CAMBIO
       this.place_id = 'X';
       this.emptyForm();
+      this.setState({
+        disabledForm:false,
+        showIcons:false
+      });
     }
     //this.validatePlace(); DESCOMENTAR CON AutoComplete
   },
 
+  fillForm:function(savedAddress,selectedAddress){
+    const address = findById(savedAddress.addresses,selectedAddress);
+    this.setState({
+      firstname: address.firstname,
+      lastname: address.lastname,
+      telephone: address.telephone,
+      place: address.place,
+      shippingAddress:address.address_1,
+      reference: address.reference,
+      placeIdMenu:address.place_id,
+    });
+  },
+
   emptyForm:function(){
     this.setState({
-      disabledForm: false,
       firstname: '',
       lastname: '',
       telephone: '',
       place: '',
       shippingAddress: '',
       reference: '',
-      placeIdMenu:'',
-      disabledIcons:true,
-      showIcons:false
+      placeIdMenu:''
     });
   },
 
@@ -330,6 +342,7 @@ ShippingPage = React.createClass({
               this.setState({
                 disabledForm:true,
                 showCheck:false,
+                openSnackbarEdit:true
               });
             }
           }
@@ -337,158 +350,198 @@ ShippingPage = React.createClass({
     }
   },
 
-  removeCurrentAddress:function(){
-    const { selectedAddress } = this.state;
-    const { addresses } = this.state.savedAddress;
+  removeCurrentAddress:function(selectedAddress,savedAddress){
+    //const { selectedAddress } = this.state;
+    //const { addresses } = savedAddress;
+    //const { savedAddress } = this.state;
     const model = this.refs.shippingForm.getModel();
-    formsController.shippingController.removeAddress(model,(res)=>{
-      if(res.success){
-        if(this.isMounted()){
-          const newAdresses = addresses.filter((obj) =>{
-            return obj.address_id !== selectedAddress;
-          });
-          this.setState({
-            'savedAddress': {...this.state.savedAddress,addresses:newAdresses},
-            'selectedAddress': 'NUEVA DIRECCION'
-          });
-          this.emptyForm();
-        }
-      }
-    })
+    model.address_id = selectedAddress;
+    this.eraseAddressFromPage(selectedAddress,savedAddress);
+    this.timerToEraseAddress = setTimeout(()=>{ formsController.shippingController.removeAddress(model,(res)=>{}) }, 4000);
+  },
+
+  eraseAddressFromPage:function(selectedAddress,savedAddress){
+    const { addresses } = savedAddress;
+    this.addressesBeforeErase = savedAddress;
+    this.selectedAddressBeforeErase = selectedAddress;
+
+    const newAdresses = addresses.filter((obj) =>{
+      return obj.address_id !== selectedAddress;
+    });
+    this.setState({
+      'savedAddress': {...savedAddress,addresses:newAdresses},
+      'selectedAddress': 'NUEVA DIRECCION',
+      'openSnackbarRemove':true
+    });
+    this.emptyForm();
+    this.setState({
+      showIcons:false,
+      disabledForm:false
+    });
+  },
+
+  onRequestSnackbarRemoveClose:function(){
+    this.setState({
+      openSnackbarRemove: false
+    });
+  },
+
+  undoRemoveAddress:function(){
+    clearTimeout(this.timerToEraseAddress);
+    this.fillForm(this.addressesBeforeErase,this.selectedAddressBeforeErase);
+    this.setState({
+      showCheck:false,
+      disabledForm:true,
+      showIcons:true,
+      savedAddress: this.addressesBeforeErase,
+      selectedAddress:this.selectedAddressBeforeErase,
+      openSnackbarEdit: false
+    });
+  },
+
+  onRequestSnackbarEditedClose:function(){
+    this.setState({
+      openSnackbarEdit: false
+    });
   },
 
   render: function() {
     let { wordsError } = this.errorMessages;
-    const { gotAllPlaces,disabledIcons,showCheck,showIcons } = this.state;
+    const { gotAllPlaces,showCheck,showIcons, selectedAddress,openSnackbarRemove,addresses,savedAddress,openSnackbarEdit } = this.state;
     return (
-          <Formsy.Form
-            ref={'shippingForm'}
-            onValid={this.validateForm}
-            onInvalid={this.invalidForm}
-            style ={styles.form}>
-            <div style={{display:'flex'}}>
-              <div style={{width:'100%'}}>
-                <FormsySelect
-                  name='selectedAddress'
-                  ref='selectedAddress'
-                  required
-                  onChange={this.handleChangeMenuAddresses}
-                  style ={styles.fieldWithIcons}
-                  fullWidth={true}
-                  floatingLabelText="Elige una dirección"
-                  value={this.state.selectedAddress}>
-                  <MenuItem value={'NUEVA DIRECCION'} primaryText="Nueva dirección"/>
-                  {!this.state.addressesLoading && !this.state.noAddresses?this.getAddresses():<div/>}
-                </FormsySelect>
-              </div>
-              {showIcons?
-                <div style={{minWidth:'96px',alignSelf:'center'}}>
-                  {showCheck?
-                  <IconButton tooltip={'Editar dirección'} onTouchTap={this.saveEditCurrentAddress}>
-                    <ActionCheckCircle />
-                  </IconButton> :
-                  <IconButton tooltip={'Editar dirección'} disabled={disabledIcons} onTouchTap={this.makeEditCurrentAddress}>
-                    <ImageEdit />
-                  </IconButton>}
-                  <IconButton tooltip={'Borrar dirección'} disabled={disabledIcons} onTouchTap={this.removeCurrentAddress}>
-                    <ContentRemoveCircleOutline  />
-                  </IconButton>
-                </div>:null}
+      <div>
+        <Snackbar open={openSnackbarEdit} message={'Direccion editada'} onRequestClose={this.onRequestSnackbarEditedClose} autoHideDuration={2000}/>
+        <Snackbar open={openSnackbarRemove} message={'Direccion eliminada'} onRequestClose={this.onRequestSnackbarRemoveClose} autoHideDuration={4000} action={'DESHACER'} onActionTouchTap={this.undoRemoveAddress}/>
+        <Formsy.Form
+          ref={'shippingForm'}
+          onValid={this.validateForm}
+          onInvalid={this.invalidForm}
+          style ={styles.form}>
+          <div style={{display:'flex'}}>
+            <div style={{width:'100%'}}>
+              <FormsySelect
+                name='selectedAddress'
+                ref='selectedAddress'
+                required
+                onChange={this.handleChangeMenuAddresses}
+                style ={styles.fieldWithIcons}
+                fullWidth={true}
+                floatingLabelText="Elige una dirección"
+                value={this.state.selectedAddress}>
+                <MenuItem value={'NUEVA DIRECCION'} primaryText="Nueva dirección"/>
+                {!this.state.addressesLoading && !this.state.noAddresses?this.getAddresses():<div/>}
+              </FormsySelect>
             </div>
-            <FormsyText
-              name='firstname'
-              ref='firstname'
-              validations='isWords'
-              validationError={wordsError}
-              required
-              floatingLabelText="Nombres"
-              type="string"
-              id ="firstname"
-              value = {this.state.firstname}
-              style ={styles.field}
-              disabled = {this.state.disabledForm}
-            />
-            <FormsyText
-              name='lastname'
-              validations='isWords'
-              validationError={wordsError}
-              required
-              floatingLabelText="Apellidos"
-              type="string"
-              id ="lastname"
-              value = {this.state.lastname}
-              style ={styles.field}
-              disabled = {this.state.disabledForm}
-            />
-            <FormsyText
-              name='telephone'
-              validations='isNumeric'
-              validationError={wordsError}
-              required
-              floatingLabelText="Teléfono"
-              type="number"
-              id ="telephone"
-              style ={styles.field}
-              value = {this.state.telephone}
-              disabled = {this.state.disabledForm}
-            />
+            {showIcons?
+              <div style={{minWidth:'96px',alignSelf:'center'}}>
+                {showCheck?
+                <IconButton tooltip={'Editar dirección'} onTouchTap={this.saveEditCurrentAddress}>
+                  <ActionCheckCircle />
+                </IconButton> :
+                <IconButton tooltip={'Editar dirección'}  onTouchTap={this.makeEditCurrentAddress}>
+                  <ImageEdit />
+                </IconButton>}
+                <IconButton tooltip={'Borrar dirección'}  onTouchTap={(e) => this.removeCurrentAddress(selectedAddress,savedAddress, e)}>
+                  <ActionDelete  />
+                </IconButton>
+              </div>:null}
+          </div>
+          <FormsyText
+            name='firstname'
+            ref='firstname'
+            validations='isWords'
+            validationError={wordsError}
+            required
+            floatingLabelText="Nombres"
+            type="string"
+            id ="firstname"
+            value = {this.state.firstname}
+            style ={styles.field}
+            disabled = {this.state.disabledForm}
+          />
+          <FormsyText
+            name='lastname'
+            validations='isWords'
+            validationError={wordsError}
+            required
+            floatingLabelText="Apellidos"
+            type="string"
+            id ="lastname"
+            value = {this.state.lastname}
+            style ={styles.field}
+            disabled = {this.state.disabledForm}
+          />
+          <FormsyText
+            name='telephone'
+            validations='isNumeric'
+            validationError={wordsError}
+            required
+            floatingLabelText="Teléfono"
+            type="number"
+            id ="telephone"
+            style ={styles.field}
+            value = {this.state.telephone}
+            disabled = {this.state.disabledForm}
+          />
 
-            <FormsySelect
-              name='place_id'
-              ref = 'place_id'
-              required
-              floatingLabelText="Lugar"
-              id ="place_id"
-              style ={styles.field}
-              onChange = {this.handlePlaceMenu}
-              value = {this.state.placeIdMenu}
-              disabled = {this.state.disabledForm}
-              >
-              {gotAllPlaces?this.getAllPlaces():<CircularProgress size={0.5}/>}
-            </FormsySelect>
+          <FormsySelect
+            name='place_id'
+            ref = 'place_id'
+            required
+            floatingLabelText="Lugar"
+            id ="place_id"
+            style ={styles.field}
+            onChange = {this.handlePlaceMenu}
+            value = {this.state.placeIdMenu}
+            disabled = {this.state.disabledForm}
+            >
+            {gotAllPlaces?this.getAllPlaces():<CircularProgress size={0.5}/>}
+          </FormsySelect>
 
-            {/*<AutoComplete floatingLabelText="Lugar"
-              type="string"
-              id ="shippingPlace"
-              searchText = {this.state.place}
-              onBlur = {this.validatePlace}
-              onUpdateInput = {this._handleAutoComplete}
-              openOnFocus = {true}
-              filter={AutoComplete.noFilter}
-              disabled = {this.state.disabledForm}
-              required
-              fullWidth={true}
-              style ={styles.field}
-              errorText = {this.state.errorPlace}
-              dataSource = {this.state.placesDataSource}/>*/}
+          {/*<AutoComplete floatingLabelText="Lugar"
+            type="string"
+            id ="shippingPlace"
+            searchText = {this.state.place}
+            onBlur = {this.validatePlace}
+            onUpdateInput = {this._handleAutoComplete}
+            openOnFocus = {true}
+            filter={AutoComplete.noFilter}
+            disabled = {this.state.disabledForm}
+            required
+            fullWidth={true}
+            style ={styles.field}
+            errorText = {this.state.errorPlace}
+            dataSource = {this.state.placesDataSource}/>*/}
 
-            <FormsyText
-              name='shippingAddress'
-              validationError={wordsError}
-              required
-              floatingLabelText="Dirección de entrega"
-              type="string"
-              id ="shippingAddress"
-              multiLine={true}
-              rows = {2}
-              value = {this.state.shippingAddress}
-              style ={styles.field}
-              disabled = {this.state.disabledForm}
-            />
-            <FormsyText
-              name='reference'
-              validationError={wordsError}
-              required
-              floatingLabelText="Referencia"
-              type="string"
-              id ="reference"
-              multiLine={true}
-              rows={2}
-              value = {this.state.reference}
-              style ={styles.field}
-              disabled = {this.state.disabledForm}
-            />
-          </Formsy.Form>
+          <FormsyText
+            name='shippingAddress'
+            validationError={wordsError}
+            required
+            floatingLabelText="Dirección de entrega"
+            type="string"
+            id ="shippingAddress"
+            multiLine={true}
+            rows = {2}
+            value = {this.state.shippingAddress}
+            style ={styles.field}
+            disabled = {this.state.disabledForm}
+          />
+          <FormsyText
+            name='reference'
+            validationError={wordsError}
+            required
+            floatingLabelText="Referencia"
+            type="string"
+            id ="reference"
+            multiLine={true}
+            rows={2}
+            value = {this.state.reference}
+            style ={styles.field}
+            disabled = {this.state.disabledForm}
+          />
+        </Formsy.Form>
+      </div>
+
     );
   }
 });
