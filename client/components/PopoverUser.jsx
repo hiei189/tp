@@ -58,7 +58,6 @@ PopoverUser = React.createClass({
   render: function() {
     const { anchorEl,open,onRequestClose }  = this.props;
     const { gotUser,user,fbUser } = this.context;
-    console.log(user);
     return (
       <Popover
         open={open}
