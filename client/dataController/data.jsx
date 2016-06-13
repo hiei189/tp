@@ -102,6 +102,16 @@ data = {
     });
   },
 
+  logout:function(callback){
+    var token = Session.get('token');
+    backendCom.logout(token.access_token,(err,response)=>{
+      if(err){
+
+      }
+      callback(response.data);
+    });
+  },
+
   getCategories:function(callback){
     var token = Session.get('token');
     backendCom.getCategories(token.access_token,(err,response)=>{

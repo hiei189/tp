@@ -91,6 +91,25 @@ formsController = {
           callback(response.data);
         }
       );
+    },
+    selectAddress:function(model,callback){
+      const token = Session.get('token');
+      backendCom.selectAddress(
+        model.firstname,
+        model.lastname,
+        model.telephone,
+        model.place_id,
+        model.shippingAddress,
+        model.reference,
+        model.selectedAddress,
+        token.access_token,
+        (err,response)=>{
+          if(err){
+            throw new Meteor.error('Error de conexion');
+          }
+          callback(response.data);
+        }
+      );
     }
   },
 

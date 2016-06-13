@@ -134,41 +134,58 @@ ShoppingDetails = React.createClass({
         switch (this.state.currentTab) {
           case 0:
               let {model} = this.shipping;
-              if(model.place_id!=='X')
-              {
+              // if(model.place_id!=='X')
+              // {
                 //model.place_id = this.place_id;
                 if(model.selectedAddress === 'NUEVA DIRECCION'){
                   this.setState({
                     loadingButton: true
                   });
                   formsController.shippingController.addAddress(model,
-                    (response)=>{
-                      Session.set('shipping.model',response.data);
-                      Session.set('shipping.id',response.data.address_id);
-                      if (this.isMounted()){
-                        this.setState({
-                          loadingButton: false,
-                          currentTab: 1,
-                          disabledButton: true,
-                        });
-                      }
+                    (newSavedAddress)=>{
+                      model.selectedAddress = newSavedAddress.data.address_id;
+                      formsController.shippingController.selectAddress(model,
+                        (res)=>{
+                          if(this.isMounted()){
+                            this.setState({
+                              loadingButton:false,
+                              currentTab:1,
+                              disabledButton:true,
+                            });
+                          }
+                        }
+                      )
                   });
                 }
                 else{
-                  Session.set('shipping.model',model);
-                  Session.set('shipping.id',model.address_id);
-                  this.setState({
-                    loadingButton: false,
-                    currentTab:1,
-                    disabledButton: true,
-                  });
+                  formsController.shippingController.selectAddress(model,
+                    (res)=>{
+                      if(this.isMounted()){
+                        this.setState({
+                          loadingButton:false,
+                          currentTab:1,
+                          disabledButton:true,
+                        });
+                      }
+                    }
+                  )
                 }
-              }
+              // }
               break;
           case 1:
               model = this.delivery.model;
+              this.setState({
+                loadingButton: true
+              });
               formsController.deliveryController.addDelivery(model,this.token.access_token,
-                (response)=>{
+                (res)=>{
+                  if(this.isMounted()){
+                    this.setState({
+                      loadingButton:false,
+                      currentTab:2,
+                      disabledButton:true,
+                    });
+                  }
                 });
             break;
           case 2:
@@ -214,7 +231,7 @@ ShoppingDetails = React.createClass({
                 onValid = {this.handleValidPayment}/>
             </Tab>
           </Tabs>
-          <Footer onSend = {this.handleSubmit} total = {this.state.total} disabled={this.state.disabledButton}/>
+          <Footer loading={this.state.loadingButton} onSend = {this.handleSubmit} total = {this.state.total} disabled={this.state.disabledButton}/>
         </div>
       );
     }

@@ -30,7 +30,8 @@ App = React.createClass({
     screensize: React.PropTypes.string,
     user:React.PropTypes.object,
     gotUser: React.PropTypes.bool,
-    token: React.PropTypes.object
+    token: React.PropTypes.object,
+    fbUser:React.PropTypes.bool,
   },
 
   getChildContext() {
@@ -39,7 +40,8 @@ App = React.createClass({
       screensize: Session.get('device-screensize'),
       user: this.state.user,
       gotUser: this.state.gotUser,
-      token: Session.get('token')
+      token: Session.get('token'),
+      fbUser:this.state.fbUser
     };
   },
 
@@ -63,6 +65,7 @@ App = React.createClass({
         paddingBottom:96,
       },
       moveValue:'0px',
+      openPopoverUser:false
     };
   },
 
@@ -243,10 +246,22 @@ App = React.createClass({
     this.context.router.push('/shoppingcart');
   },
 
+  showUserPopover(event){
+    this.setState({
+      openPopoverUser: !this.state.openPopoverUser,
+      anchorElPopover: event.currentTarget
+    });
+  },
+
   getShoppingcart(){
     var tooltipUser = (this.state.gotUser?this.state.user.firstname + ' ' + this.state.user.lastname:'Inicia sesión');
     return(
       <div>
+        <IconButton
+        tooltip="Usuario"
+        onTouchTap={this.showUserPopover}>
+          <ActionAccountCircle color={Colors.white}/>
+        </IconButton>
         <IconButton
           tooltip="Carrito de compras"
           onTouchTap={this.showCartPage}>
@@ -270,25 +285,48 @@ App = React.createClass({
   },
 
   _handleCloseSession(){
+    data.logout((res)=>{
+      Session.setPersistent('user',{});
+      Session.setPersistent('token',{});
+      Session.setPersistent('shoppingCart',{});
+      Session.setPersistent('cartshopNumber',0);
+      Session.setPersistent('isShoppingCartEmpty',true);
+      data.initToken((err,response)=>{
+          if(!err){
+            if(this.isMounted()){
+              this.setState({
+                gotToken: true
+              });
+            }
+          }
+      });
+      if(this.isMounted()){
+        this.setState({
+          gotToken: false,
+          user:{},
+          gotUser:false,
+          fbUser:false
+        });
+      }
+    });
+    if(this.state.fbUser){
+      FB.logout(function(response) {
+        console.log(response);
+        Session.setPersistent('user',{});
+        Session.setPersistent('token',{});
+        Session.setPersistent('shoppingCart',{});
+        Session.setPersistent('cartshopNumber',0);
+        Session.setPersistent('isShoppingCartEmpty',true);
+      });
+    }
+
+
+
+  },
+
+  onRequestClosePopoverUser(){
     this.setState({
-      gotToken: false,
-      user:{},
-      gotUser:false,
-      fbUser:false
-    });
-    FB.logout(function(response) {
-    });
-    Session.setPersistent('user',{});
-    Session.setPersistent('token',{});
-    Session.setPersistent('shoppingCart',{});
-    Session.setPersistent('cartshopNumber',0);
-    Session.setPersistent('isShoppingCartEmpty',true);
-    data.initToken((err,response)=>{
-        if(!err){
-            this.setState({
-              gotToken: true
-            });
-        }
+      openPopoverUser: false
     });
   },
 
@@ -312,6 +350,11 @@ App = React.createClass({
             showMenuIconButton = {!this.state.leftNavDocked}
             onLeftIconButtonTouchTap ={this.openMenu}
             zDepth={0}/>
+          <PopoverUser
+            open={this.state.openPopoverUser}
+            onRequestClose={this.onRequestClosePopoverUser}
+            beforeLogout={this._handleCloseSession}
+            anchorEl={this.state.anchorElPopover}/>
           <LeftNav
             containerClassName = {'leftNav'}
             ref= {"leftNav"}
