@@ -5,7 +5,7 @@ const Colors = mui.Styles.Colors;
 
 const styles={
   paperContainer:{
-    width:'75%',
+    width:'90%',
     minWidth:288,
     maxWidth:612,
     margin:'auto',
@@ -178,7 +178,7 @@ ShoppingDetails = React.createClass({
               this.setState({
                 loadingButton: true
               });
-              formsController.deliveryController.addDelivery(model,this.token.access_token,
+              formsController.deliveryController.addDelivery(model,
                 (res)=>{
                   if(this.isMounted()){
                     this.setState({

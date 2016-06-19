@@ -40,12 +40,11 @@ DeliveryPage = React.createClass({
     return {
       dateDelivery:'',
       hourDelivery:'',
-      occasions:'',
+      occasions:'NO_DATA',
       priceDelivery:'',
       message:'',
       addressesLoading: true,
       deliveryHours: 'NO_DATA',
-      selectedDeliveryHour: '10.00',
       birth:'',
       fechatest:'',
       typeDate:'string'
@@ -63,7 +62,12 @@ DeliveryPage = React.createClass({
     this.token = Session.get('token');
 
     //ESTO DEVUELVE NULL
-    formsController.getOcassions((err,response)=>{
+    formsController.getOccasions((res)=>{
+      if (this.isMounted()){
+        this.setState({
+          occasions: res
+        });
+      }
     });
 
     formsController.getDeliveryHours(this.token.access_token,(response)=>{
@@ -84,6 +88,21 @@ DeliveryPage = React.createClass({
     isDefaultRequiredValue: 'Este campo es requerido'
   },
 
+  getOccasions:function(){
+    if (this.state.occasions === 'NO_DATA'){
+      return (<MenuItem>
+        <CircularProgress />
+      </MenuItem>)
+    }
+    return this.state.occasions.map((occasion)=>{
+      return (<MenuItem
+      key={occasion.occasion_id}
+      value={occasion.occasion_id}
+      primaryText={occasion.name}/>)
+    });
+
+  },
+
   getDeliveryHours:function(){
     if(this.state.deliveryHours === 'NO_DATA'){
       return
@@ -96,7 +115,7 @@ DeliveryPage = React.createClass({
         return(
           <MenuItem
             key={hour.delivery_hour_id}
-            value = {hour.name}
+            value = {hour.delivery_hour_id}
             primaryText={hour.name}/>
         );
       });
@@ -111,10 +130,6 @@ DeliveryPage = React.createClass({
     this.props.onInvalid();
   },
 
-  handleDeliveryMenu: function(event, selectedDeliveryHour, index) {
-    this.setState({selectedDeliveryHour})
-  },
-
   onFocusDate:function(){
     if(this.state.typeDate !== 'date') {this.setState({typeDate: 'date'})}
   },
@@ -122,7 +137,18 @@ DeliveryPage = React.createClass({
   onBlurDate:function() {
     if(this.state.typeDate !== 'string') {this.setState({typeDate: 'string'})}
   },
+  calculatePriceShipping:function(){
+    const model = this.refs.deliveryForm.getModel();
 
+    formsController.deliveryController.addDelivery(model,
+      (res)=>{
+        if(this.isMounted()){
+          this.setState({
+            priceDelivery: res.data.price.toString()
+          });
+        }
+      });
+  },
   render: function() {
 
     let { wordsError } = this.errorMessages;
@@ -161,20 +187,19 @@ DeliveryPage = React.createClass({
             ref = {'deliveryHourMenu'}
             required
             style={styles.field}
-            floatingLabelText="Elige una hora de entrega"
-            onChange={this.handleDeliveryMenu}>
+            floatingLabelText="Hora de entrega">
             {this.getDeliveryHours()}
           </FormsySelect>
 
-          <FormsyText
+          <FormsySelect
             required
             floatingLabelText="Motivo"
             type="string"
             id ="occasions"
-            name = "ocassions"
-            value={this.state.ocassions}
-            style ={styles.field}
-          />
+            name = "occasions"
+            style ={styles.field}>
+            {this.getOccasions()}
+            </FormsySelect>
 
           <FormsyText
             required
@@ -191,6 +216,7 @@ DeliveryPage = React.createClass({
           <div style={{width:'100%'}}>
             <FormsyText
               required
+              disabled = {true}
               floatingLabelText="Costo de envío"
               type="string"
               id ="priceDelivery"

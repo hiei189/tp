@@ -3,7 +3,7 @@ const Colors = mui.Styles.Colors;
 
 const styles = {
   paperContainer:{
-    width:'75%',
+    width:'90%',
     minWidth:256,
     maxWidth:612,
     margin:'auto',

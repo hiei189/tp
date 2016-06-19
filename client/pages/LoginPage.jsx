@@ -96,7 +96,6 @@ LoginPage = React.createClass({
       email,
       password,
       (res)=>{
-        console.log(res);
         if(res.success){
           if(this.isMounted()){
             this.setState({
@@ -134,8 +133,6 @@ LoginPage = React.createClass({
   handleRecoveryPassword:function(model){
     backendCom.recoverPassword(model.email,this.token.access_token,
       (err,response)=>{
-        console.log(err);
-        console.log(response);
     });
   },
 

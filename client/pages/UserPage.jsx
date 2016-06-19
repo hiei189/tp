@@ -45,7 +45,7 @@ const styles={
     color:Colors.pink500
   },
   paperContainer:{
-    width:'75%',
+    width:'90%',
     minWidth:288,
     margin:'auto',
     maxWidth:612,
