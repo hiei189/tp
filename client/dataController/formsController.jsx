@@ -141,12 +141,27 @@ formsController = {
   getDeliveryHours:function(token,callback){
     backendCom.getDeliveryHours(
       token,(err,response)=>{
-        if (!err){
-          Session.set('deliveryHours',response.data);
-          callback(response.data);
+        if(err){
+          Session.set('ERROR',response.data);
+          throw new Meteor.error('Error de conexión');
         }
+        Session.set('deliveryHours',response.data);
+        callback(response.data);
       }
     )
+  },
+
+  getOcassions:function(callback){
+    const token = Session.get('token');
+    backendCom.getOccasions(token.access_token,(err,response)=>{
+      if(err){
+        throw new Meteor.error('Error de conexión');
+      }
+      console.log(response);
+      if(response.data.success){
+        callback(response.data);
+      }
+    });
   }
 
 

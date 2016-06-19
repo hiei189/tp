@@ -63,7 +63,7 @@ DeliveryPage = React.createClass({
     this.token = Session.get('token');
 
     //ESTO DEVUELVE NULL
-    backendCom.getOccasions(this.token.access_token,(err,response)=>{
+    formsController.getOcassions((err,response)=>{
     });
 
     formsController.getDeliveryHours(this.token.access_token,(response)=>{

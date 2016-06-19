@@ -2,8 +2,6 @@ const {MapsLocalShipping,ActionHistory,ActionPayment} =mui.SvgIcons;
 const {Paper,MenuItem,RaisedButton} = mui;
 const Colors = mui.Styles.Colors;
 
-
-
 const styles={
   icons:{
     margin:'auto',
@@ -47,9 +45,10 @@ const styles={
     color:Colors.pink500
   },
   paperContainer:{
-    width:'50%',
+    width:'75%',
     minWidth:288,
     margin:'auto',
+    maxWidth:612,
     padding:'0 3%',
     marginTop:20,
     display:'flex',
@@ -66,7 +65,8 @@ const styles={
 UserPage = React.createClass({
   contextTypes:{
     gotUser: React.PropTypes.bool,
-    router:React.PropTypes.object
+    router:React.PropTypes.object,
+    smallScreen:React.PropTypes.object
   },
 
   getInitialState: function() {
@@ -242,10 +242,10 @@ UserPage = React.createClass({
   render: function() {
     const {gotUser,user,showDialog,showError,errorBackendMessages,disabledButton, password,repeatedPassword} = this.state;
     const {isNumericError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError} = this.errorMessages;
-
+    const { smallScreen } = this.context;
     if(gotUser){
       return (
-        <Paper style={styles.paperContainer}>
+        <Paper style={styles.paperContainer} zDepth = {smallScreen?0:1}>
           {this.showDialog()}
           <div>
             <h2 style={styles.paperTitle}>Datos de usuario</h2>
