@@ -5,8 +5,9 @@ const Colors = mui.Styles.Colors;
 
 const styles={
   paperContainer:{
-    width:'50%',
+    width:'90%',
     minWidth:288,
+    maxWidth:612,
     margin:'auto',
     padding:'0 3%',
     marginTop:20,
@@ -177,7 +178,7 @@ ShoppingDetails = React.createClass({
               this.setState({
                 loadingButton: true
               });
-              formsController.deliveryController.addDelivery(model,this.token.access_token,
+              formsController.deliveryController.addDelivery(model,
                 (res)=>{
                   if(this.isMounted()){
                     this.setState({
@@ -244,13 +245,18 @@ ShoppingDetails = React.createClass({
 });
 
 
-const ShoppingDetailsTabTemplate = ({title,onInvalid,onValid,Component})=>{
+const ShoppingDetailsTabTemplate = ({title,onInvalid,onValid,Component},context)=>{
+  const { smallScreen } = context;
   return(
-    <Paper style={styles.paperContainer}>
+    <Paper style={styles.paperContainer}  zDepth = {smallScreen?0:1}>
       <div>
         <h2 style={styles.paperTitle}>{title}</h2>
       </div>
       <Component onInvalid = {onInvalid} onValid = {onValid} />
     </Paper>
   );
+}
+
+ShoppingDetailsTabTemplate.contextTypes = {
+  smallScreen: React.PropTypes.bool
 }

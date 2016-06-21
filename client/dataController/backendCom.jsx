@@ -540,7 +540,7 @@ backendCom = {
 
   getOccasions: function(token,callback){
     HTTP.get(
-      basic_url + 'ocassions',
+      basic_url + 'occasions',
       {
         headers:{
         'Authorization':'Bearer '+ token,
@@ -554,8 +554,8 @@ backendCom = {
     );
   },
 
-  addDelivery:function(day,hour,ocassion_id,message,anonymous,token,callback){
-    const parsedDay = Date.parse(day);
+  addDelivery:function(day,hour,occasion_id,message,anonymous,token,callback){
+    const parsedDay = Date.parse(day);    
     HTTP.call(
       'POST',
       basic_url + 'delivery',
@@ -566,9 +566,9 @@ backendCom = {
           'X-Oc-Store-Id': '0'
         },
         data:{
-          day:parsedDay,
-          hour: hour,
-          ocassion_id:ocassion_id,
+          day:parsedDay.toString(),
+          hour_id: hour,
+          occasion_id:occasion_id,
           message: message,
           anonymous: anonymous,
           delivery: "new"

@@ -3,8 +3,9 @@ const Colors = mui.Styles.Colors;
 
 const styles = {
   paperContainer:{
-    width:'50%',
+    width:'90%',
     minWidth:256,
+    maxWidth:612,
     margin:'auto',
     padding:'0 3%',
     marginTop:20,
@@ -59,13 +60,14 @@ const styles = {
 CreateUserPage = React.createClass({
 
   contextTypes : {
-    router: React.PropTypes.object
+    router: React.PropTypes.object,
+    smallScreen: React.PropTypes.bool
   },
 
   componentWillMount: function() {
-    Session.set('pageT')
-
+    Session.set('pageTitle','Crear usuario');
   },
+
   getInitialState: function() {
     this.error = {};
     this.error.name = '';
@@ -155,8 +157,9 @@ CreateUserPage = React.createClass({
   render: function() {
     const {isNumericError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError} = this.errorMessages;
     const {showDialog, showError,errorBackendMessages} = this.state;
+    const { smallScreen } = this.context;
     return (
-      <Paper style={styles.paperContainer}>
+      <Paper style={styles.paperContainer} zDepth = {smallScreen?0:1}>
         {showDialog?
           (showError?
           <DialogDefault

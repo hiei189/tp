@@ -32,6 +32,7 @@ App = React.createClass({
     gotUser: React.PropTypes.bool,
     token: React.PropTypes.object,
     fbUser:React.PropTypes.bool,
+    smallScreen:React.PropTypes.bool
   },
 
   getChildContext() {
@@ -41,7 +42,8 @@ App = React.createClass({
       user: this.state.user,
       gotUser: this.state.gotUser,
       token: Session.get('token'),
-      fbUser:this.state.fbUser
+      fbUser:this.state.fbUser,
+      smallScreen: this.state.smallScreen
     };
   },
 
@@ -65,7 +67,8 @@ App = React.createClass({
         paddingBottom:96,
       },
       moveValue:'0px',
-      openPopoverUser:false
+      openPopoverUser:false,
+      smallScreen: true
     };
   },
 
@@ -109,19 +112,21 @@ App = React.createClass({
           case "xxlarge":
             this.setState({
               leftNavDocked: true,
+              moveValue: this.navbarWidth,
+              openMenu:true,
+              smallScreen:false
             });
-              this.setState({
-                moveValue: this.navbarWidth,
-                openMenu:true
-              });
+            Session.set('smallScreen',false);
             break;
           case "small":
           case "medium":
+            Session.set('smallScreen',true);
             this.setState({
               openMenu:false,
               leftNavDocked: false,
               showMenuIconButton:true,
               moveValue:'0px',
+              smallScreen:true
             });
             break;
           default:
@@ -258,11 +263,11 @@ App = React.createClass({
     var tooltipUser = (this.state.gotUser?this.state.user.firstname + ' ' + this.state.user.lastname:'Inicia sesión');
     return(
       <div>
-        <IconButton
+        {/*<IconButton
         tooltip="Usuario"
         onTouchTap={this.showUserPopover}>
           <ActionAccountCircle color={Colors.white}/>
-        </IconButton>
+        </IconButton>*/}
         <IconButton
           tooltip="Carrito de compras"
           onTouchTap={this.showCartPage}>
@@ -351,11 +356,11 @@ App = React.createClass({
             showMenuIconButton = {!this.state.leftNavDocked}
             onLeftIconButtonTouchTap ={this.openMenu}
             zDepth={0}/>
-          <PopoverUser
+          {/*<PopoverUser
             open={this.state.openPopoverUser}
             onRequestClose={this.onRequestClosePopoverUser}
             beforeLogout={this._handleCloseSession}
-            anchorEl={this.state.anchorElPopover}/>
+            anchorEl={this.state.anchorElPopover}/>*/}
           <LeftNav
             containerClassName = {'leftNav'}
             ref= {"leftNav"}

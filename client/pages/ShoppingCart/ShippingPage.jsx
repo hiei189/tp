@@ -27,7 +27,17 @@ const styles = {
   },
   fieldWithIcons: {
     margin: 'auto',
-    width:'100%'
+    width:'calc(100% - 96px)',
+  },
+  labelSelectField:{
+    textOverflow:'ellipsis',
+    whiteSpace:'nowrap',
+    overflowY: 'hidden',
+    overflowX: 'auto',
+  },
+  fullFieldWithIcons:{
+    margin: 'auto',
+    width:'100%',
   },
   form:{
     margin: 'auto',
@@ -52,8 +62,6 @@ const styles = {
 }
 
 ShippingPage = React.createClass({
-
-  mixins: [React.addons.LinkedStateMixin],
 
   getDefaultProps: function() {
     return {
@@ -418,20 +426,19 @@ ShippingPage = React.createClass({
           onInvalid={this.invalidForm}
           style ={styles.form}>
           <div style={{display:'flex'}}>
-            <div style={{width:'100%'}}>
               <FormsySelect
                 name='selectedAddress'
                 ref='selectedAddress'
                 required
+                labelStyle={styles.labelSelectField}
                 onChange={this.handleChangeMenuAddresses}
-                style ={styles.fieldWithIcons}
+                style ={showIcons?styles.fieldWithIcons:styles.fullFieldWithIcons}
                 fullWidth={true}
                 floatingLabelText="Elige una dirección"
                 value={this.state.selectedAddress}>
                 <MenuItem value={'NUEVA DIRECCION'} primaryText="Nueva dirección"/>
                 {!this.state.addressesLoading && !this.state.noAddresses?this.getAddresses():<div/>}
               </FormsySelect>
-            </div>
             {showIcons?
               <div style={{minWidth:'96px',alignSelf:'center'}}>
                 {showCheck?

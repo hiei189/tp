@@ -120,14 +120,15 @@ formsController = {
   },
 
   deliveryController:{
-    addDelivery:function(model,token,callback){
+    addDelivery:function(model,callback){
+      const token = Session.get('token');
       backendCom.addDelivery(
         model.dateDelivery,
         model.deliveryHourMenu,
-        model.ocassions,
+        model.occasions,
         model.message,
         '0', //revisar anonymous
-        token,
+        token.access_token,
         (err,response)=>{
           //NO RECIBE DATA DE RESPUESTA,PERO SI GRABA.
           if(response.data.success){
@@ -141,12 +142,24 @@ formsController = {
   getDeliveryHours:function(token,callback){
     backendCom.getDeliveryHours(
       token,(err,response)=>{
-        if (!err){
-          Session.set('deliveryHours',response.data);
-          callback(response.data);
+        if(err){
+          Session.set('ERROR',response.data);
+          throw new Meteor.error('Error de conexión');
         }
+        Session.set('deliveryHours',response.data);
+        callback(response.data);
       }
     )
+  },
+
+  getOccasions:function(callback){
+    const token = Session.get('token');
+    backendCom.getOccasions(token.access_token,(err,response)=>{
+      if(err){
+        throw new Meteor.error('Error de conexión');
+      }
+      callback(response.data);
+    });
   }
 
 
