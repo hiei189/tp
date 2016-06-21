@@ -124,12 +124,20 @@ var utils = {
     },
     minLength: function (values, value, length) {
       return !isExisty(value) || isEmpty(value) || value.length >= length;
+    },
+    isMonth:function(values,value){
+      return !isExisty(value) || (value <= 12 && value >=1);
+    },
+    isYear:function(values,value){
+      return !isExisty(value) || (value >= 1850 && value <= new Date().getFullYear());
+    },
+    isDay:function(values,value){
+      const isLeapYear = new Date(values['year'], 2, 0).getDate() == 29;
+      var validDays = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+      validDays[1] = isLeapYear?29:28;
+      return !isExisty(value) || !isExisty(values['year']) || !isExisty(values['month']) || (value<= validDays[Number(values['month']-1)] && value>=1);
     }
   };
-
-
-
-
 
 
 var HOC = function (Component) {

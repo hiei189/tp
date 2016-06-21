@@ -54,6 +54,19 @@ const styles = {
     color: Colors.pink500,
     textAlign:'center'
   },
+  dateContainer:{
+    display:'flex',
+    justifyContent:'space-between',
+    flexWrap:'wrap',
+    width:'100%',
+    minWidth:'212'
+  },
+  dateField:{
+    width:'25%'
+  },
+  inputDateField:{
+    textAlign:'center'
+  }
 }
 
 
@@ -78,8 +91,8 @@ CreateUserPage = React.createClass({
   },
 
   createUser:function(model){
-    console.log(model);
-    //model.datebirth = utils.createDateFromString(model.datebirth);
+
+    model.datebirth = utils.createDateFromDMY(model.day,model.month,model.year);
     data.createUser(model,(res)=>{
       if(res.success){
         if(this.isMounted()){
@@ -115,7 +128,10 @@ CreateUserPage = React.createClass({
     isEmailError: "Ingresa un email correcto",
     minLength7Error: "Debes ingresar más de siete caracteres",
     isExistyError:"Este campo es requerido",
-    equalsFieldPasswordError: "Las contraseñas no coinciden"
+    equalsFieldPasswordError: "Las contraseñas no coinciden",
+    isMonthError:"No es un mes valido",
+    isYearError:"No es año valido",
+    isDayError:"No es un dia valido"
   },
 
   handleChange: function(e) {
@@ -155,7 +171,7 @@ CreateUserPage = React.createClass({
   },
 
   render: function() {
-    const {isNumericError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError} = this.errorMessages;
+    const {isNumericError,isMonthError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError, isDayError, isYearError} = this.errorMessages;
     const {showDialog, showError,errorBackendMessages} = this.state;
     const { smallScreen } = this.context;
     return (
@@ -214,17 +230,50 @@ CreateUserPage = React.createClass({
             value={this.state.lastname}
             style ={styles.field}
           />
-
-        <FormsyDate
+        <div style={styles.dateContainer}>
+          <FormsyText
             required
-            floatingLabelText="Fecha de nacimiento"
-            textFieldStyle = {styles.field}
-            onFocus={this.onFocusDate}
-            onBlur={this.onBlurDate}
-            name = "datebirth"
-            id = "datebirth"
-            value = {this.state.datebith}
+            floatingLabelText="Dia"
+            validations={{isDay:true,'isNumeric':true}}
+            validationErrors={{
+              isDay: isDayError
+            }}
+            maxLength={2}
+            textFieldStyle = {{width:'100%'}}
+            name = "day"
+            style ={styles.dateField}
+            inputStyle = {styles.inputDateField}
           />
+
+
+          <FormsyText
+            required
+            floatingLabelText="Mes"
+            validations={{'isMonth':true,'isNumeric':true}}
+            validationErrors={{
+              isMonth: isMonthError
+            }}
+            maxLength={2}
+            textFieldStyle = {{width:'100%'}}
+            name = "month"
+            style ={styles.dateField}
+            inputStyle = {styles.inputDateField}
+          />
+
+          <FormsyText
+            required
+            floatingLabelText="Año"
+            validations={{'isYear':true,'isNumeric':true}}
+            validationErrors={{
+              isYear: isYearError
+            }}
+            maxLength={4}
+            textFieldStyle = {{width:'100%'}}
+            name = "year"
+            style ={styles.dateField}
+            inputStyle = {styles.inputDateField}
+          />
+        </div>
 
           <FormsySelect
             name = {'gender'}

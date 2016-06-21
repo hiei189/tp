@@ -555,7 +555,8 @@ backendCom = {
   },
 
   addDelivery:function(day,hour,occasion_id,message,anonymous,token,callback){
-    const parsedDay = Date.parse(day);    
+    const parsedDay = Date.parse(day);
+    console.log(parsedDay);
     HTTP.call(
       'POST',
       basic_url + 'delivery',
@@ -566,7 +567,7 @@ backendCom = {
           'X-Oc-Store-Id': '0'
         },
         data:{
-          day:parsedDay.toString(),
+          day:parsedDay,
           hour_id: hour,
           occasion_id:occasion_id,
           message: message,
@@ -576,6 +577,8 @@ backendCom = {
       },
       (err,response)=>{
         callback(err,response);
+        console.log(err);
+        console.log(response);
         return;
       }
     );

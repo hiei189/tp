@@ -59,6 +59,19 @@ const styles={
     color: Colors.pink500,
     textAlign:'center'
   },
+  dateContainer:{
+    display:'flex',
+    justifyContent:'space-between',
+    flexWrap:'wrap',
+    width:'100%',
+    minWidth:'212'
+  },
+  dateField:{
+    width:'25%'
+  },
+  inputDateField:{
+    textAlign:'center'
+  }
 }
 
 
@@ -66,7 +79,7 @@ UserPage = React.createClass({
   contextTypes:{
     gotUser: React.PropTypes.bool,
     router:React.PropTypes.object,
-    smallScreen:React.PropTypes.object
+    smallScreen:React.PropTypes.bool
   },
 
   getInitialState: function() {
@@ -79,7 +92,10 @@ UserPage = React.createClass({
       showError: false,
       disabledButton:true,
       password:'',
-      repeatedPassword:''
+      repeatedPassword:'',
+      year:'',
+      month:'',
+      day:''
     };
   },
 
@@ -94,11 +110,16 @@ UserPage = React.createClass({
       const gotUser = Session.get('gotUser');
       this.trackerId_a = a;
       Tracker.nonreactive(()=>{
+        let user = Session.get('user');
+        let date = new Date(user.dob);
         if(gotUser){
           this.setState({
-            user: Session.get('user'),
-            gotUser:true,
-            fbUser: Session.get('fbUser')
+            user: user,
+            gotUser: true,
+            fbUser: Session.get('fbUser'),
+            year: (date.getFullYear()).toString(),
+            month: (date.getMonth()+1).toString(),
+            day: (date.getUTCDate()).toString()
           });
         }else{
           this.setState({
@@ -128,7 +149,10 @@ UserPage = React.createClass({
     isEmailError: "Ingresa un email correcto",
     minLength7Error: "Debes ingresar más de siete caracteres",
     isExistyError:"Este campo es requerido",
-    equalsFieldPasswordError: "Las contraseñas no coinciden"
+    equalsFieldPasswordError: "Las contraseñas no coinciden",
+    isMonthError:"No es un mes valido",
+    isYearError:"No es año valido",
+    isDayError:"No es un dia valido"
   },
   invalidForm:function(){
     this.setState({
@@ -151,7 +175,7 @@ UserPage = React.createClass({
   },
 
   onValidSubmit:function(model){
-
+    model.dob = utils.createDateFromDMY(model.day,model.month,model.year);
     const updateData=()=>{
       data.updateUserData(model,(res)=>{
       if(res.success){
@@ -240,8 +264,8 @@ UserPage = React.createClass({
   },
 
   render: function() {
-    const {gotUser,user,showDialog,showError,errorBackendMessages,disabledButton, password,repeatedPassword} = this.state;
-    const {isNumericError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError} = this.errorMessages;
+    const {gotUser,user,showDialog,showError,errorBackendMessages,disabledButton, password,repeatedPassword,day,year,month} = this.state;
+    const {isNumericError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError,isDayError, isYearError,isMonthError} = this.errorMessages;
     const { smallScreen } = this.context;
     if(gotUser){
       return (
@@ -286,6 +310,54 @@ UserPage = React.createClass({
               style = {styles.field}
             />
 
+            <div style={styles.dateContainer}>
+              <FormsyText
+                required
+                floatingLabelText="Dia"
+                validations={{isDay:true,'isNumeric':true}}
+                validationErrors={{
+                  isDay: isDayError
+                }}
+                maxLength={2}
+                textFieldStyle = {{width:'100%'}}
+                name = "day"
+                style ={styles.dateField}
+                value = {day}
+                inputStyle = {styles.inputDateField}
+              />
+
+
+              <FormsyText
+                required
+                floatingLabelText="Mes"
+                validations={{'isMonth':true,'isNumeric':true}}
+                validationErrors={{
+                  isMonth: isMonthError
+                }}
+                maxLength={2}
+                textFieldStyle = {{width:'100%'}}
+                name = "month"
+                style ={styles.dateField}
+                value = {month}
+                inputStyle = {styles.inputDateField}
+              />
+
+              <FormsyText
+                required
+                floatingLabelText="Año"
+                validations={{'isYear':true,'isNumeric':true}}
+                validationErrors={{
+                  isYear: isYearError
+                }}
+                maxLength={4}
+                textFieldStyle = {{width:'100%'}}
+                name = "year"
+                style ={styles.dateField}
+                value = {year}
+                inputStyle = {styles.inputDateField}
+              />
+            </div>
+{/*
             <FormsyDate
               required
               floatingLabelText="Fecha de nacimiento"
@@ -295,7 +367,7 @@ UserPage = React.createClass({
               name = "dob"
               id = "dob"
               value = {user.dob}
-            />
+            />*/}
 
             <FormsySelect
               name = {'gender'}
@@ -333,7 +405,6 @@ UserPage = React.createClass({
               textFieldStyle = {{width:'100%'}}
               name = 'telephone'
               id ='telephone'
-              type="number"
               value={user.telephone}
               style = {styles.field}
             />
