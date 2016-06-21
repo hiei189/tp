@@ -247,6 +247,7 @@ App = React.createClass({
   },
 
   showUserPopover(event){
+    event.preventDefault();
     this.setState({
       openPopoverUser: !this.state.openPopoverUser,
       anchorElPopover: event.currentTarget
