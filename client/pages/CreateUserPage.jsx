@@ -4,7 +4,7 @@ const Colors = mui.Styles.Colors;
 const styles = {
   paperContainer:{
     width:'90%',
-    minWidth:256,
+    minWidth:288,
     maxWidth:612,
     margin:'auto',
     padding:'0 3%',
@@ -29,7 +29,8 @@ const styles = {
     margin: 'auto',
     width:'20%',
     minWidth:'212',
-    marginTop:'12'
+    marginTop:'12',
+    display:'flex'
   },
   radiobutton:{
     flex:0.5,
