@@ -294,7 +294,7 @@ App = React.createClass({
   _handleCloseSession(){
 
     if(this.state.fbUser){
-      FB.logout(function(response) {
+      FB.logout((response)=> {
         this.setState({
           fbUser:false
         });
