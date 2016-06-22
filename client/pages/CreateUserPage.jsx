@@ -12,7 +12,6 @@ const styles = {
     display:'flex',
     flexDirection:'column',
     justifyContent:'space-around',
-    textAlign:'center'
   },
 
   container: {

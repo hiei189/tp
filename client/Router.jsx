@@ -4,6 +4,7 @@ Meteor.startup(function() {
   Session.set('cartshopNumber','0');
   Session.set('token',{});
   Session.set('user',{});
+  Session.set('gotUser',false);
   Session.set('places','NO_DATA');
   Session.set('gotFbResponse',{});
   Session.set('fbResponse',{});

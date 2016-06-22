@@ -106,7 +106,7 @@ data = {
     var token = Session.get('token');
     backendCom.logout(token.access_token,(err,response)=>{
       if(err){
-
+        throw new Meteor.Error('200','Error cerrando sesion');
       }
       callback(response.data);
     });

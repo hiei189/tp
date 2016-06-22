@@ -19,6 +19,19 @@ const {SvgIcon} = mui;
 //   }
 // }
 
+
+var LOGOUT = (props) => {
+  return (
+    <SvgIcon viewBox={'0 0 84.2 90'} {...props} >
+      <path d="M82.8,41.6L66.6,25.5c-0.8-0.8-1.9-1-2.9-0.6c-1,0.4-1.6,1.4-1.6,2.4v8.8H35.3c-1.9,0-3.5,1.6-3.5,3.5v10.6 c0,1.9,1.6,3.5,3.5,3.5h26.8v8.8c0,1.1,0.6,2,1.6,2.4c0.3,0.1,0.7,0.2,1,0.2c0.7,0,1.4-0.3,1.9-0.8l16.2-16.2 C84.6,46.5,84.6,43.5,82.8,41.6z"/>
+      <path d="M51.2,65.3h-3.5c-1.9,0-3.5,1.6-3.5,3.5v10.1c0,0.3-0.2,0.5-0.5,0.5H11.1c-0.3,0-0.5-0.2-0.5-0.5V11.1	c0-0.3,0.2-0.5,0.5-0.5h32.5c0.3,0,0.5,0.2,0.5,0.5v10.1c0,1.9,1.6,3.5,3.5,3.5h3.5c1.9,0,3.5-1.6,3.5-3.5V10.6	C54.7,4.8,50,0,44.1,0H10.6C4.8,0,0,4.8,0,10.6v68.8C0,85.3,4.8,90,10.6,90h33.5c5.8,0,10.6-4.8,10.6-10.6V68.8	C54.7,66.9,53.1,65.3,51.2,65.3z"/>
+    </SvgIcon>
+  )
+}
+
+
+
+
 var HOME = React.createClass({
   render: function() {
     return (
@@ -441,4 +454,4 @@ var LOGO_PANDA_DER = React.createClass({
 });
 
 
-Icons = {HOME,BOUQUET,DISCOUNT,GIFT,GIFT_LOVE,HOME2,HOME3,ROSE,TEDDY,TULIP,H24,PANDA,LOGO_PANDA_DER}
+Icons = {HOME,BOUQUET,DISCOUNT,GIFT,GIFT_LOVE,HOME2,HOME3,ROSE,TEDDY,TULIP,H24,PANDA,LOGO_PANDA_DER,LOGOUT}

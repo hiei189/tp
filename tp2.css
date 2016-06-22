@@ -29,9 +29,10 @@ html{
 /********LEFTNAV**********/
 #leftNavListContainer{
   position:relative !important;
-  min-height: 90% !important;
+  min-height: 83% !important;
   /*min-height: 500px !important;*/
-  padding-bottom: 48px !important;
+  padding-bottom: 96px !important;
+
 }
 
 /*****INITIAL SCREEN LOADING**********/
@@ -274,6 +275,7 @@ html{
     align-items: center;
     flex-direction: column;
     padding: 8px 4px;
+    text-align: center;
   }
   .desktopUserListItem{
     padding: 0px;

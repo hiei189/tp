@@ -168,6 +168,8 @@ DeliveryPage = React.createClass({
             textFieldStyle = {styles.field}
             onFocus={this.onFocusDate}
             onBlur={this.onBlurDate}
+            minDate = {this.minDate}
+            maxDate = {this.maxDate}
             name = "dateDelivery"
           />
 
@@ -209,7 +211,6 @@ DeliveryPage = React.createClass({
             name = "message"
             multiLine={true}
             rows={3}
-            value={this.state.message}
             style ={styles.field}
           />
 

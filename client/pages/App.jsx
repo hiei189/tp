@@ -16,7 +16,8 @@ var styles = {
     backgroundColor:''
   },
   selectedAvatar:{
-    fill:Colors.pink500
+    fill:Colors.pink500,
+    color:Colors.pink500,
   }
 }
 
@@ -291,40 +292,46 @@ App = React.createClass({
   },
 
   _handleCloseSession(){
-    data.logout((res)=>{
-      Session.setPersistent('user',{});
-      Session.setPersistent('token',{});
-      Session.setPersistent('shoppingCart',{});
-      Session.setPersistent('cartshopNumber',0);
-      Session.setPersistent('isShoppingCartEmpty',true);
-      data.initToken((err,response)=>{
-          if(!err){
-            if(this.isMounted()){
-              this.setState({
-                gotToken: true
-              });
-            }
-          }
-      });
-      if(this.isMounted()){
-        this.setState({
-          gotToken: false,
-          user:{},
-          gotUser:false,
-          fbUser:false
-        });
-      }
-    });
+
     if(this.state.fbUser){
       FB.logout(function(response) {
-        console.log(response);
+        this.setState({
+          fbUser:false
+        });
         Session.setPersistent('user',{});
+        Session.setPersistent('gotUser',false);
         Session.setPersistent('token',{});
         Session.setPersistent('shoppingCart',{});
         Session.setPersistent('cartshopNumber',0);
         Session.setPersistent('isShoppingCartEmpty',true);
       });
     }
+
+    data.logout((res)=>{
+      Session.setPersistent('user',{});
+      Session.setPersistent('token',{});
+      Session.setPersistent('gotUser',false);
+      Session.setPersistent('shoppingCart',{});
+      Session.setPersistent('cartshopNumber',0);
+      Session.setPersistent('isShoppingCartEmpty',true);
+      if(this.isMounted()){
+        this.setState({
+          gotToken: false,
+          user:{},
+          gotUser:false
+        });
+      }
+      data.initToken((err,response)=>{
+        if(!err){
+          if(this.isMounted()){
+            this.setState({
+              gotToken: true
+            });
+          }
+        }
+      });
+    });
+
 
 
 
@@ -438,16 +445,6 @@ const GetLeftList = React.createClass({
     this.context.router.push('/categories/'+clickedItem.id.toString());
   },
 
-  _handleCreateUserListTouch:function(event){
-    this.close();
-    Session.set('pageTitle','Crear usuario');
-    switch(event.currentTarget.id.toString()){
-      case 'createUser':
-        this.context.router.push('/createUser');
-        break;
-    }
-  },
-
   renderNested:function(category){
     return category.categories.map((category)=>{
       const styleText = Session.get('selectedItem')==category.category_id?styles.selectedCategory:null;
@@ -509,19 +506,12 @@ const GetLeftList = React.createClass({
                 style={styleText}
                 onTouchTap = {this._handleTouchTap.bind(this,category.name)}
                 primaryText = {category.name}
-                value={category.category_id}
-              />
+                value={category.category_id}/>
             ])
           );
         }
     });
   },
-
-  _handleCloseSession:function(){
-    this.close();
-    this.props.handleCloseSession();
-  },
-
 
   _handleUserListTouch:function(){
     this.setState({
@@ -532,11 +522,19 @@ const GetLeftList = React.createClass({
     this.close();
   },
 
+  _handleLogout:function(){
+    this.close();
+    this.props.handleCloseSession();
+  },
+
   render: function() {
     let smallScreen = this.context.screensize==='small'||this.context.screensize==='medium';
     let width = smallScreen?272:128;
+    const { gotUser } = this.context;
     const displayNone = smallScreen?'':'noDisplay';
-    const styleAvatarUser = Session.get('selectedItem')==='user'?styles.selectedAvatar:null;
+    const styleUser = Session.get('selectedItem')==='user'?styles.selectedAvatar:null;
+    const styleLogout = Session.get('selectedItem')==='logout'?styles.selectedAvatar:null;
+    let IconComponent = Icons.LOGOUT;
     return (
       <SelectableList
         id = {'leftNavListContainer'}>
@@ -559,13 +557,20 @@ const GetLeftList = React.createClass({
           </ul>)
         }
         {smallScreen?
-          <div>
+          <div id={'divUserListItem'}>
             <ListItem
             value={'user'}
-            id={'divUserListItem'}
+            style = {styleUser}
             onTouchTap={this._handleUserListTouch}
-            leftIcon = {<ActionAccountCircle style={styleAvatarUser}/>}
+            leftIcon = {<ActionAccountCircle style={styleUser}/>}
             primaryText = {'Usuario'}/>
+          {gotUser?<ListItem
+          value={'logout'}
+          onTouchTap={this._handleLogout}
+          style = {styleLogout}
+          leftIcon = {<IconComponent style={styleLogout}/>}
+          primaryText = {'Cerrar sesion'}/>:null}
+
         </div>:
           <ul className={'desktopUserListItem'}>
             <Li
@@ -574,6 +579,13 @@ const GetLeftList = React.createClass({
               selected = {this.state.selectedItem === 'user'}
               Icon ={ActionAccountCircle}
               onTouchTap = {this._handleUserListTouch}/>
+            {gotUser?<Li
+              key={'logout'}
+              category = {{name:'Cerrar sesion',category_id:'logout'}}
+              selected = {this.state.selectedItem === 'logout'}
+              Icon ={Icons.LOGOUT}
+              onTouchTap = {this._handleLogout}/>:null}
+
           </ul>
         }
       </SelectableList>

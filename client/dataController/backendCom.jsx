@@ -556,7 +556,6 @@ backendCom = {
 
   addDelivery:function(day,hour,occasion_id,message,anonymous,token,callback){
     const parsedDay = Date.parse(day);
-    console.log(parsedDay);
     HTTP.call(
       'POST',
       basic_url + 'delivery',
@@ -577,8 +576,6 @@ backendCom = {
       },
       (err,response)=>{
         callback(err,response);
-        console.log(err);
-        console.log(response);
         return;
       }
     );
