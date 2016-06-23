@@ -230,6 +230,11 @@ CreateUserPage = React.createClass({
             value={this.state.lastname}
             style ={styles.field}
           />
+          <div className={'datebirthContainer'}>
+            <span className={'datebirth'}>
+              Fecha de nacimiento
+            </span>
+          </div>
         <div style={styles.dateContainer}>
           <FormsyText
             required
