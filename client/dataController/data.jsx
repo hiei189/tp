@@ -189,7 +189,7 @@ data = {
         if(!err){
           callback(response.data);
           if(response.data.success){
-
+            Session.set('user',response.data.data);
           }
         }
       }

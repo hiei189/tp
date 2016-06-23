@@ -295,9 +295,12 @@ App = React.createClass({
 
     if(this.state.fbUser){
       FB.logout((response)=> {
-        this.setState({
-          fbUser:false
-        });
+        if(this.isMounted()){
+          this.setState({
+            fbUser:false
+          });
+        }
+        
         Session.setPersistent('user',{});
         Session.setPersistent('gotUser',false);
         Session.setPersistent('token',{});

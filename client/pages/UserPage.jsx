@@ -79,7 +79,8 @@ UserPage = React.createClass({
   contextTypes:{
     gotUser: React.PropTypes.bool,
     router:React.PropTypes.object,
-    smallScreen:React.PropTypes.bool
+    smallScreen:React.PropTypes.bool,
+    fbUser:React.PropTypes.bool,
   },
 
   getInitialState: function() {
@@ -178,6 +179,7 @@ UserPage = React.createClass({
     model.dob = utils.createDateFromDMY(model.day,model.month,model.year);
     const updateData=()=>{
       data.updateUserData(model,(res)=>{
+        console.log(res);
       if(res.success){
         if(this.isMounted()){
           this.setState({
@@ -266,7 +268,7 @@ UserPage = React.createClass({
   render: function() {
     const {gotUser,user,showDialog,showError,errorBackendMessages,disabledButton, password,repeatedPassword,day,year,month} = this.state;
     const {isNumericError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError,isDayError, isYearError,isMonthError} = this.errorMessages;
-    const { smallScreen } = this.context;
+    const { smallScreen,fbUser } = this.context;
     if(gotUser){
       return (
         <Paper style={styles.paperContainer} zDepth = {smallScreen?0:1}>
@@ -309,6 +311,12 @@ UserPage = React.createClass({
               value={user.lastname}
               style = {styles.field}
             />
+          <div className={'datebirthContainer'}>
+            <span className={'datebirth'}>
+              Fecha de nacimiento
+            </span>
+          </div>
+
 
             <div style={styles.dateContainer}>
               <FormsyText
@@ -409,34 +417,35 @@ UserPage = React.createClass({
               style = {styles.field}
             />
           {/*{this.state.fbUser?null:null} OJO AGREGAR*/}
-            <FormsyText
-              validations={{minLength:7}}
-              validationErrors={{
-                minLength: minLength7Error
-              }}
-              floatingLabelText="Nueva contraseña"
-              textFieldStyle = {{width:'100%'}}
-              name = 'password'
-              id ='password'
-              type="password"
-              value={password}
-              style = {styles.field}
-            />
+          {fbUser?null:<FormsyText
+            validations={{minLength:7}}
+            validationErrors={{
+              minLength: minLength7Error
+            }}
+            floatingLabelText="Nueva contraseña"
+            textFieldStyle = {{width:'100%'}}
+            name = 'password'
+            id ='password'
+            type="password"
+            value={password}
+            style = {styles.field}
+          />}
+          {fbUser?null:<FormsyText
+            validations={{minLength:7,equalsField:'password'}}
+            validationErrors={{
+              minLength: minLength7Error,
+              equalsField: equalsFieldPasswordError
+            }}
+            floatingLabelText="Repite la nueva contraseña"
+            textFieldStyle = {{width:'100%'}}
+            name = 'repeatedPassword'
+            id ='repeatedPassword'
+            type="password"
+            value={repeatedPassword}
+            style = {styles.field}
+          />}
 
-            <FormsyText
-              validations={{minLength:7,equalsField:'password'}}
-              validationErrors={{
-                minLength: minLength7Error,
-                equalsField: equalsFieldPasswordError
-              }}
-              floatingLabelText="Repite la nueva contraseña"
-              textFieldStyle = {{width:'100%'}}
-              name = 'repeatedPassword'
-              id ='repeatedPassword'
-              type="password"
-              value={repeatedPassword}
-              style = {styles.field}
-            />
+
 
             <RaisedButton
               label="Actualizar"

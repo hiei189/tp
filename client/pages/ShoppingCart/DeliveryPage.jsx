@@ -233,9 +233,9 @@ DeliveryPage = React.createClass({
           </div>
 
         </Formsy.Form>
-        <div style={styles.field}>
+        {/*<div style={styles.field}>
           {'Nota: el costo de envío se hace en el intervalo de una hora después de la hora seleccionada'}
-        </div>
+        </div>*/}
 
       </div>
     );
