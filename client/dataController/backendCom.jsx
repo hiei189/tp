@@ -198,8 +198,7 @@ backendCom = {
   },
 
   updateUserData:function(token,firstname,lastname,datebirth,email,telephone,gender,callback){
-    const parsedDatebirth = Date.parse(datebirth);;
-
+    const parsedDatebirth = Date.parse(datebirth).toString();
     HTTP.call(
       'POST',
       basic_url + 'account',

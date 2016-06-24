@@ -179,7 +179,6 @@ UserPage = React.createClass({
     model.dob = utils.createDateFromDMY(model.day,model.month,model.year);
     const updateData=()=>{
       data.updateUserData(model,(res)=>{
-        console.log(res);
       if(res.success){
         if(this.isMounted()){
           this.setState({

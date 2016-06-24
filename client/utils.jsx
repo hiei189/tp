@@ -6,6 +6,7 @@ utils = {
     return d;
   },
   createDateFromDMY(d,m,y){
-    return date = new Date(y,m-1,d-1);
+    const date = new Date(y,m-1,d);
+    return date;
   }
 }

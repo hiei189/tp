@@ -82,7 +82,7 @@ PaymentPage = React.createClass({
     return (
       <div style={{marginBottom:'50px'}}>
 
-        <Formsy.Form
+        {/*<Formsy.Form
           onValid = {this.handleShowForm}
           style = {styles.form}
           >
@@ -92,7 +92,7 @@ PaymentPage = React.createClass({
             <RadioButton label={test}/>
           </RadioButtonGroup>
 
-        </Formsy.Form>
+        </Formsy.Form>*/}
 
         <Formsy.Form
           onValidSubmit={this.submit}
