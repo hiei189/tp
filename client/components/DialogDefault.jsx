@@ -23,6 +23,10 @@ DialogDefault = React.createClass({
   handleClose:function(){
     this.setState({open: false});
     Session.set('showDialog',false);
+    Session.set('DialogMessage','');
+    Session.set('isAnErrorDialog',false);
+    Session.set('DialogTitle','Tulipanda');
+    Session.set('DialogShouldGoBack',false);
     if (this.props.onRequestClose){
       this.props.onRequestClose();
     }
@@ -52,7 +56,7 @@ DialogDefault = React.createClass({
         title={title}>
         {error?
           <div>
-            Ocurrieron los siguientes errores al iniciar sesión:
+            Ocurrieron los siguientes errores:
             <ErrorMessages errorBackendMessages = {message} />
           </div>
           :message}

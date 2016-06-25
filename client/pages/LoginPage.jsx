@@ -101,14 +101,7 @@ LoginPage = React.createClass({
       email,
       password,
       (res)=>{
-        console.log(res);
         if(res.success){
-          Session.set('DialogMessage','Has iniciado sesión exitosamente');
-          Session.set('isAnErrorDialog',false);
-          Session.set('DialogTitle','Bienvenido, '+ Session.get('user').firstname);
-          Session.set('DialogShouldGoBack',true);
-          Session.set('showDialog',true);
-
           if(this.isMounted()){
             this.setState({
               userLogged: true,
@@ -116,11 +109,6 @@ LoginPage = React.createClass({
             });
           }
         }else{
-          Session.set('DialogMessage',res.error);
-          Session.set('isAnErrorDialog',true);
-          Session.set('DialogTitle','No se pudo iniciar sesión!');
-          Session.set('showDialog',true);
-
           if(this.isMounted()){
             this.setState({
               loadingLogin:false

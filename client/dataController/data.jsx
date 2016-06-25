@@ -96,6 +96,17 @@ data = {
             Session.set('gotUser',true);
             Session.set('fbUser',false);
           }
+          Session.set('DialogMessage','Has iniciado sesión exitosamente');
+          Session.set('isAnErrorDialog',false);
+          Session.set('DialogTitle','Bienvenido, '+ response.data.data.firstname);
+          Session.set('DialogShouldGoBack',true);
+          Session.set('showDialog',true);
+        }
+        else{
+          Session.set('DialogMessage',response.data.error);
+          Session.set('isAnErrorDialog',true);
+          Session.set('DialogTitle','No se pudo iniciar sesión!');
+          Session.set('showDialog',true);
         }
         callback(response.data);
         return;
@@ -202,6 +213,7 @@ data = {
       if(password === repeatedPassword){
         backendCom.updatePassword(token.access_token,password,repeatedPassword,
           (err,response)=>{
+            console.log(response);
             if(err){
               throw new Meteor.error('Error updating password');
             }

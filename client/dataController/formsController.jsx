@@ -133,7 +133,12 @@ formsController = {
           //NO RECIBE DATA DE RESPUESTA,PERO SI GRABA.
           if(response.data.success){
             callback(response.data);
+            return;
           }
+          Session.set('DialogMessage',response.data.error);
+          Session.set('isAnErrorDialog',true);
+          Session.set('DialogTitle','No se pudo agregar la direccion de delivery');
+          Session.set('showDialog',true);
         }
       );
     }
