@@ -96,9 +96,9 @@ data = {
             Session.set('gotUser',true);
             Session.set('fbUser',false);
           }
-          return;
         }
         callback(response.data);
+        return;
     });
   },
 
@@ -211,5 +211,14 @@ data = {
         )
       }
     }
+  },
+  recoverPassword:function(email,callback){
+    var token = Session.get('token');
+    backendCom.recoverPassword(email, token.access_token,  (err,response)=>{
+      if(err){
+        throw Meteor.Error('Error de conexion');
+      }
+      callback(response.data);
+    });
   }
 }

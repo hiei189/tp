@@ -1,9 +1,3 @@
-function mapObject(object, callback) {
-  return Object.keys(object).map(function (key) {
-    return callback(key, object[key]);
-  });
-}
-
 ErrorMessages = ({errorBackendMessages}) => {
   return (
     <ul>
@@ -12,7 +6,7 @@ ErrorMessages = ({errorBackendMessages}) => {
           {errorBackendMessages}
         </li>
         :
-        mapObject(errorBackendMessages,(error,errorMessage)=>{
+        utils.mapObject(errorBackendMessages,(error,errorMessage)=>{
         return <Lierror key={error} error = {errorMessage} />
       })}
     </ul>

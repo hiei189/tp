@@ -10,6 +10,7 @@ Meteor.startup(function() {
   Session.set('fbResponse',{});
   Session.set('isShoppingCartEmpty',true);
   Session.set('shoppingCart',{});
+  Session.set('showDialog',false);
   //injectTapEventPlugin();
   data.initToken((err,response)=>{
       if(!err){

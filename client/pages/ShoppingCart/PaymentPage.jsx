@@ -46,6 +46,13 @@ const styles = {
     alignSelf:'flex-end',
     marginTop:'20px'
   },
+  dateContainer:{
+    display:'flex',
+    justifyContent:'space-between',
+    flexWrap:'wrap',
+    width:'100%',
+    minWidth:'212'
+  },
   headers:{
     margin:'auto',
     width:'60%',
@@ -78,6 +85,12 @@ const styles = {
     whiteSpace:'nowrap',
     overflowY: 'hidden',
     overflowX: 'auto',
+  },
+  inputDateField:{
+    textAlign:'center'
+  },
+  dateField:{
+    width:'40%'
   },
 }
 
@@ -232,17 +245,22 @@ var CreditCard = React.createClass({
     return {
       selectedCreditcard: 'NUEVA TARJETA',
       noCreditcards:true,
-      credicardLoading:true
+      credicardLoading:true,
+      isMonthError:"No es un mes valido",
+      isYearError:"No es año valido",
     };
   },
   handleCreditcardChange:function(event,selectedCreditcard,index){
     this.setState({selectedCreditcard});
   },
+  componentWillMount: function() {
+    backendCom.getSavedCreditcards(Session.get('token').access_token,()=>{});
+  },
   getCreditcards:function(){
 
   },
   render: function() {
-    const {isNumeric,wordsError} = this.errorMessages;
+    const {isNumeric,wordsError,isMonthError,isYearError} = this.errorMessages;
     const { showIcons,selectedCreditcard } = this.state;
     return (
       <Formsy.Form
@@ -293,6 +311,45 @@ var CreditCard = React.createClass({
           value={this.state.expiration}
           style ={styles.field}
         />
+        <div className={'datebirthContainer'}>
+          <span className={'datebirth'}>
+            Fecha de vencimiento
+          </span>
+        </div>
+        <div style={styles.dateContainer}>
+
+          <FormsyText
+            required
+            floatingLabelText="Mes"
+            validations={{'isMonth':true,'isNumeric':true}}
+            validationErrors={{
+              isMonth: isMonthError
+            }}
+            type={'number'}
+            maxLength={2}
+            textFieldStyle = {{width:'100%'}}
+            name = "month"
+            style ={styles.dateField}
+            inputStyle = {styles.inputDateField}
+          />
+
+          <FormsyText
+            required
+            floatingLabelText="Año"
+            validations={{'isYear':true,'isNumeric':true}}
+            validationErrors={{
+              isYear: isYearError
+            }}
+            maxLength={2}
+            type={'number'}
+            textFieldStyle = {{width:'100%'}}
+            name = "year"
+            style ={styles.dateField}
+            inputStyle = {styles.inputDateField}
+          />
+        </div>
+
+
 
         <FormsyText
           required

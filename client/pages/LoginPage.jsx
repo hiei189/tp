@@ -101,21 +101,28 @@ LoginPage = React.createClass({
       email,
       password,
       (res)=>{
+        console.log(res);
         if(res.success){
+          Session.set('DialogMessage','Has iniciado sesión exitosamente');
+          Session.set('isAnErrorDialog',false);
+          Session.set('DialogTitle','Bienvenido, '+ Session.get('user').firstname);
+          Session.set('DialogShouldGoBack',true);
+          Session.set('showDialog',true);
+
           if(this.isMounted()){
             this.setState({
               userLogged: true,
               loadingLogin:false,
-              showError:false,
-              showDialog:true
             });
           }
         }else{
+          Session.set('DialogMessage',res.error);
+          Session.set('isAnErrorDialog',true);
+          Session.set('DialogTitle','No se pudo iniciar sesión!');
+          Session.set('showDialog',true);
+
           if(this.isMounted()){
             this.setState({
-              showError: true,
-              showDialog: true,
-              errorBackendMessages: res.error,
               loadingLogin:false
             });
           }
@@ -136,8 +143,14 @@ LoginPage = React.createClass({
   },
 
   handleRecoveryPassword:function(model){
-    backendCom.recoverPassword(model.email,this.token.access_token,
-      (err,response)=>{
+    data.recoverPassword(model.email,
+      (res)=>{
+        if(!res.success){
+          Session.set('DialogMessage',res.error);
+          Session.set('isAnErrorDialog',true);
+          Session.set('DialogTitle','No se puede recuperar tu contraseña!');
+          Session.set('showDialog',true);
+        }
     });
   },
 
@@ -199,23 +212,6 @@ LoginPage = React.createClass({
             :
             (
             <div>
-              {showDialog?
-                (showError?
-                (<DialogDefault
-                  onRequestClose = {()=>this.setState({
-                    showDialog:false,
-                    showError:false
-                  })}
-                  title={'No se pudo iniciar sesión!'}>
-                  Ocurrieron los siguientes errores al iniciar sesión:
-                  <ErrorMessages errorBackendMessages = {errorBackendMessages} />
-                </DialogDefault>)
-                 :
-                (<DialogDefault
-                title={'Bienvenido, '+ Session.get('user').firstname}
-                onRequestClose={()=>this.context.router.goBack()}>
-                Has iniciado sesión exitosamente!
-              </DialogDefault>)):null}
               <h2 style={styles.paperTitle}>Iniciar sesión</h2>
               <Formsy.Form
                 ref={'loginForm'}

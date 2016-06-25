@@ -69,7 +69,13 @@ App = React.createClass({
       },
       moveValue:'0px',
       openPopoverUser:false,
-      smallScreen: true
+      smallScreen: true,
+      isAnErrorDialog:false,
+      DialogTitle:'Tulipanda',
+      DialogMessage: 'Bienvenido',
+      DialogOnRequestClose:'',
+      showDialog:false,
+      DialogShouldGoBack:false
     };
   },
 
@@ -204,7 +210,22 @@ App = React.createClass({
           });
         }
       });
-    })
+    });
+
+    Tracker.autorun((j)=>{
+      this.trackerId_j = j;
+      const showDialog = Session.get('showDialog');
+      Tracker.nonreactive(()=>{
+        this.setState({
+          showDialog: showDialog,
+          isAnErrorDialog: Session.get('isAnErrorDialog'),
+          DialogMessage: Session.get('DialogMessage'),
+          DialogOnRequestClose : Session.get('DialogOnRequestClose'),
+          DialogShouldGoBack: Session.get('DialogShouldGoBack'),
+          DialogTitle : Session.get('DialogTitle'),
+        });
+      });
+    });
 
   },
   componentWillUnmount: function() {
@@ -215,6 +236,7 @@ App = React.createClass({
     this.trackerId_f.stop();
     this.trackerId_h.stop();
     this.trackerId_i.stop();
+    this.trackerId_j.stop();
   },
 
   openMenu(){
@@ -351,6 +373,7 @@ App = React.createClass({
     let smallScreen = this.screensize==='small'||this.screensize==='medium';
     let leftNavWidth = smallScreen?272:112;
     const styleAppBar = !smallScreen?{textAlign:'center'}:{};
+    const { isAnErrorDialog,DialogTitle,DialogMessage,DialogOnRequestClose,showDialog,DialogShouldGoBack } = this.state;
     let AppBarTitle = smallScreen?(this.state.pageTitle):(<div id={'logoAppBar'}>
       <img style={{height:'52px'}} src={"/images/logoNoColor.png"}/>
     </div>);
@@ -371,6 +394,12 @@ App = React.createClass({
             onRequestClose={this.onRequestClosePopoverUser}
             beforeLogout={this._handleCloseSession}
             anchorEl={this.state.anchorElPopover}/>*/}
+            {showDialog && <DialogDefault
+              error={isAnErrorDialog}
+              message={DialogMessage}
+              title={DialogTitle}
+              goback = {DialogShouldGoBack}
+              onRequestClose = {DialogOnRequestClose}/>}
           <LeftNav
             containerClassName = {'leftNav'}
             ref= {"leftNav"}

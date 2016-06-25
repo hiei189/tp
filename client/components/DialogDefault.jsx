@@ -7,7 +7,9 @@ const styles={
 }
 
 DialogDefault = React.createClass({
-
+  contextTypes:{
+    router:React.PropTypes.object,
+  },
   getInitialState: function() {
     return {
       open: true
@@ -20,8 +22,12 @@ DialogDefault = React.createClass({
 
   handleClose:function(){
     this.setState({open: false});
+    Session.set('showDialog',false);
     if (this.props.onRequestClose){
       this.props.onRequestClose();
+    }
+    if(this.props.goback){
+      this.context.router.goBack();
     }
   },
 
@@ -35,6 +41,7 @@ DialogDefault = React.createClass({
         onTouchTap={this.handleClose}
        />)
        this.props.actions?this.props.actions:actions;
+       const { error, message, title, children } = this.props;
     return (
       <Dialog
         open={this.state.open}
@@ -42,8 +49,14 @@ DialogDefault = React.createClass({
         modal={false}
         actions = {actions}
         onRequestClose={this.handleClose}
-        title={this.props.title}>
-        {this.props.children}
+        title={title}>
+        {error?
+          <div>
+            Ocurrieron los siguientes errores al iniciar sesión:
+            <ErrorMessages errorBackendMessages = {message} />
+          </div>
+          :message}
+        {children?children:null}
       </Dialog>
     );
   }
