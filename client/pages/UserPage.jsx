@@ -114,6 +114,7 @@ UserPage = React.createClass({
         let user = Session.get('user');
         let date = new Date(user.dob);
         if(gotUser){
+          Session.set('pageTitle','Usuario');
           this.setState({
             user: user,
             gotUser: true,

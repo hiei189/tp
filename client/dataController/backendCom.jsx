@@ -598,5 +598,21 @@ backendCom = {
         return;
       }
     );
+  },
+
+  getPaypalInfo:function(token,callback){
+    HTTP.call('GET',
+    basic_url + 'paypal',
+    {
+      headers:{
+        'Authorization':'Bearer '+ token,
+        'X-Oc-Merchant-Language' : 'es',
+        'X-Oc-Store-Id': '0'
+      }
+    },
+      (err,response)=>{
+        callback(err,response);
+      }
+    );
   }
 }

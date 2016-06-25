@@ -226,7 +226,6 @@ ShoppingDetails = React.createClass({
             <Tab value = {2}
               icon={<div><ActionPayment style={styles.icons}/></div>}>
               <ShoppingDetailsTabTemplate
-                title={'Datos de pago'}
                 onInvalid = {this.handleInvalidPayment}
                 Component = {PaymentPage}
                 onValid = {this.handleValidPayment}/>
@@ -249,9 +248,10 @@ const ShoppingDetailsTabTemplate = ({title,onInvalid,onValid,Component},context)
   const { smallScreen } = context;
   return(
     <Paper style={styles.paperContainer}  zDepth = {smallScreen?0:1}>
-      <div>
+      {title?<div>
         <h2 style={styles.paperTitle}>{title}</h2>
-      </div>
+      </div>:null}
+
       <Component onInvalid = {onInvalid} onValid = {onValid} />
     </Paper>
   );

@@ -63,6 +63,7 @@ ProductTile = React.createClass({
         <div className={'productImgContainer'}>
           <img
             id = {this.props.product.id}
+            style={{cursor:'pointer'}}
             src={this.props.product.image}
             className={productImg}
             onTouchTap={this.onTouchTapImg}
@@ -70,9 +71,10 @@ ProductTile = React.createClass({
         </div>
         <div className={'productDataContainer'}  >
           <div className={'productTitle'}
+            style={{cursor:'pointer'}}
             onTouchTap={this._handleTouchTap}
             id={this.props.product.id}>
-            <h4>{this.props.product.name}</h4>
+            <h4 >{this.props.product.name}</h4>
           </div><hr/>
           <div className={'productCodeFullText'}>
             <span className={'productKey'}>Código: </span> <span>{this.props.product.sku}</span><br/>

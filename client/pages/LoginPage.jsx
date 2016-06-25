@@ -3,12 +3,16 @@ const Colors = mui.Styles.Colors;
 
 const styles = {
   paperContainer:{
-    width:'33%',
-    minWidth:256,
     margin:'auto',
     padding:'0 3% 5px',
     marginTop:20,
-    textAlign:'center'
+    textAlign:'center',
+    width:'90%',
+    minWidth:288,
+    maxWidth:612,
+    display:'flex',
+    flexDirection:'column',
+    justifyContent:'space-around',
   },
   container: {
     display: 'flex',
@@ -59,7 +63,8 @@ LoginPage = React.createClass({
   contextTypes: {
     muiTheme: React.PropTypes.object,
     router:React.PropTypes.object,
-    token: React.PropTypes.object
+    token: React.PropTypes.object,
+    smallScreen: React.PropTypes.bool
   },
   componentWillMount: function() {
     Session.set('pageTitle','Inicia sesión');
@@ -161,18 +166,17 @@ LoginPage = React.createClass({
   render: function() {
     let { wordsError,isEmail, isExisty } = this.errorMessages;
     const {loadingLogin,showDialog,showError,errorBackendMessages} = this.state;
+    const { smallScreen } = this.context;
     return (
-      <Paper style={styles.paperContainer}>
-        <div style={styles.container}>
+      <Paper style={styles.paperContainer} zDepth = {smallScreen?0:1}>
+
           {this.state.recoverPassword?
             (
-              <div>
-              <h2 style={styles.paperTitle}>Recupera tu contraseña</h2>
               <Formsy.Form
                 ref={'recoveryPasswordForm'}
                 onValidSubmit={this.handleRecoveryPassword}
                 style ={styles.forms}>
-
+                  <h2 style={styles.paperTitle} >Recupera tu contraseña</h2>
                 <FormsyText
                   name='recovery.email'
                   ref='recovery.email'
@@ -180,7 +184,6 @@ LoginPage = React.createClass({
                   validationError={isEmail}
                   required
                   floatingLabelText="Correo electrónico"
-                  hintText={'Ingresa el correo con el creaste tu cuenta'}
                   type="string"
                   style ={styles.field}
                 /><br/>
@@ -192,7 +195,6 @@ LoginPage = React.createClass({
                   style ={styles.button}
                 /><br/>
               </Formsy.Form>
-            </div>
             )
             :
             (
@@ -284,7 +286,6 @@ LoginPage = React.createClass({
                 onTouchTap={this.createNewUser}>Registrate</span>
             </div><br/>
           </div>
-        </div>
       </Paper>
     );
   }

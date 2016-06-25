@@ -59,7 +59,8 @@ ProductsByCategoryPage = React.createClass({
       this.selectedCategory = nextProps.params.categoryId;
       this.nextPage = 1;
       this.setState({
-        products: []
+        products: [],
+        selectedTab:1
       });
       this.getCategories(nextProps);
     }
@@ -111,16 +112,22 @@ ProductsByCategoryPage = React.createClass({
     //this.fetchNextPage(this.nextPage);
   },
 
+  handleChangeTab:function(selectedTab){
+    this.setState({selectedTab});
+  },
+
   getDesktopTabs:function(){
     if(this.selectedCategoryObject.categories){
+      let i = 0;
         let ProductsArray = this.selectedCategoryObject.categories.map((category)=>{
+          i++;
           return(
-            <Tab key={category.category_id} label={category.name}>
+            <Tab key={category.category_id} label={category.name} value={i}>
               <ProductsComponent categoryId = {category.category_id} />
             </Tab>
           );
         });
-        return <Tabs tabItemContainerStyle={{color:Colors.pink500}}>{ProductsArray}</Tabs>
+        return <Tabs tabItemContainerStyle={{color:Colors.pink500}} onChange={this.handleChangeTab} value={this.state.selectedTab}>{ProductsArray}</Tabs>
     }else{
         return <ProductsComponent categoryId = {this.selectedCategoryObject.category_id} />
     }

@@ -160,7 +160,20 @@ formsController = {
       }
       callback(response.data);
     });
+  },
+
+  payment:{
+    getPaypalInfo:function(callback){
+      const token = Session.get('token')
+      backendCom.getPaypalInfo(token.access_token,(err,response)=>{
+        if(err){
+          throw new Meteor.error(200,'Error de conexion');
+        }
+        callback(response.data);
+      });
+    }
   }
+
 
 
 

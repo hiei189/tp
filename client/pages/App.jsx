@@ -300,7 +300,7 @@ App = React.createClass({
             fbUser:false
           });
         }
-        
+
         Session.setPersistent('user',{});
         Session.setPersistent('gotUser',false);
         Session.setPersistent('token',{});
@@ -634,6 +634,7 @@ var Li = React.createClass({
     return (
       <li
         onMouseOver={this.mouseOver}
+        style ={{cursor:'pointer'}}
         onMouseOut={this.mouseOut}>
         <a
           className={'desktopListItem'}

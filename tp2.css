@@ -183,7 +183,7 @@ html{
     -ms-transform: scale(1.75);
     -o-transform: scale(1.75);
     transform: scale(1.75);
-    position: absolute;
+    position: fixed;
     top:0;
     bottom: 0;
     left: 0;
