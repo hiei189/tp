@@ -108,7 +108,8 @@ PaymentPage = React.createClass({
       methodCard: false,
       method:'NO_METHOD',
       gotPaypalData:false,
-      paypal:{}
+      paypalInputs:{},
+      paypalAction:''
     };
   },
 
@@ -136,8 +137,9 @@ PaymentPage = React.createClass({
       if(res.success){
         if(this.isMounted()){
           this.setState({
-            paypal:res.paypal,
-            gotPaypalData:true
+            paypalInputs:res.paypal,
+            gotPaypalData:true,
+            paypalAction: res.action
           });
         }
       }
@@ -158,12 +160,12 @@ PaymentPage = React.createClass({
 
   render: function() {
 
-    const {methodCard,gotPaypalData,paypal} = this.state;
+    const {methodCard,gotPaypalData,paypalInputs,paypalAction} = this.state;
 
     return (
       <div style={{marginBottom:'20px'}}>
         {gotPaypalData?
-          <Paypal inputs = {paypal} />:null}
+          <Paypal inputs = {paypalInputs} action = {paypalAction}/>:null}
         {methodCard?
           <CreditCard
             goBack = {this.selectMethodAgain}
@@ -220,7 +222,7 @@ var Paypal = React.createClass({
 
   render: function() {
     return (
-      <form ref={'paypalForm'} action="https://www.paypal.com/cgi-bin/webscr" method="post" id="form_paypal">
+      <form ref={'paypalForm'} action={this.props.action} method="post" id="form_paypal">
         {this.loadPaypalInputs()}
       </form>
     );

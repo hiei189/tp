@@ -169,6 +169,7 @@ DeliveryPage = React.createClass({
             onFocus={this.onFocusDate}
             onBlur={this.onBlurDate}
             minDate = {this.minDate}
+            primarty = {true}
             maxDate = {this.maxDate}
             name = "dateDelivery"
           />

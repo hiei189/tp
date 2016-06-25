@@ -34,5 +34,8 @@ theme =  getMuiTheme({
     backgroundColor: Colors.white,
     textColor: ColorManipulator.fade(Colors.pink500, 0.5),
     selectedTextColor: Colors.pink500
+  },
+  datePicker:{
+    selectColor: Colors.pink500
   }
 });
