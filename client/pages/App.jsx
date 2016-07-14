@@ -223,6 +223,7 @@ App = React.createClass({
           DialogOnRequestClose : Session.get('DialogOnRequestClose'),
           DialogShouldGoBack: Session.get('DialogShouldGoBack'),
           DialogTitle : Session.get('DialogTitle'),
+          DialogAction : Session.get('DialogAction'),
         });
       });
     });
@@ -373,7 +374,7 @@ App = React.createClass({
     let smallScreen = this.screensize==='small'||this.screensize==='medium';
     let leftNavWidth = smallScreen?272:112;
     const styleAppBar = !smallScreen?{textAlign:'center'}:{};
-    const { isAnErrorDialog,DialogTitle,DialogMessage,DialogOnRequestClose,showDialog,DialogShouldGoBack } = this.state;
+    const { isAnErrorDialog,DialogTitle,DialogMessage,DialogOnRequestClose,showDialog,DialogShouldGoBack,DialogAction } = this.state;
     let AppBarTitle = smallScreen?(this.state.pageTitle):(<div id={'logoAppBar'}>
       <img style={{height:'52px'}} src={"/images/logoNoColor.png"}/>
     </div>);
@@ -399,6 +400,7 @@ App = React.createClass({
               message={DialogMessage}
               title={DialogTitle}
               goback = {DialogShouldGoBack}
+              action = {DialogAction}
               onRequestClose = {DialogOnRequestClose}/>}
           <LeftNav
             containerClassName = {'leftNav'}

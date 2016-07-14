@@ -98,21 +98,10 @@ CreateUserPage = React.createClass({
         if(this.isMounted()){
           this.setState({
             userCreated: true,
-            showError:false,
-            showDialog:true,
             createdUser: res.data
           });
         }
-      }else{
-        if(this.isMounted()){
-          this.setState({
-            showError: true,
-            showDialog:true,
-            errorBackendMessages: res.error
-          });
-        }
       }
-
     });
   },
 
@@ -172,27 +161,9 @@ CreateUserPage = React.createClass({
 
   render: function() {
     const {isNumericError,isMonthError,isWordsError,isSpecialWordsError,isEmailError,minLength7Error,isExistyError,equalsFieldPasswordError, isDayError, isYearError} = this.errorMessages;
-    const {showDialog, showError,errorBackendMessages} = this.state;
     const { smallScreen } = this.context;
     return (
       <Paper style={styles.paperContainer} zDepth = {smallScreen?0:1}>
-        {showDialog?
-          (showError?
-          <DialogDefault
-            onRequestClose = {()=>this.setState({
-              showDialog:false
-            })}
-            title={'No se pudo crear tu cuenta!'}>
-            Ocurrieron los siguientes errores al crear tu cuenta:
-            <ErrorMessages errorBackendMessages = {errorBackendMessages} />
-          </DialogDefault>
-            :
-          <DialogDefault
-            title={'Bienvenido!, ' + this.state.createdUser.firstname}
-            onRequestClose={this.goHome}>
-            Tu cuenta ha sido creada exitosamente!
-          </DialogDefault>):null}
-
         <Formsy.Form
           onValidSubmit={this.createUser}
           onValid={this.validForm}

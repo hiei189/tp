@@ -33,6 +33,9 @@ data = {
     let isTokenPersistent = Object.keys(token).length != 0; //si hay token entonces habia sesion
 
     backendCom.getTokenGuest(token.access_token,(err,response)=>{
+      if(err){
+        throw new Meteor.Error('200', 'No se pudo iniciar conexion, vuelve a intentarlo');
+      }
       if(response.data){
         if(isTokenPersistent){Session.setPersistent('token',response.data);}
         else {Session.set('token',response.data);}
@@ -84,6 +87,9 @@ data = {
     var token = Session.get('token');
     backendCom.loginUser(token.access_token,email,password,
       (err,response)=>{
+        if(err){
+          throw new Meteor.Error('200', 'No se pudo establecer conexion con el servidor, intenta de nuevo');
+        }
         if(response.data.success){
           CartController.getAllItems(token.access_token,(err,response)=>{});
           if(persistent){
@@ -187,6 +193,18 @@ data = {
         if(response.data.success){
           Session.set('user',response.data.data);
           Session.set('gotUser',true);
+
+          Session.set('DialogMessage','Tu cuenta ha sido creada exitosamente!');
+          Session.set('isAnErrorDialog',false);
+          Session.set('DialogTitle','Bienvenido!, '+ response.data.data.firstname);
+          Session.set('DialogAction','GO_HOME');
+          Session.set('showDialog',true);
+        }else{
+          Session.set('DialogMessage',response.data.error);
+          Session.set('isAnErrorDialog',true);
+          Session.set('DialogAction','DO_NOTHING');
+          Session.set('DialogTitle','No se pudo crear tu cuenta de usuario!');
+          Session.set('showDialog',true);
         }
       }
     });
@@ -197,12 +215,14 @@ data = {
     backendCom.updateUserData(token.access_token,model.firstname,model.lastname,model.dob,
     model.email, model.telephone,model.gender,
       (err,response)=>{
-        if(!err){
+        if(err){
+          throw new Meteor.Error('200', 'No se pudo actualizar los datos, por favor intenta de nuevo');
+        }
           callback(response.data);
           if(response.data.success){
             Session.set('user',response.data.data);
           }
-        }
+
       }
     );
   },
@@ -215,7 +235,7 @@ data = {
           (err,response)=>{
             console.log(response);
             if(err){
-              throw new Meteor.error('Error updating password');
+              throw new Meteor.Error('Error updating password');
             }
             callback(response.data);
             return;
@@ -228,7 +248,7 @@ data = {
     var token = Session.get('token');
     backendCom.recoverPassword(email, token.access_token,  (err,response)=>{
       if(err){
-        throw Meteor.Error('Error de conexion');
+        throw new Meteor.Error('Error de conexion');
       }
       callback(response.data);
     });

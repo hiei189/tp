@@ -113,12 +113,6 @@ formsController = {
     }
   },
 
-  delivery:{
-    errors:{
-
-    }
-  },
-
   deliveryController:{
     addDelivery:function(model,callback){
       const token = Session.get('token');

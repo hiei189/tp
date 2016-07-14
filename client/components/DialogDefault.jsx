@@ -21,17 +21,33 @@ DialogDefault = React.createClass({
   },
 
   handleClose:function(){
+    const { actions, onRequestClose,goback } = this.props;
+    const { router } = this.context;
     this.setState({open: false});
     Session.set('showDialog',false);
     Session.set('DialogMessage','');
     Session.set('isAnErrorDialog',false);
     Session.set('DialogTitle','Tulipanda');
     Session.set('DialogShouldGoBack',false);
-    if (this.props.onRequestClose){
-      this.props.onRequestClose();
+    Session.set('DialogAction','DO_NOTHING');
+
+
+    if (onRequestClose){
+      onRequestClose();
     }
-    if(this.props.goback){
-      this.context.router.goBack();
+
+    if(actions){
+      switch (actions) {
+        case 'GO_HOME':
+          router.push('/');
+          break;
+        default:
+          break;
+      }
+    }
+
+    if(goback){
+      router.goBack();
     }
   },
 
