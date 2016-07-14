@@ -16,6 +16,11 @@ const styles={
     justifyContent:'space-around',
 
   },
+  paperNote:{
+    color: Colors.pink500,
+    textAlign:'center',
+    marginBottom:'20px'
+  },
   icons:{
     margin:'auto',
     width:28,
@@ -211,6 +216,7 @@ ShoppingDetails = React.createClass({
               icon={<div><MapsLocalShipping style={styles.icons}/></div>}>
               <ShoppingDetailsTabTemplate
                 title={'Dirección de entrega'}
+                note={'Ingrese aqui los datos de quien recepcionara tu pedido'}
                 onInvalid = {this.handleInvalidShipping}
                 Component = {ShippingPage}
                 onValid = {this.handleValidShipping}/>
@@ -244,14 +250,14 @@ ShoppingDetails = React.createClass({
 });
 
 
-const ShoppingDetailsTabTemplate = ({title,onInvalid,onValid,Component},context)=>{
+const ShoppingDetailsTabTemplate = ({title,note,onInvalid,onValid,Component},context)=>{
   const { smallScreen } = context;
   return(
     <Paper style={styles.paperContainer}  zDepth = {smallScreen?0:1}>
       {title?<div>
         <h2 style={styles.paperTitle}>{title}</h2>
       </div>:null}
-
+      {note?<span style={styles.paperNote}>{note}</span>:null}
       <Component onInvalid = {onInvalid} onValid = {onValid} />
     </Paper>
   );

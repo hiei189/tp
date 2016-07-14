@@ -121,7 +121,7 @@ formsController = {
         model.deliveryHourMenu,
         model.occasions,
         model.message,
-        '0', //revisar anonymous
+        model.anonymous?1:0, //revisar anonymous
         token.access_token,
         (err,response)=>{
           //NO RECIBE DATA DE RESPUESTA,PERO SI GRABA.

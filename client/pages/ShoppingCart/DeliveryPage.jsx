@@ -1,5 +1,5 @@
 const Colors = mui.Styles.Colors;
-const {TextField, TimePicker, DropDownMenu, SelectField, DatePicker,RaisedButton,MenuItem,CircularProgress,FloatingActionButton} = mui;
+const {TextField, TimePicker, DropDownMenu, SelectField, DatePicker,RaisedButton,MenuItem,CircularProgress,FloatingActionButton,Toggle} = mui;
 const {ContentSend} = mui.SvgIcons;
 const {NavigationRefresh} = mui.SvgIcons;
 
@@ -29,6 +29,9 @@ const styles = {
     width:'60%',
     textAlign:'center',
     color:Colors.pink500
+  },
+  fieldAnonymous:{
+    color: 'rgba(0, 0, 0, 0.298039)'
   }
 }
 
@@ -47,7 +50,8 @@ DeliveryPage = React.createClass({
       deliveryHours: 'NO_DATA',
       birth:'',
       fechatest:'',
-      typeDate:'string'
+      typeDate:'string',
+      toggledAnonymous:false,
     };
   },
 
@@ -123,6 +127,7 @@ DeliveryPage = React.createClass({
   },
   validateForm:function(){
     model = this.refs.deliveryForm.getModel();
+    model.anonymous = this.state.toggledAnonymous;
     this.props.onValid(model);
   },
 
@@ -139,20 +144,32 @@ DeliveryPage = React.createClass({
   },
   calculatePriceShipping:function(){
     const model = this.refs.deliveryForm.getModel();
+    model.anonymous = this.state.toggledAnonymous;
 
     formsController.deliveryController.addDelivery(model,
       (res)=>{
         if(this.isMounted()){
           this.setState({
-            priceDelivery: res.data.price.toString()
+            priceDelivery: res.data.cost_text.toString()
           });
         }
       });
   },
+
+  onToggleAnonymous: function(){
+
+
+    this.setState({
+      toggledAnonymous: !this.state.toggledAnonymous
+    });
+
+
+  },
+
   render: function() {
 
     let { wordsError } = this.errorMessages;
-
+    const { toggledAnonymous } = this.state;
     return (
       <div style={{marginBottom:'50px'}}>
         <Formsy.Form
@@ -161,6 +178,14 @@ DeliveryPage = React.createClass({
           ref = {'deliveryForm'}
           onInvalid={this.invalidForm}
           style ={styles.form}>
+
+          <Toggle
+            label={'Anonimo'}
+            onToggle = {this.onToggleAnonymous}
+            toggle = {toggledAnonymous}
+            labelStyle={toggledAnonymous?null:styles.fieldAnonymous}
+            />
+
 
           <FormsyDate
             required

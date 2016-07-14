@@ -109,7 +109,9 @@ PaymentPage = React.createClass({
       method:'NO_METHOD',
       gotPaypalData:false,
       paypalInputs:{},
-      paypalAction:''
+      paypalAction:'',
+      year:'',
+      month:'',
     };
   },
 
@@ -160,7 +162,7 @@ PaymentPage = React.createClass({
 
   render: function() {
 
-    const {methodCard,gotPaypalData,paypalInputs,paypalAction} = this.state;
+    const { methodCard,gotPaypalData,paypalInputs,paypalAction, year, month } = this.state;
 
     return (
       <div style={{marginBottom:'20px'}}>
@@ -235,35 +237,35 @@ var CreditCard = React.createClass({
   errorMessages: {
     isNumeric:'Solo puedes ingresar números',
     isDefaultRequiredValue: 'Este campo es requerido',
-    wordsError: "Solo use letras (a-z)"
+    wordsError: "Solo use letras (a-z)",
+    isMonthError:"No es un mes valido",
+    isCreditCardYearError:"No es año valido",
   },
   componentWillMount: function() {
     let MenuCountries = Object.keys(Countries).map((code)=>{
       return <MenuItem key={code} value = {code} primaryText = {Countries[code]} />
     });
     this.setState({MenuCountries});
+    backendCom.getSavedCreditcards(Session.get('token').access_token,()=>{});
   },
   getInitialState: function() {
     return {
       selectedCreditcard: 'NUEVA TARJETA',
       noCreditcards:true,
       credicardLoading:true,
-      isMonthError:"No es un mes valido",
-      isYearError:"No es año valido",
+      year:'',
+      month:''
     };
   },
   handleCreditcardChange:function(event,selectedCreditcard,index){
     this.setState({selectedCreditcard});
   },
-  componentWillMount: function() {
-    backendCom.getSavedCreditcards(Session.get('token').access_token,()=>{});
-  },
   getCreditcards:function(){
 
   },
   render: function() {
-    const {isNumeric,wordsError,isMonthError,isYearError} = this.errorMessages;
-    const { showIcons,selectedCreditcard } = this.state;
+    const {isNumeric,wordsError,isMonthError,isYearError,isCreditCardYearError} = this.errorMessages;
+    const { showIcons,selectedCreditcard,month,year } = this.state;
     return (
       <Formsy.Form
         onValidSubmit={this.props.submit}
@@ -302,17 +304,7 @@ var CreditCard = React.createClass({
           style ={styles.fieldCreditcard}
         />
 
-        <FormsyText
-          required
-          floatingLabelText="Fecha de Expiración"
-          hintText = "Ingresa la fecha de expiración"
-          type="string"
-          defaultValue = "__/__"
-          id ="ccexpiration"
-          name = "ccexpiration"
-          value={this.state.expiration}
-          style ={styles.field}
-        />
+
         <div className={'datebirthContainer'}>
           <span className={'datebirth'}>
             Fecha de vencimiento
@@ -327,25 +319,25 @@ var CreditCard = React.createClass({
             validationErrors={{
               isMonth: isMonthError
             }}
-            type={'number'}
             maxLength={2}
             textFieldStyle = {{width:'100%'}}
             name = "month"
             style ={styles.dateField}
+            value = {month}
             inputStyle = {styles.inputDateField}
           />
 
           <FormsyText
             required
             floatingLabelText="Año"
-            validations={{'isYear':true,'isNumeric':true}}
+            validations={{'isCreditCardYear':true,'isNumeric':true}}
             validationErrors={{
-              isYear: isYearError
+              isCreditCardYear: isCreditCardYearError
             }}
             maxLength={2}
-            type={'number'}
             textFieldStyle = {{width:'100%'}}
             name = "year"
+            value = {year}
             style ={styles.dateField}
             inputStyle = {styles.inputDateField}
           />

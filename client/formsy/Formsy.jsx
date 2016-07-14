@@ -128,6 +128,12 @@ var utils = {
     isMonth:function(values,value){
       return !isExisty(value) || (value <= 12 && value >=1);
     },
+    isCreditCardYear:function(values,value){
+      if(value.toString().length === 2){
+        return !isExisty(value) || (value >= new Date().getFullYear()-2000);
+      }
+      return !isExisty(value);
+    },
     isYear:function(values,value){
       return !isExisty(value) || (value >= 1850 && value <= new Date().getFullYear());
     },
