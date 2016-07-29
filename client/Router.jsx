@@ -3,11 +3,8 @@ Meteor.startup(function() {
 
 
   culqi = (checkout)=>{
-    console.log(checkout);
-    formsController.payment.confirmPayment(CulqiJS.respuesta,(res)=>{
-      console.log(res);
+    formsController.payment.confirmPayment(checkout.respuesta,(res)=>{
     });
-    console.log(CulqiJS.respuesta);
   };
 
   Session.set('pageTitle','Tulipanda');
