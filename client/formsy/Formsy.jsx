@@ -55,7 +55,7 @@ var utils = {
   };
 
   var isEmpty = function (value) {
-    return value === '';
+    return value === '' ;
   };
 
   var validations = {

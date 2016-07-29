@@ -56,6 +56,7 @@ ShoppingDetails = React.createClass({
     this.shipping = {};
     this.delivery = {};
     this.payment = {};
+    this.creditcard = {};
     this.token = Session.get('token');
     Tracker.autorun((a)=>{
       this.trackerId_a = a;
@@ -179,30 +180,56 @@ ShoppingDetails = React.createClass({
               // }
               break;
           case 1:
-              model = this.delivery.model;
-              this.setState({
-                loadingButton: true
+            model = this.delivery.model;
+            this.setState({
+              loadingButton: true
+            });
+            formsController.deliveryController.addDelivery(model,
+              (res)=>{
+                if(this.isMounted()){
+                  this.setState({
+                    loadingButton:false,
+                    currentTab:2,
+                    disabledButton:true,
+                  });
+                }
               });
-              formsController.deliveryController.addDelivery(model,
-                (res)=>{
-                  if(this.isMounted()){
-                    this.setState({
-                      loadingButton:false,
-                      currentTab:2,
-                      disabledButton:true,
-                    });
-                  }
-                });
             break;
           case 2:
-
-              break;
+            model = this.creditcard.model;
+            CulqiJS.pagarVenta({
+              numero:model.number,
+              exp_m:model.month,
+              exp_a:model.year,
+              cvc:model.cvc,
+              nombre:model.name,
+              email:model.email
+            })
+            break;
           default:
         }
       }
     }else{
       this.context.router.push('/user');
     }
+  },
+
+  validateCreditCard:function(model,isValid){
+    if(isValid){
+      this.creditcard.model = model;
+      console.log(model);
+      this.setState({
+        disabledButton:false,
+        validCreditCard:true,
+        validCurrentForm:true
+      });
+      return;
+    }
+    this.setState({
+      disabledButton:true,
+      validCreditCard:false,
+      validCurrentForm:false
+    });
   },
 
   render: function() {
@@ -234,6 +261,7 @@ ShoppingDetails = React.createClass({
               <ShoppingDetailsTabTemplate
                 onInvalid = {this.handleInvalidPayment}
                 Component = {PaymentPage}
+                validateCreditCard = {this.validateCreditCard}
                 onValid = {this.handleValidPayment}/>
             </Tab>
           </Tabs>
@@ -250,7 +278,7 @@ ShoppingDetails = React.createClass({
 });
 
 
-const ShoppingDetailsTabTemplate = ({title,note,onInvalid,onValid,Component},context)=>{
+const ShoppingDetailsTabTemplate = ({title,note,onInvalid,onValid,Component,...props},context)=>{
   const { smallScreen } = context;
   return(
     <Paper style={styles.paperContainer}  zDepth = {smallScreen?0:1}>
@@ -258,7 +286,7 @@ const ShoppingDetailsTabTemplate = ({title,note,onInvalid,onValid,Component},con
         <h2 style={styles.paperTitle}>{title}</h2>
       </div>:null}
       {note?<span style={styles.paperNote}>{note}</span>:null}
-      <Component onInvalid = {onInvalid} onValid = {onValid} />
+      <Component onInvalid = {onInvalid} onValid = {onValid} {...props} />
     </Paper>
   );
 }

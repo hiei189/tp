@@ -1,5 +1,15 @@
 const {Route, Router,IndexRoute,browserHistory} = ReactRouter;
 Meteor.startup(function() {
+
+
+  culqi = (checkout)=>{
+    console.log(checkout);
+    formsController.payment.confirmPayment(CulqiJS.respuesta,(res)=>{
+      console.log(res);
+    });
+    console.log(CulqiJS.respuesta);
+  };
+
   Session.set('pageTitle','Tulipanda');
   Session.set('cartshopNumber','0');
   Session.set('token',{});

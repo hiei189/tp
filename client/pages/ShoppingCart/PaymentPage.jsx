@@ -1,5 +1,4 @@
 const Colors = mui.Styles.Colors;
-const Countries = {"AF":"Afganist\u00e1n","AL":"Albania","DE":"Alemania","AD":"Andorra","AO":"Angola","AI":"Anguila","AQ":"Ant\u00e1rtida","AG":"Antigua y Barbuda","SA":"Arabia Saud\u00ed","DZ":"Argelia","AR":"Argentina","AM":"Armenia","AW":"Aruba","AU":"Australia","AT":"Austria","AZ":"Azerbaiy\u00e1n","BS":"Bahamas","BD":"Banglad\u00e9s","BB":"Barbados","BH":"Bar\u00e9in","BE":"B\u00e9lgica","BZ":"Belice","BJ":"Ben\u00edn","BM":"Bermudas","BY":"Bielorrusia","BO":"Bolivia","BA":"Bosnia-Herzegovina","BW":"Botsuana","BR":"Brasil","BN":"Brun\u00e9i","BG":"Bulgaria","BF":"Burkina Faso","BI":"Burundi","BT":"But\u00e1n","CV":"Cabo Verde","KH":"Camboya","CM":"Camer\u00fan","CA":"Canad\u00e1","BQ":"Caribe neerland\u00e9s","QA":"Catar","EA":"Ceuta y Melilla","TD":"Chad","CL":"Chile","CN":"China","CY":"Chipre","VA":"Ciudad del Vaticano","CO":"Colombia","KM":"Comoras","KP":"Corea del Norte","KR":"Corea del Sur","CI":"Costa de Marfil","CR":"Costa Rica","HR":"Croacia","CU":"Cuba","CW":"Curazao","DG":"Diego Garc\u00eda","DK":"Dinamarca","DM":"Dominica","EC":"Ecuador","EG":"Egipto","SV":"El Salvador","AE":"Emiratos \u00c1rabes Unidos","ER":"Eritrea","SK":"Eslovaquia","SI":"Eslovenia","ES":"Espa\u00f1a","US":"Estados Unidos","EE":"Estonia","ET":"Etiop\u00eda","PH":"Filipinas","FI":"Finlandia","FJ":"Fiyi","FR":"Francia","GA":"Gab\u00f3n","GM":"Gambia","GE":"Georgia","GH":"Ghana","GI":"Gibraltar","GD":"Granada","GR":"Grecia","GL":"Groenlandia","GP":"Guadalupe","GU":"Guam","GT":"Guatemala","GF":"Guayana Francesa","GG":"Guernesey","GN":"Guinea","GQ":"Guinea Ecuatorial","GW":"Guinea-Bis\u00e1u","GY":"Guyana","HT":"Hait\u00ed","HN":"Honduras","HU":"Hungr\u00eda","IN":"India","ID":"Indonesia","IR":"Ir\u00e1n","IQ":"Iraq","IE":"Irlanda","CX":"Isla Christmas","AC":"Isla de la Ascensi\u00f3n","IM":"Isla de Man","NU":"Isla Niue","NF":"Isla Norfolk","IS":"Islandia","AX":"Islas \u00c5land","KY":"Islas Caim\u00e1n","IC":"islas Canarias","CC":"Islas Cocos","CK":"Islas Cook","FO":"Islas Feroe","GS":"Islas Georgia del Sur y Sandwich del Sur","FK":"Islas Malvinas","MP":"Islas Marianas del Norte","MH":"Islas Marshall","UM":"Islas menores alejadas de EE. UU.","PN":"Islas Pitcairn","SB":"Islas Salom\u00f3n","TC":"Islas Turcas y Caicos","VG":"Islas V\u00edrgenes Brit\u00e1nicas","VI":"Islas V\u00edrgenes de EE. UU.","IL":"Israel","IT":"Italia","JM":"Jamaica","JP":"Jap\u00f3n","JE":"Jersey","JO":"Jordania","KZ":"Kazajist\u00e1n","KE":"Kenia","KG":"Kirguist\u00e1n","KI":"Kiribati","XK":"Kosovo","KW":"Kuwait","LA":"Laos","LS":"Lesoto","LV":"Letonia","LB":"L\u00edbano","LR":"Liberia","LY":"Libia","LI":"Liechtenstein","LT":"Lituania","LU":"Luxemburgo","MK":"Macedonia","MG":"Madagascar","MY":"Malasia","MW":"Malaui","MV":"Maldivas","ML":"Mali","MT":"Malta","MA":"Marruecos","MQ":"Martinica","MU":"Mauricio","MR":"Mauritania","YT":"Mayotte","MX":"M\u00e9xico","FM":"Micronesia","MD":"Moldavia","MC":"M\u00f3naco","MN":"Mongolia","ME":"Montenegro","MS":"Montserrat","MZ":"Mozambique","MM":"Myanmar (Birmania)","NA":"Namibia","NR":"Nauru","NP":"Nepal","NI":"Nicaragua","NE":"N\u00edger","NG":"Nigeria","NO":"Noruega","NC":"Nueva Caledonia","NZ":"Nueva Zelanda","OM":"Om\u00e1n","NL":"Pa\u00edses Bajos","PK":"Pakist\u00e1n","PW":"Palau","PA":"Panam\u00e1","PG":"Pap\u00faa Nueva Guinea","PY":"Paraguay","PE":"Per\u00fa","PF":"Polinesia Francesa","PL":"Polonia","PT":"Portugal","PR":"Puerto Rico","HK":"RAE de Hong Kong (China)","MO":"RAE de Macao (China)","GB":"Reino Unido","CF":"Rep\u00fablica Centroafricana","CZ":"Rep\u00fablica Checa","CG":"Rep\u00fablica del Congo","CD":"Rep\u00fablica Democr\u00e1tica del Congo","DO":"Rep\u00fablica Dominicana","RE":"Reuni\u00f3n","RW":"Ruanda","RO":"Ruman\u00eda","RU":"Rusia","EH":"S\u00e1hara Occidental","WS":"Samoa","AS":"Samoa Americana","BL":"San Bartolom\u00e9","KN":"San Crist\u00f3bal y Nieves","SM":"San Marino","MF":"San Mart\u00edn","PM":"San Pedro y Miquel\u00f3n","VC":"San Vicente y las Granadinas","SH":"Santa Elena","LC":"Santa Luc\u00eda","ST":"Santo Tom\u00e9 y Pr\u00edncipe","SN":"Senegal","RS":"Serbia","SC":"Seychelles","SL":"Sierra Leona","SG":"Singapur","SX":"Sint Maarten","SY":"Siria","SO":"Somalia","LK":"Sri Lanka","SZ":"Suazilandia","ZA":"Sud\u00e1frica","SD":"Sud\u00e1n","SS":"Sud\u00e1n del Sur","SE":"Suecia","CH":"Suiza","SR":"Surinam","SJ":"Svalbard y Jan Mayen","TH":"Tailandia","TW":"Taiw\u00e1n","TZ":"Tanzania","TJ":"Tayikist\u00e1n","IO":"Territorio Brit\u00e1nico del Oc\u00e9ano \u00cdndico","TF":"Territorios Australes Franceses","PS":"Territorios Palestinos","TL":"Timor Oriental","TG":"Togo","TK":"Tokelau","TO":"Tonga","TT":"Trinidad y Tobago","TA":"Trist\u00e1n da Cunha","TN":"T\u00fanez","TM":"Turkmenist\u00e1n","TR":"Turqu\u00eda","TV":"Tuvalu","UA":"Ucrania","UG":"Uganda","UY":"Uruguay","UZ":"Uzbekist\u00e1n","VU":"Vanuatu","VE":"Venezuela","VN":"Vietnam","WF":"Wallis y Futuna","YE":"Yemen","DJ":"Yibuti","ZM":"Zambia","ZW":"Zimbabue"};
 const {TextField, TimePicker, FlatButton, DropDownMenu, SelectField, DatePicker,RaisedButton,MenuItem,AutoComplete,CircularProgress,FloatingActionButton, RadioButton, RadioButtonGroup} = mui;
 
 const styles = {
@@ -43,8 +42,19 @@ const styles = {
     flexDirection:'column'
   },
   goBackButton:{
-    alignSelf:'flex-end',
-    marginTop:'20px'
+
+  },
+  bottomButtons:{
+    display:'flex',
+    flexDirection:'row',
+    marginTop:'20px',
+    justifyContent:'space-around'
+  },
+  bottomButtonsOneIcon:{
+    display:'flex',
+    flexDirection:'row',
+    marginTop:'20px',
+    justifyContent:'flex-start'
   },
   dateContainer:{
     display:'flex',
@@ -115,23 +125,8 @@ PaymentPage = React.createClass({
     };
   },
 
-  componentWillMount: function() {
-
-
-  },
-
   handleCountryMenu: function(event, selectedCountry, index) {
     this.setState({selectedCountry})
-  },
-
-  onValid:function(){
-
-  },
-  onInvalid:function(){
-
-  },
-  submit:function(){
-
   },
 
   handlePaypal:function(){
@@ -163,7 +158,6 @@ PaymentPage = React.createClass({
   render: function() {
 
     const { methodCard,gotPaypalData,paypalInputs,paypalAction, year, month } = this.state;
-
     return (
       <div style={{marginBottom:'20px'}}>
         {gotPaypalData?
@@ -174,24 +168,25 @@ PaymentPage = React.createClass({
             onValidSubmit={this.submit}
             onValid={this.onValid}
             ref = {'paymentForm'}
+            validateCreditCard = {this.props.validateCreditCard}
             onInvalid={this.onInvalid}/>:
-            <div>
               <div>
-                <h2 style={styles.paperTitle}>Metodos de Pago</h2>
-              </div>
-              <div style={styles.containerPaymentOptions}>
-                <PaymentOption
-                  handle = {this.handleCard}
-                  img = {'/payment/tarjetas.png'}
-                  note = {'Solo se aceptan tarjetas emitidas en Peru'}
+                <div>
+                  <h2 style={styles.paperTitle}>Metodos de Pago</h2>
+                </div>
+                <div style={styles.containerPaymentOptions}>
+                  <PaymentOption
+                    handle = {this.handleCard}
+                    img = {'/payment/tarjetas.png'}
+                    note = {'Tarjetas permitidas'}
                   />
-                <PaymentOption
-                  handle = {this.handlePaypal}
-                  img = {'/payment/paypal.png'}
-                  note = {'PayPal acepta tarjetas de todo el mundo'}
+                  <PaymentOption
+                    handle = {this.handlePaypal}
+                    img = {'/payment/paypal.png'}
+                    note = {'PayPal acepta tarjetas de todo el mundo'}
                   />
+                </div>
               </div>
-            </div>
         }
       </div>
 
@@ -233,6 +228,338 @@ var Paypal = React.createClass({
 });
 
 
+var BillInfo = React.createClass({
+  getInitialState: function() {
+    return {
+      firstname:null,
+      lastname:null,
+      selectedCountry:null,
+      telephone:null,
+      city:null,
+      address:null,
+      gotCodigoComercio:false,
+      codigo_comercio:null,
+      email:null,
+      MenuCountries:<MenuItem value='LOADING' primaryText='Cargando países ...' />
+    };
+  },
+
+  componentWillMount: function() {
+    let Countries = {};
+    data.getCountries((res)=>{
+      if(res.success){
+        if(this.isMounted()){
+          Countries = res.data.map((country)=>{
+            return <MenuItem
+              key={country.country_id} value = {country.country_id} primaryText = {country.name} />
+          });
+          this.setState({MenuCountries:Countries});
+        }}
+    });
+
+    formsController.payment.getCulqi((res)=>{
+      if(res.success){
+        if(this.isMounted()){
+          this.setState({
+            gotCodigoComercio: true,
+            codigo_comercio: res.data.codigo_comercio,
+            firstname:res.data.firstname,
+            lastname: res.data.lastname,
+            telephone:res.data.telephone,
+            selectedCountry:res.data.country_id,
+            city:res.data.city,
+            address:res.data.address_1,
+            email:res.data.email
+          });
+        }
+      }
+    });
+  },
+
+  errorMessages: {
+    isNumeric:'Solo puedes ingresar números',
+    isDefaultRequiredValue: 'Este campo es requerido',
+    wordsError: "Solo use letras (a-z)",
+    isMonthError:"No es un mes valido",
+    isCreditCardYearError:"No es año valido",
+    isExisty:'',
+    isExistyMenu:'Debe seleccionar un país'
+  },
+
+  validateForm:function(){
+    const {onValid} = this.props;
+    const { gotCodigoComercio,codigo_comercio } = this.state;
+    const model = this.refs.billInfo.getModel();
+    model.codigo_comercio = codigo_comercio;
+    onValid(model,true && gotCodigoComercio);
+    if(!gotCodigoComercio){
+      throw new Meteor.Error('Error conectando con el servidor');
+    }
+  },
+
+  onInvalid:function(){
+    this.props.onValid('xx',false);
+  },
+
+  render: function() {
+    const {isNumeric,wordsError,isMonthError,isYearError,isCreditCardYearError,isExisty,isExistyMenu} = this.errorMessages;
+    return (
+      <Formsy.Form
+        ref = {'billInfo'}
+        onValid={this.validateForm}
+        onInvalid={this.onInvalid}
+        style ={styles.form}>
+
+        <div>
+          <h2 style={styles.paperTitle}>Datos de facturación</h2>
+        </div>
+
+        <FormsyText
+          required
+          floatingLabelText="Nombres"
+          hintText = "Nombres de facturación"
+          validations="isSpecialWords,isExisty"
+          validationErrors={{wordsError,isExisty}}
+          type="string"
+          id ="firstname"
+          name = "firstname"
+          ref='firstname'
+          value={this.state.firstname}
+          style ={styles.field}
+        />
+
+        <FormsyText
+          required
+          floatingLabelText="Apellidos"
+          hintText = "Apellidos de facturación"
+          validations="isSpecialWords,isExisty"
+          validationErrors = {wordsError}
+          type="string"
+          id ="lastname"
+          name = "lastname"
+          ref='lastname'
+          value={this.state.lastname}
+          style ={styles.field}
+        />
+
+        <FormsyText
+          required
+          floatingLabelText="Teléfono"
+          validations="isNumeric,isExisty"
+          type="number"
+          id ="telephone"
+          name ="telephone"
+          ref='telephone'
+          validationErrors={isNumeric}
+          value={this.state.telephone}
+          style ={styles.field}
+        />
+
+        <FormsyText
+          required
+          floatingLabelText="Email"
+          validations="isEmail,isExisty"
+          validationErrors = {wordsError}
+          type="string"
+          id ="email"
+          name = "email"
+          ref='email'
+          value={this.state.email}
+          style ={styles.field}
+        />
+
+        <FormsyText
+          required
+          name='address'
+          ref='address'
+          validationErrors={wordsError}
+          validations="isExisty"
+          floatingLabelText="Dirección de facturación"
+          type="string"
+          id ="address"
+          multiLine={true}
+          rows = {2}
+          value = {this.state.address}
+          style ={styles.field}
+        />
+
+        <FormsySelect
+          name='country'
+          ref='country'
+          id='country'
+          required
+          fullWidth={true}
+          onChange={this.handleCountryMenu}
+          style ={styles.field}
+          floatingLabelText="País"
+          validations="isExisty"
+          value={this.state.selectedCountry}>
+          {this.state.MenuCountries}
+        </FormsySelect>
+
+        <FormsyText
+          required
+          floatingLabelText="Ciudad"
+          hintText = "Ciudad/Provincia de facturación"
+          validations="isSpecialWords,isExisty"
+          validationErrors={wordsError}
+          type="string"
+          id ="city"
+          ref='city'
+          name = "city"
+          value={this.state.city}
+          style ={styles.field}
+        />
+      </Formsy.Form>
+        );
+  }
+});
+
+var CreditCardInfo = React.createClass({
+  errorMessages: {
+    isNumeric:'Solo puedes ingresar números',
+    isDefaultRequiredValue: 'Este campo es requerido',
+    wordsError: "Solo use letras (a-z)",
+    isMonthError:"No es un mes valido",
+    isCreditCardYearError:"No es año valido",
+  },
+
+  componentWillMount: function() {
+    CulqiJS.informacion_venta = this.props.informacion_venta;
+    CulqiJS.codigo_comercio = this.props.codigo_comercio;
+  },
+
+  getInitialState: function() {
+    return {
+      selectedCreditcard:'',
+      month:'',
+      year:'',
+      creditCardNumber:'',
+      credicardLoading:false,
+      noCreditcards:true,
+      code:'',
+      showIcons:true
+    };
+  },
+
+  onValid:function(){
+    const model = this.refs.creditCardInfo.getModel();
+    const { billInfo } = this.props;
+    //AGREGAMOS INFORMACION DE FACTURACION AL MODELO
+    model.firstname = billInfo.firstname;
+    model.lastname = billInfo.lastname;
+    model.email = billInfo.email;
+    model.address_id = billInfo.address;
+    model.country_id = billInfo.country;
+    this.props.validateForm(model,true);
+  },
+  onInvalid:function(){
+    this.props.validateForm('xx',false);
+
+  },
+
+  render: function() {
+
+      const { isNumeric,wordsError,isMonthError,isYearError,isCreditCardYearError } = this.errorMessages;
+      const { showIcons,selectedCreditcard,month,year } = this.state;
+      return (
+        <Formsy.Form
+          onValidSubmit={this.props.submit}
+          onValid={this.onValid}
+          ref = {'creditCardInfo'}
+          onInvalid={this.onInvalid}
+          style ={styles.form}>
+          <div>
+            <h2 style={styles.paperTitle}>Ingrese su tarjeta</h2>
+          </div>
+          {/*<FormsySelect
+            name='selectedCreditcard'
+            required
+            labelStyle={styles.labelSelectField}
+            onChange={this.handleCreditcardChange}
+            style ={showIcons?styles.fieldWithIcons:styles.fullFieldWithIcons}
+            fullWidth={true}
+            floatingLabelText="Elige una tarjeta"
+            value={selectedCreditcard}>
+            <MenuItem value={'NUEVA TARJETA'} primaryText="Nueva tarjeta"/>
+            {!this.state.credicardLoading && !this.state.noCreditcards?this.getCreditcards():<div/>}
+          </FormsySelect>*/}
+          <FormsyText
+            required
+            floatingLabelText="Número"
+            hintText = "Ingresa los 16 números"
+            type="number"
+            validations={{'isNumeric':true,isLength:16}}
+            validationErrors={{
+              isLength:"Deben ser 16 dígitos",
+              isNumeric:isNumeric
+            }}
+            id ="number"
+            name = "number"
+            value={this.state.creditCardNumber}
+            style ={styles.fieldCreditcard}
+          />
+
+
+          <div className={'datebirthContainer'}>
+            <span className={'datebirth'}>
+              Fecha de vencimiento
+            </span>
+          </div>
+          <div style={styles.dateContainer}>
+
+            <FormsyText
+              required
+              floatingLabelText="Mes"
+              validations={{'isMonth':true,'isNumeric':true}}
+              validationErrors={{
+                isMonth: isMonthError
+              }}
+              maxLength={2}
+              textFieldStyle = {{width:'100%'}}
+              name = "month"
+              style ={styles.dateField}
+              value = {month}
+              inputStyle = {styles.inputDateField}
+            />
+
+            <FormsyText
+              required
+              floatingLabelText="Año"
+              validations={{'isCreditCardYear':true,'isNumeric':true}}
+              validationErrors={{
+                isCreditCardYear: isCreditCardYearError
+              }}
+              maxLength={2}
+              textFieldStyle = {{width:'100%'}}
+              name = "year"
+              value = {year}
+              style ={styles.dateField}
+              inputStyle = {styles.inputDateField}
+            />
+          </div>
+
+
+          <FormsyText
+            required
+            floatingLabelText="Codigo de seguridad (CVV)"
+            type="password"
+            id ="cvc"
+            validations={{'isNumeric':true,isLength:3}}
+            validationErrors={{isLength:'Deben ser 3 dígitos',isNumeric:isNumeric}}
+            hintText = "Tres dígitos detrás de la tarjeta"
+            name = "cvc"
+            value={this.state.code}
+            style ={styles.field}
+          />
+        </Formsy.Form>
+    );
+  }
+});
+
+
+
+
 var CreditCard = React.createClass({
   errorMessages: {
     isNumeric:'Solo puedes ingresar números',
@@ -242,202 +569,92 @@ var CreditCard = React.createClass({
     isCreditCardYearError:"No es año valido",
   },
   componentWillMount: function() {
-    let MenuCountries = Object.keys(Countries).map((code)=>{
-      return <MenuItem key={code} value = {code} primaryText = {Countries[code]} />
-    });
-    this.setState({MenuCountries});
-    backendCom.getSavedCreditcards(Session.get('token').access_token,()=>{});
+    const script = document.createElement("script");
+    script.src = "https://integ-pago.culqi.com/api/v2/culqi.js";
+    script.type = 'text/javascript';
+    script.id = 'culqi';
+    document.body.appendChild(script);
+    //backendCom.getSavedCreditcards(Session.get('token').access_token,()=>{});
+  },
+  componentWillUnmount: function() {
+    const idScript = document.getElementById('culqi');
+    idScript.parentNode.removeChild(idScript);
   },
   getInitialState: function() {
     return {
-      selectedCreditcard: 'NUEVA TARJETA',
-      noCreditcards:true,
-      credicardLoading:true,
-      year:'',
-      month:''
+      currentView: '1',
+      gotInformacionVenta:false,
+      gotCodigoComercio:false
     };
   },
+
+  goBack:function(){
+    if(this.state.currentView==='1'){
+      this.props.goBack();
+      return;
+    }else{
+      this.setState({
+        currentView:'1'
+      });
+    }
+  },
+
+  confirmBillInfo:function(){
+    formsController.payment.setBillInfo(this.billInfo,(res)=>{
+      if(res.success){
+        if(this.isMounted()){
+          this.informacionVenta = res.data.informacionVenta;
+          this.setState({
+            gotInformacionVenta: true,
+            currentView:'2'
+          });
+        }
+      }
+    });
+  },
+
   handleCreditcardChange:function(event,selectedCreditcard,index){
     this.setState({selectedCreditcard});
   },
   getCreditcards:function(){
 
   },
+  validateBillInfo:function(model,isValid){
+    this.billInfo = model;
+    this.codigoComercio = model.codigo_comercio;
+    if(isValid){
+      this.setState({
+        validConfirmButton:true,
+        gotCodigoComercio: true
+      });
+      return;
+    }
+    this.setState({
+      validConfirmButton:false,
+      gotCodigoComercio: false
+    });
+
+  },
   render: function() {
     const {isNumeric,wordsError,isMonthError,isYearError,isCreditCardYearError} = this.errorMessages;
-    const { showIcons,selectedCreditcard,month,year } = this.state;
+    const { currentView,validConfirmButton } = this.state;
     return (
-      <Formsy.Form
-        onValidSubmit={this.props.submit}
-        onValid={this.props.onValid}
-        ref = {'paymentForm'}
-        onInvalid={this.props.onInvalid}
-        style ={styles.form}>
-        <div>
-          <h2 style={styles.paperTitle}>Tarjeta de credito</h2>
+      <div>
+        {currentView==='1'?
+          <BillInfo onValid={this.validateBillInfo}/>:
+            <CreditCardInfo
+              validateForm = {this.props.validateCreditCard}
+              codigo_comercio={this.codigoComercio}
+              billInfo = {this.billInfo}
+              informacion_venta = {this.informacionVenta} />
+        }
+        <div style={currentView==='2'?styles.bottomButtonsOneIcon:styles.bottomButtons}>
+          <FlatButton style={styles.goBackButton} primary={true} label="ATRAS" onTouchTap={this.goBack}/>
+          {currentView==='1'?<RaisedButton style={styles.goForwardButton} disabled={!validConfirmButton} primary={true} label="CONFIRMAR" onTouchTap={this.confirmBillInfo}/>:null}
         </div>
-        <FormsySelect
-          name='selectedCreditcard'
-          required
-          labelStyle={styles.labelSelectField}
-          onChange={this.handleCreditcardChange}
-          style ={showIcons?styles.fieldWithIcons:styles.fullFieldWithIcons}
-          fullWidth={true}
-          floatingLabelText="Elige una tarjeta"
-          value={selectedCreditcard}>
-          <MenuItem value={'NUEVA TARJETA'} primaryText="Nueva tarjeta"/>
-          {!this.state.credicardLoading && !this.state.noCreditcards?this.getCreditcards():<div/>}
-        </FormsySelect>
-        <FormsyText
-          required
-          floatingLabelText="Número"
-          hintText = "Ingresa los 16 números"
-          type="number"
-          validations={{'isNumeric':true,isLength:16}}
-          validationErrors={{
-            isLength:"Deben ser 16 dígitos",
-            isNumeric:isNumeric
-          }}
-          id ="ccnumber"
-          name = "ccnumber"
-          value={this.state.number}
-          style ={styles.fieldCreditcard}
-        />
+      </div>
 
 
-        <div className={'datebirthContainer'}>
-          <span className={'datebirth'}>
-            Fecha de vencimiento
-          </span>
-        </div>
-        <div style={styles.dateContainer}>
-
-          <FormsyText
-            required
-            floatingLabelText="Mes"
-            validations={{'isMonth':true,'isNumeric':true}}
-            validationErrors={{
-              isMonth: isMonthError
-            }}
-            maxLength={2}
-            textFieldStyle = {{width:'100%'}}
-            name = "month"
-            style ={styles.dateField}
-            value = {month}
-            inputStyle = {styles.inputDateField}
-          />
-
-          <FormsyText
-            required
-            floatingLabelText="Año"
-            validations={{'isCreditCardYear':true,'isNumeric':true}}
-            validationErrors={{
-              isCreditCardYear: isCreditCardYearError
-            }}
-            maxLength={2}
-            textFieldStyle = {{width:'100%'}}
-            name = "year"
-            value = {year}
-            style ={styles.dateField}
-            inputStyle = {styles.inputDateField}
-          />
-        </div>
-
-
-
-        <FormsyText
-          required
-          floatingLabelText="Codigo de seguridad (CVV)"
-          type="password"
-          id ="cccvv"
-          validations={{'isNumeric':true,isLength:3}}
-          validationErrors={{isLength:'Deben ser 3 dígitos',isNumeric:isNumeric}}
-          hintText = "Tres dígitos detrás de la tarjeta"
-          name = "cccvv"
-          value={this.state.code}
-          style ={styles.field}
-        />
-
-
-        <FormsyText
-          required
-          floatingLabelText="Nombres"
-          hintText = "Nombres de facturación"
-          validations="isSpecialWords"
-          validationErrors={wordsError}
-          type="string"
-          id ="ccfirstname"
-          name = "ccfirstname"
-          value={this.state.firstname}
-          style ={styles.field}
-        />
-
-        <FormsyText
-          required
-          floatingLabelText="Apellidos"
-          hintText = "Apellidos de facturación"
-          validations="isSpecialWords"
-          validationErrors = {wordsError}
-          type="string"
-          id ="cclastname"
-          name = "cclastname"
-          value={this.state.lastname}
-          style ={styles.field}
-        />
-
-        <FormsySelect
-          name='ccCountry'
-          ref='ccCountry'
-          required
-          onChange={this.handleCountryMenu}
-          style ={styles.field}
-          floatingLabelText="País"
-          value={this.state.selectedCountry}>
-          {this.state.MenuCountries}
-        </FormsySelect>
-
-        <FormsyText
-          required
-          floatingLabelText="Región"
-          hintText = "Región/Departamento de facturación"
-          validations="isSpecialWords"
-          validationErrors={wordsError}
-          type="string"
-          id ="ccRegion"
-          name = "ccRegion"
-          value={this.state.region}
-          style ={styles.field}
-        />
-
-        <FormsyText
-          required
-          floatingLabelText="Ciudad"
-          hintText = "Ciudad/Provincia de facturación"
-          validations="isSpecialWords"
-          validationErrors={wordsError}
-          type="string"
-          id ="ccCity"
-          name = "ccCity"
-          value={this.state.city}
-          style ={styles.field}
-        />
-
-        <FormsyText
-          required
-          floatingLabelText="Código postal"
-          hintText = "Código postal de facturación"
-          validations="isAlphanumeric"
-          type="string"
-          id ="ccPostCode"
-          name = "ccPostCode"
-          value={this.state.postcode}
-          style ={styles.field}
-        />
-
-      <FlatButton style={styles.goBackButton} primary={true} label="ATRAS" onTouchTap={this.props.goBack}/>
-
-
-      </Formsy.Form>
     );
   }
 
