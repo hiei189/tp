@@ -202,7 +202,8 @@ ShoppingDetails = React.createClass({
               exp_m:model.month,
               exp_a:model.year,
               cvc:model.cvc,
-              nombre:model.name,
+              nombre:model.firstname,
+              apellido:model.lastname,
               email:model.email
             })
             break;
@@ -217,7 +218,6 @@ ShoppingDetails = React.createClass({
   validateCreditCard:function(model,isValid){
     if(isValid){
       this.creditcard.model = model;
-      console.log(model);
       this.setState({
         disabledButton:false,
         validCreditCard:true,
