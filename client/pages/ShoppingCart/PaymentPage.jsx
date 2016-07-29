@@ -530,7 +530,7 @@ var CreditCardInfo = React.createClass({
               validationErrors={{
                 isCreditCardYear: isCreditCardYearError
               }}
-              maxLength={2}
+              maxLength={4}
               textFieldStyle = {{width:'100%'}}
               name = "year"
               value = {year}
@@ -545,7 +545,7 @@ var CreditCardInfo = React.createClass({
             floatingLabelText="Codigo de seguridad (CVV)"
             type="password"
             id ="cvc"
-            validations={{'isNumeric':true,isLength:3}}
+            validations={{'isNumeric':true,maxLength:4,minLength:3}}
             validationErrors={{isLength:'Deben ser 3 dígitos',isNumeric:isNumeric}}
             hintText = "Tres dígitos detrás de la tarjeta"
             name = "cvc"

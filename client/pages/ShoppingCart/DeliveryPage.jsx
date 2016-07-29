@@ -148,6 +148,7 @@ DeliveryPage = React.createClass({
 
     formsController.deliveryController.addDelivery(model,
       (res)=>{
+        Session.set('totalPrice',res.data.total);
         if(this.isMounted()){
           this.setState({
             priceDelivery: res.data.cost_text.toString()
@@ -184,7 +185,7 @@ DeliveryPage = React.createClass({
             onToggle = {this.onToggleAnonymous}
             toggle = {toggledAnonymous}
             labelStyle={toggledAnonymous?null:styles.fieldAnonymous}
-            />
+          />
 
 
           <FormsyDate
@@ -227,10 +228,9 @@ DeliveryPage = React.createClass({
             name = "occasions"
             style ={styles.field}>
             {this.getOccasions()}
-            </FormsySelect>
+          </FormsySelect>
 
           <FormsyText
-            required
             floatingLabelText="Mensaje"
             type="string"
             id ="message"

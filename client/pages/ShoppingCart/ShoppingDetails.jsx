@@ -72,11 +72,29 @@ ShoppingDetails = React.createClass({
             total: this.shoppingCart.totals[0].text,
             noProducts: false
           });
+          //Session.set('totalPrice', this.shoppingCart.totals[0].text);
         }
       });
     });
-  },
 
+    Tracker.autorun((b)=>{
+      this.trackerId_b = b;
+      let total = Session.get('totalPrice');
+      Tracker.nonreactive(()=>{
+        if(total){
+          this.setState({
+            total: 'S/'+ total.toString() + '.00'
+          });
+        }
+
+      });
+    });
+
+  },
+  componentWillUnmount: function() {
+      this.trackerId_b.stop();
+      this.trackerId_a.stop();
+  },
   handleTabChange:function(value,a,b){
     //BORRAR ESTO EN PRODUCCION
     if (value === 0 || value === 1 || value === 2){
@@ -204,7 +222,7 @@ ShoppingDetails = React.createClass({
               cvc:model.cvc,
               nombre:model.firstname,
               apellido:model.lastname,
-              email:model.email
+              correo:model.email
             })
             break;
           default:
