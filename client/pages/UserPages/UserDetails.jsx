@@ -75,7 +75,7 @@ const styles={
 }
 
 
-UserPage = React.createClass({
+UserDetails = React.createClass({
   contextTypes:{
     gotUser: React.PropTypes.bool,
     router:React.PropTypes.object,
