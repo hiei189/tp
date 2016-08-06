@@ -133,13 +133,13 @@ CartPage = React.createClass({
         <div>
           {this.state.noProducts?<div>Elige productos para poder comprarlos</div>:
             (
-            <div style={{width:'100%'}}>
               <div style={{width:'100%'}}>
-                <div style={styles.container}>
-                  {this.renderTiles()}
+                <div style={{width:'100%'}}>
+                  <div style={styles.container}>
+                    {this.renderTiles()}
+                  </div>
                 </div>
-              </div>
-              <Footer onSend = {this._handleBuy} total = {this.state.total} disabled={false}/>
+                <Footer onSend = {this._handleBuy} total = {this.state.total} disabled={false}/>
             </div>
           )}
         </div>

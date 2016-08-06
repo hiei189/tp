@@ -252,5 +252,14 @@ data = {
       }
       callback(response.data);
     });
+  },
+  getCountries:function(callback){
+    var token = Session.get('token');
+    backendCom.getCountries(token.access_token,(err,response)=>{
+      if(err){
+        throw new Meteor.Error('Error de conexion');
+      }
+      callback(response.data);
+    })
   }
 }

@@ -9,7 +9,7 @@ formsController = {
     const token = Session.get('token');
     backendCom.getAllPlaces(token.access_token,(err,response)=>{
       if(err){
-        throw new Meteor.error('Error getting available places');
+        throw new Meteor.Error('Error getting available places');
       }
       callback(response.data);
     });
@@ -66,7 +66,7 @@ formsController = {
         token.access_token,
         (err,response)=>{
           if(err){
-            throw new Meteor.error('Error de conexion');
+            throw new Meteor.Error('Error de conexion');
           }
           callback(response.data);
         }
@@ -86,7 +86,7 @@ formsController = {
         token.access_token,
         (err,response)=>{
           if(err){
-            throw new Meteor.error('Error de conexion');
+            throw new Meteor.Error('Error de conexion');
           }
           callback(response.data);
         }
@@ -105,7 +105,7 @@ formsController = {
         token.access_token,
         (err,response)=>{
           if(err){
-            throw new Meteor.error('Error de conexion');
+            throw new Meteor.Error('Error de conexion');
           }
           callback(response.data);
         }
@@ -129,7 +129,7 @@ formsController = {
             callback(response.data);
             return;
           }
-          Session.set('DialogMessage',response.data.error);
+          Session.set('DialogMessage',response.data.Error);
           Session.set('isAnErrorDialog',true);
           Session.set('DialogTitle','No se pudo agregar la direccion de delivery');
           Session.set('showDialog',true);
@@ -142,8 +142,8 @@ formsController = {
     backendCom.getDeliveryHours(
       token,(err,response)=>{
         if(err){
-          Session.set('ERROR',response.data);
-          throw new Meteor.error('Error de conexión');
+          Session.set('Error',response.data);
+          throw new Meteor.Error('Error de conexión');
         }
         Session.set('deliveryHours',response.data);
         callback(response.data);
@@ -155,7 +155,7 @@ formsController = {
     const token = Session.get('token');
     backendCom.getOccasions(token.access_token,(err,response)=>{
       if(err){
-        throw new Meteor.error('Error de conexión');
+        throw new Meteor.Error('Error de conexión');
       }
       callback(response.data);
     });
@@ -166,7 +166,36 @@ formsController = {
       const token = Session.get('token')
       backendCom.getPaypalInfo(token.access_token,(err,response)=>{
         if(err){
-          throw new Meteor.error(200,'Error de conexion');
+          throw new Meteor.Error(200,'Error de conexion');
+        }
+        callback(response.data);
+      });
+    },
+    getCulqi:function(callback){
+      const token = Session.get('token');
+      backendCom.getCulqi(token.access_token,(err,response)=>{
+        if (err){
+          throw new Meteor.Error(200,'Error obteniendo datos');
+        }
+        callback(response.data);
+      });
+    },
+    setBillInfo:function(model,callback){
+      const token = Session.get('token');
+      backendCom.setBillInfo(model.firstname,model.lastname,model.address,model.telephone,
+        model.country,model.city,
+        token.access_token,(err,response)=>{
+        if(err){
+          throw new Meteor.Error(200,'Error enviando datos');
+        }
+        callback(response.data);
+      });
+    },
+    confirmPayment:function(confirm,callback){
+      const token = Session.get('token');
+      backendCom.confirmPayment(confirm,token.access_token,(err,response)=>{
+        if(err){
+          throw new Meteor.Error(200,'Error enviando datos');
         }
         callback(response.data);
       });

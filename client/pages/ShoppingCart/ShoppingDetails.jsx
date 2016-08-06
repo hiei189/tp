@@ -56,6 +56,7 @@ ShoppingDetails = React.createClass({
     this.shipping = {};
     this.delivery = {};
     this.payment = {};
+    this.creditcard = {};
     this.token = Session.get('token');
     Tracker.autorun((a)=>{
       this.trackerId_a = a;
@@ -71,11 +72,29 @@ ShoppingDetails = React.createClass({
             total: this.shoppingCart.totals[0].text,
             noProducts: false
           });
+          //Session.set('totalPrice', this.shoppingCart.totals[0].text);
         }
       });
     });
-  },
 
+    Tracker.autorun((b)=>{
+      this.trackerId_b = b;
+      let total = Session.get('totalPrice');
+      Tracker.nonreactive(()=>{
+        if(total){
+          this.setState({
+            total: 'S/'+ total.toString() + '.00'
+          });
+        }
+
+      });
+    });
+
+  },
+  componentWillUnmount: function() {
+      this.trackerId_b.stop();
+      this.trackerId_a.stop();
+  },
   handleTabChange:function(value,a,b){
     //BORRAR ESTO EN PRODUCCION
     if (value === 0 || value === 1 || value === 2){
@@ -179,30 +198,56 @@ ShoppingDetails = React.createClass({
               // }
               break;
           case 1:
-              model = this.delivery.model;
-              this.setState({
-                loadingButton: true
+            model = this.delivery.model;
+            this.setState({
+              loadingButton: true
+            });
+            formsController.deliveryController.addDelivery(model,
+              (res)=>{
+                if(this.isMounted()){
+                  this.setState({
+                    loadingButton:false,
+                    currentTab:2,
+                    disabledButton:true,
+                  });
+                }
               });
-              formsController.deliveryController.addDelivery(model,
-                (res)=>{
-                  if(this.isMounted()){
-                    this.setState({
-                      loadingButton:false,
-                      currentTab:2,
-                      disabledButton:true,
-                    });
-                  }
-                });
             break;
           case 2:
-
-              break;
+            model = this.creditcard.model;
+            CulqiJS.pagarVenta({
+              numero:model.number,
+              exp_m:model.month,
+              exp_a:model.year,
+              cvc:model.cvc,
+              nombre:model.firstname,
+              apellido:model.lastname,
+              correo:model.email
+            })
+            break;
           default:
         }
       }
     }else{
       this.context.router.push('/user');
     }
+  },
+
+  validateCreditCard:function(model,isValid){
+    if(isValid){
+      this.creditcard.model = model;
+      this.setState({
+        disabledButton:false,
+        validCreditCard:true,
+        validCurrentForm:true
+      });
+      return;
+    }
+    this.setState({
+      disabledButton:true,
+      validCreditCard:false,
+      validCurrentForm:false
+    });
   },
 
   render: function() {
@@ -234,6 +279,7 @@ ShoppingDetails = React.createClass({
               <ShoppingDetailsTabTemplate
                 onInvalid = {this.handleInvalidPayment}
                 Component = {PaymentPage}
+                validateCreditCard = {this.validateCreditCard}
                 onValid = {this.handleValidPayment}/>
             </Tab>
           </Tabs>
@@ -250,7 +296,7 @@ ShoppingDetails = React.createClass({
 });
 
 
-const ShoppingDetailsTabTemplate = ({title,note,onInvalid,onValid,Component},context)=>{
+const ShoppingDetailsTabTemplate = ({title,note,onInvalid,onValid,Component,...props},context)=>{
   const { smallScreen } = context;
   return(
     <Paper style={styles.paperContainer}  zDepth = {smallScreen?0:1}>
@@ -258,7 +304,7 @@ const ShoppingDetailsTabTemplate = ({title,note,onInvalid,onValid,Component},con
         <h2 style={styles.paperTitle}>{title}</h2>
       </div>:null}
       {note?<span style={styles.paperNote}>{note}</span>:null}
-      <Component onInvalid = {onInvalid} onValid = {onValid} />
+      <Component onInvalid = {onInvalid} onValid = {onValid} {...props} />
     </Paper>
   );
 }

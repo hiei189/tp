@@ -426,28 +426,28 @@ ShippingPage = React.createClass({
           onInvalid={this.invalidForm}
           style ={styles.form}>
           <div style={{display:'flex'}}>
-              <FormsySelect
-                name='selectedAddress'
-                ref='selectedAddress'
-                required
-                labelStyle={styles.labelSelectField}
-                onChange={this.handleChangeMenuAddresses}
-                style ={showIcons?styles.fieldWithIcons:styles.fullFieldWithIcons}
-                fullWidth={true}
-                floatingLabelText="Elige una dirección"
-                value={this.state.selectedAddress}>
-                <MenuItem value={'NUEVA DIRECCION'} primaryText="Nueva dirección"/>
-                {!this.state.addressesLoading && !this.state.noAddresses?this.getAddresses():<div/>}
-              </FormsySelect>
+            <FormsySelect
+              name='selectedAddress'
+              ref='selectedAddress'
+              required
+              labelStyle={styles.labelSelectField}
+              onChange={this.handleChangeMenuAddresses}
+              style ={showIcons?styles.fieldWithIcons:styles.fullFieldWithIcons}
+              fullWidth={true}
+              floatingLabelText="Elige una dirección"
+              value={this.state.selectedAddress}>
+              <MenuItem value={'NUEVA DIRECCION'} primaryText="Nueva dirección"/>
+              {!this.state.addressesLoading && !this.state.noAddresses?this.getAddresses():<div/>}
+            </FormsySelect>
             {showIcons?
               <div style={{minWidth:'96px',alignSelf:'center'}}>
                 {showCheck?
-                <IconButton tooltip={'Editar dirección'} onTouchTap={this.saveEditCurrentAddress}>
-                  <ActionCheckCircle />
-                </IconButton> :
-                <IconButton tooltip={'Editar dirección'}  onTouchTap={this.makeEditCurrentAddress}>
-                  <ImageEdit />
-                </IconButton>}
+                  <IconButton tooltip={'Editar dirección'} onTouchTap={this.saveEditCurrentAddress}>
+                    <ActionCheckCircle />
+                  </IconButton> :
+                    <IconButton tooltip={'Editar dirección'}  onTouchTap={this.makeEditCurrentAddress}>
+                      <ImageEdit />
+                    </IconButton>}
                 <IconButton tooltip={'Borrar dirección'}  onTouchTap={(e) => this.removeCurrentAddress(selectedAddress,savedAddress, e)}>
                   <ActionDelete  />
                 </IconButton>
@@ -456,7 +456,7 @@ ShippingPage = React.createClass({
           <FormsyText
             name='firstname'
             ref='firstname'
-            validations='isWords'
+            validations='isSpecialWords'
             validationError={wordsError}
             required
             floatingLabelText="Nombres"
@@ -468,7 +468,7 @@ ShippingPage = React.createClass({
           />
           <FormsyText
             name='lastname'
-            validations='isWords'
+            validations='isSpecialWords'
             validationError={wordsError}
             required
             floatingLabelText="Apellidos"
@@ -501,7 +501,7 @@ ShippingPage = React.createClass({
             onChange = {this.handlePlaceMenu}
             value = {this.state.placeIdMenu}
             disabled = {this.state.disabledForm}
-            >
+          >
             {gotAllPlaces?this.getAllPlaces():<CircularProgress size={0.5}/>}
           </FormsySelect>
 
@@ -518,7 +518,7 @@ ShippingPage = React.createClass({
             fullWidth={true}
             style ={styles.field}
             errorText = {this.state.errorPlace}
-            dataSource = {this.state.placesDataSource}/>*/}
+          dataSource = {this.state.placesDataSource}/>*/}
 
           <FormsyText
             name='shippingAddress'

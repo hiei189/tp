@@ -629,5 +629,80 @@ backendCom = {
       (err,response)=>{
       }
     );
+  },
+
+  getCulqi:function(token,callback){
+    HTTP.call('GET',
+      basic_url + 'culqi',
+      {
+        headers:{
+          'Authorization':'Bearer '+ token,
+          'X-Oc-Merchant-Language' : 'es',
+          'X-Oc-Store-Id': '0'
+        }
+      },
+      (err,response)=>{
+        callback(err,response);
+      }
+    )
+  },
+  setBillInfo(firstname,lastname,address,telephone,country_id,city,token,callback){
+    HTTP.call('POST',
+      basic_url + 'culqi',
+      {
+        headers:{
+          'Authorization':'Bearer '+ token,
+          'X-Oc-Merchant-Language' : 'es',
+          'X-Oc-Store-Id': '0',
+        },
+        data:{
+          'firstname':firstname,
+          'lastname':lastname,
+          'address_1':address,
+          'telephone':telephone,
+          'country_id':country_id,
+          'city':city
+        }
+      },
+      (err,response)=>{
+        callback(err,response);
+      }
+    );
+  },
+
+  confirmPayment(confirm,token,callback){
+    HTTP.call('POST',
+      basic_url + 'culqi/check',
+      {
+        headers:{
+          'Authorization':'Bearer '+ token,
+          'X-Oc-Merchant-Language' : 'es',
+          'X-Oc-Store-Id': '0',
+        },
+        data:{
+          'informacionDeVentaCifrada':confirm
+        }
+      },
+      (err,response)=>{
+        callback(err,response);
+      }
+    );
+  },
+
+
+  getCountries(token,callback){
+    HTTP.call('GET',
+      basic_url + 'countries',
+      {
+        headers:{
+          'Authorization':'Bearer '+ token,
+          'X-Oc-Merchant-Language' : 'es',
+          'X-Oc-Store-Id': '0',
+        }
+      },
+      (err,response)=>{
+        callback(err,response);
+      }
+    );
   }
 }

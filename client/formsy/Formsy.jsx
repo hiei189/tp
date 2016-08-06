@@ -55,7 +55,7 @@ var utils = {
   };
 
   var isEmpty = function (value) {
-    return value === '';
+    return value === '' ;
   };
 
   var validations = {
@@ -129,8 +129,8 @@ var utils = {
       return !isExisty(value) || (value <= 12 && value >=1);
     },
     isCreditCardYear:function(values,value){
-      if(value.toString().length === 2){
-        return !isExisty(value) || (value >= new Date().getFullYear()-2000);
+      if(value.toString().length === 4){
+        return !isExisty(value) || (value >= new Date().getFullYear());
       }
       return !isExisty(value);
     },
