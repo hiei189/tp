@@ -105,10 +105,6 @@ CreateUserPage = React.createClass({
     });
   },
 
-  componentWillMount: function() {
-    Session.set('pageTitle', 'Crear usuario');
-  },
-
   errorMessages:{
     isNumericError:'Solo puedes ingresar números',
     isDefaultRequiredValue: 'Este campo es requerido',

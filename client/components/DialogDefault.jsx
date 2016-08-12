@@ -60,7 +60,7 @@ DialogDefault = React.createClass({
         keyboardFocused={true}
         onTouchTap={this.handleClose}
        />)
-       this.props.actions?this.props.actions:actions;
+       //actions = this.props.actions!=='DO_NOTHING'?this.props.actions:actions;
        const { error, message, title, children } = this.props;
     return (
       <Dialog

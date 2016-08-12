@@ -163,13 +163,13 @@ formsController = {
 
   payment:{
     getPaypalInfo:function(callback){
-      const token = Session.get('token')
-      backendCom.getPaypalInfo(token.access_token,(err,response)=>{
-        if(err){
-          throw new Meteor.Error(200,'Error de conexion');
-        }
-        callback(response.data);
-      });
+      // const token = Session.get('token')
+      // backendCom.getPaypalInfo(token.access_token,(err,response)=>{
+      //   if(err){
+      //     throw new Meteor.Error(200,'Error de conexion');
+      //   }
+      //   callback(response.data);
+      // });
     },
     getCulqi:function(callback){
       const token = Session.get('token');

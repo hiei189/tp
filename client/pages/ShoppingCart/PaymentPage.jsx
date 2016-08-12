@@ -180,11 +180,11 @@ PaymentPage = React.createClass({
                     img = {'/payment/tarjetas.png'}
                     note = {'Tarjetas permitidas'}
                   />
-                  <PaymentOption
+                  {/*<PaymentOption
                     handle = {this.handlePaypal}
                     img = {'/payment/paypal.png'}
                     note = {'PayPal acepta tarjetas de todo el mundo'}
-                  />
+                  />*/}
                 </div>
               </div>
         }
@@ -421,7 +421,14 @@ var CreditCardInfo = React.createClass({
     isDefaultRequiredValue: 'Este campo es requerido',
     wordsError: "Solo use letras (a-z)",
     isMonthError:"No es un mes valido",
+    isExisty:'',
     isCreditCardYearError:"No es año valido",
+  },
+  getDefaultProps: function() {
+    return {
+      firstname:'',
+      lastname:''
+    };
   },
 
   componentWillMount: function() {
@@ -438,7 +445,7 @@ var CreditCardInfo = React.createClass({
       credicardLoading:false,
       noCreditcards:true,
       code:'',
-      showIcons:true
+      showIcons:true,
     };
   },
 
@@ -460,7 +467,7 @@ var CreditCardInfo = React.createClass({
 
   render: function() {
 
-      const { isNumeric,wordsError,isMonthError,isYearError,isCreditCardYearError } = this.errorMessages;
+      const { isNumeric,wordsError,isMonthError,isYearError,isCreditCardYearError,isExisty } = this.errorMessages;
       const { showIcons,selectedCreditcard,month,year } = this.state;
       return (
         <Formsy.Form
@@ -472,6 +479,36 @@ var CreditCardInfo = React.createClass({
           <div>
             <h2 style={styles.paperTitle}>Ingrese su tarjeta</h2>
           </div>
+          <FormsyText
+            required
+            floatingLabelText="Nombres"
+            disabled={true}
+            hintText = "Nombres de facturación"
+            validations="isSpecialWords,isExisty"
+            validationErrors={{wordsError,isExisty}}
+            type="string"
+            id ="firstname"
+            name = "firstname"
+            ref='firstname'
+            value={this.props.firstname}
+            style ={styles.field}
+          />
+
+          <FormsyText
+            required
+            disabled={true}
+            floatingLabelText="Apellidos"
+            hintText = "Apellidos de facturación"
+            validations="isSpecialWords,isExisty"
+            validationErrors = {wordsError}
+            type="string"
+            id ="lastname"
+            name = "lastname"
+            ref='lastname'
+            value={this.props.lastname}
+            style ={styles.field}
+          />
+
           {/*<FormsySelect
             name='selectedCreditcard'
             required
@@ -584,7 +621,9 @@ var CreditCard = React.createClass({
     return {
       currentView: '1',
       gotInformacionVenta:false,
-      gotCodigoComercio:false
+      gotCodigoComercio:false,
+      firstname:'',
+      lastname:''
     };
   },
 
@@ -606,7 +645,9 @@ var CreditCard = React.createClass({
           this.informacionVenta = res.data.informacionVenta;
           this.setState({
             gotInformacionVenta: true,
-            currentView:'2'
+            currentView:'2',
+            firstname:res.data.firstname,
+            lastname:res.data.lastname
           });
         }
       }
@@ -637,12 +678,14 @@ var CreditCard = React.createClass({
   },
   render: function() {
     const {isNumeric,wordsError,isMonthError,isYearError,isCreditCardYearError} = this.errorMessages;
-    const { currentView,validConfirmButton } = this.state;
+    const { currentView,validConfirmButton,firstname,lastname } = this.state;
     return (
       <div>
         {currentView==='1'?
           <BillInfo onValid={this.validateBillInfo}/>:
             <CreditCardInfo
+              firstname = {firstname}
+              lastname = {lastname}
               validateForm = {this.props.validateCreditCard}
               codigo_comercio={this.codigoComercio}
               billInfo = {this.billInfo}

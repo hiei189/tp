@@ -4,6 +4,21 @@ Meteor.startup(function() {
 
   culqi = (checkout)=>{
     formsController.payment.confirmPayment(checkout.respuesta,(res)=>{
+      if(!res.success){
+        Session.set('DialogMessage',res.error);
+        Session.set('isAnErrorDialog',true);
+        Session.set('DialogTitle','No se pudo ingresar el pago');
+        Session.set('showDialog',true);
+        Session.set('DialogShouldGoBack',false);
+        Session.set('DialogAction','DO_NOTHING');
+        return;
+      }
+      Session.set('DialogMessage',res.data.msg);
+      Session.set('isAnErrorDialog',false);
+      Session.set('DialogTitle','Compra exitosa');
+      Session.set('showDialog',true);
+      Session.set('DialogShouldGoBack',false);
+      Session.set('DialogAction','GO_HOME');
     });
   };
 
